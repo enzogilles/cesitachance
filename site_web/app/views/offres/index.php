@@ -11,31 +11,33 @@
                value="<?= isset($motcle) ? htmlspecialchars($motcle) : '' ?>" required>
 
         <button type="submit" class="btn">Rechercher</button>
+        <button type="reset" class="btn btn-reset">Réinitialiser</button>
     </form>
 
     <div class="offers-container">
-        <?php if (!empty($offres)): ?>
-            <?php foreach ($offres as $offre): ?>
-                <div class="offer-card">
-                    <h4><?= htmlspecialchars($offre['titre']) ?> - <?= htmlspecialchars($offre['entreprise']) ?></h4>
-                    <p><strong>Rémunération :</strong> <?= htmlspecialchars($offre['remuneration']) ?>€</p>
-                    <p><?= htmlspecialchars($offre['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
-                    
-                    <div class="offer-buttons">
-                        <a href="<?= BASE_URL ?>index.php?controller=offre&action=detail&id=<?= $offre['id'] ?>" class="btn-voir">Voir</a>
-                        <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Étudiant'): ?>
-                            <form action="<?= BASE_URL ?>index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
-                                <input type="hidden" name="offre_id" value="<?= $offre['id'] ?>">
-                                <button type="submit" class="btn">Ajouter à la Wishlist</button>
-                            </form>
-                        <?php endif; ?>
-                    </div>
+    <?php if (!empty($offres)): ?>
+        <?php foreach ($offres as $offre): ?>
+            <div class="offer-card">
+                <h4><?= htmlspecialchars($offre['titre']) ?> - <?= htmlspecialchars($offre['entreprise']) ?></h4>
+                <p><strong>Rémunération :</strong> <?= htmlspecialchars($offre['remuneration']) ?>€</p>
+                <p><?= htmlspecialchars($offre['description'] ?? '', ENT_QUOTES, 'UTF-8') ?></p>
+                
+                <div class="offer-buttons">
+                    <a href="<?= BASE_URL ?>index.php?controller=offre&action=detail&id=<?= $offre['id'] ?>" class="btn-voir">Voir</a>
+                    <?php if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Étudiant'): ?>
+                        <form action="<?= BASE_URL ?>index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
+                            <input type="hidden" name="offre_id" value="<?= $offre['id'] ?>">
+                            <button type="submit" class="btn">Ajouter à la Wishlist</button>
+                        </form>
+                    <?php endif; ?>
                 </div>
-            <?php endforeach; ?>
-        <?php else: ?>
-            <p style="text-align: center; color: #777;">Aucune offre trouvée.</p>
-        <?php endif; ?>
-    </div>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p style="text-align: center; color: #777;">Aucune offre trouvée.</p>
+    <?php endif; ?>
+</div>
+
 
     <!-- Pagination -->
     <?php if (isset($totalPages) && $totalPages > 0): ?>

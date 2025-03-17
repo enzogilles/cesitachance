@@ -196,6 +196,17 @@ a.btn-voir:hover {
   background-color: #75BD91;
 }
 
+button.btn-reset {
+  background-color: #f0f0f0; 
+  color: #333;
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+}
+
+button.btn-reset:hover {
+  background-color: #e0e0e0;
+}
+
 .add-offer-container {
   text-align: center;
   margin: 30px 0;

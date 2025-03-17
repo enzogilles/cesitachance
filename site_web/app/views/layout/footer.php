@@ -8,5 +8,6 @@
   </p>
 </footer>
 <script src="<?= BASE_URL ?>js/header.js"></script>
+<script src="<?= BASE_URL ?>js/entreprises.js"></script>
 </body>
 </html>
