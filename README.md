@@ -1,2 +1,2 @@
 # Projet_Web
-Groupe 3
+Dans cette branche se trouvera le site en cours de développement.
