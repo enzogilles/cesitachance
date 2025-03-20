@@ -1,0 +1,8 @@
+id,id_entreprise,titre,description,date_publication,statut,remuneration
+1,4,Offre 1,Description détaillée de l'offre 1,01/11/2023,En attente,2000
+2,4,Offre 2,Description détaillée de l'offre 2,10/09/2023,Fermée,2000
+3,2,Offre 3,Description détaillée de l'offre 3,01/11/2023,En attente,2000
+4,4,Offre 4,Description détaillée de l'offre 4,09/05/2023,Fermée,2000
+5,1,Offre 5,Description détaillée de l'offre 5,18/09/2023,Publiée,2000
+6,2,Offre 6,Description détaillée de l'offre 6,08/03/2023,Fermée,2000
+7,5,Offre 7,Description détaillée de l'offre 7,28/05/2023,Fermée,2000

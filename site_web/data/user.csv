@@ -1,0 +1,11 @@
+id,nom,prenom,email,password,role_id
+1,Nom1,Prenom1,user1@mail.com,hashed_password_1,1
+2,Nom2,Prenom2,user2@mail.com,hashed_password_2,3
+3,Nom3,Prenom3,user3@mail.com,hashed_password_3,2
+4,Nom4,Prenom4,user4@mail.com,hashed_password_4,2
+5,Nom5,Prenom5,user5@mail.com,hashed_password_5,2
+6,Nom6,Prenom6,user6@mail.com,hashed_password_6,1
+7,Nom7,Prenom7,user7@mail.com,hashed_password_7,3
+8,Nom8,Prenom8,user8@mail.com,hashed_password_8,2
+9,Nom9,Prenom9,user9@mail.com,hashed_password_9,2
+10,Nom10,Prenom10,user10@mail.com,hashed_password_10,2

@@ -1,0 +1,2 @@
+id,entreprise_id,user_id,note,commentaire,date_evaluation
+`id`,`entreprise_id`,`user_id`,`note`,`commentaire`,`date_evaluation`
