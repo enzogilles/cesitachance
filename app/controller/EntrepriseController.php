@@ -248,4 +248,22 @@ class EntrepriseController extends BaseController
             'entreprise' => $entreprise
         ]);
     }
+
+    public function details($id)
+{
+    session_start();
+    $pdo = Database::getInstance();
+    $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
+    $stmt->execute([$id]);
+    $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
+
+    if (!$entrepriseData) {
+        die("Entreprise introuvable.");
+    }
+
+    $this->render('entreprises/details.php', [
+        'entreprise' => $entrepriseData
+    ]);
+}
+
 }
