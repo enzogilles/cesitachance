@@ -30,7 +30,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.AZURE_VM_USER}}@${{ secrets.AZURE_VM_IP }} << 'EOF'
           cd /var/www/site_web
-          git pull origin main
+          sudo git pull origin main
           EOF
 
       - name: Clean Up SSH Key File
