@@ -1,0 +1,38 @@
+name: Deploy to Azure
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Save SSH Key to File
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.AZURE_VM_SSH_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Configure SSH Settings
+        run: |
+          echo "StrictHostKeyChecking no" > ~/.ssh/config
+
+      - name: Execute Remote Commands
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.AZURE_VM_USER}}@${{ secrets.AZURE_VM_IP }} << 'EOF'
+          cd /var/www/site_web
+          git pull origin main
+          EOF
+
+      - name: Clean Up SSH Key File
+        run: |
+          rm -f ~/.ssh/id_rsa
