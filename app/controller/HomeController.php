@@ -1,9 +1,9 @@
 <?php
 // app/controller/HomeController.php
 
-namespace app\controller;
+namespace App\Controller;
 
-use app\controller\BaseController;
+use App\Controller\BaseController;
 use Database;
 
 class HomeController extends BaseController {
