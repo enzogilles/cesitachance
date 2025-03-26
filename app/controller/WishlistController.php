@@ -9,8 +9,7 @@ use Database;
 class WishlistController extends BaseController {
 
     /**
-     * Affiche la wishlist de l'utilisateur connecté
-     * => rôle : Étudiant ou Admin
+     * Affiche la wishlist de l'utilisateur connecté -> réservé aux Étudiants ou Admin.
      */
     public function index() {
         session_start();
@@ -32,11 +31,11 @@ class WishlistController extends BaseController {
         $stmt->execute([$user_id]);
         $wishlist = $stmt->fetchAll(\PDO::FETCH_ASSOC);
         
-        $this->render('wishlist/index.php', ['wishlist' => $wishlist]);
+        $this->render('wishlist/index.twig', ['wishlist' => $wishlist]);
     }
 
     /**
-     * Ajouter une offre à la wishlist => Étudiant ou Admin
+     * Ajouter une offre à la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function add() {
         session_start();
@@ -51,7 +50,6 @@ class WishlistController extends BaseController {
     
             $pdo = Database::getInstance();
             
-            // Vérifier si l'offre est déjà dans la wishlist
             $stmt = $pdo->prepare("SELECT id FROM wishlist WHERE user_id = ? AND offre_id = ?");
             $stmt->execute([$user_id, $offre_id]);
             
@@ -73,7 +71,7 @@ class WishlistController extends BaseController {
     }
     
     /**
-     * Retirer de la wishlist => Étudiant ou Admin
+     * Retirer une offre de la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function remove() {
         session_start();
@@ -89,5 +87,57 @@ class WishlistController extends BaseController {
             header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
             exit;
         }
+    }
+
+    /**
+     * Recherche d'offres dans la wishlist (ancienne méthode).
+     */
+    public function search() {
+        session_start();
+        $pdo = Database::getInstance();
+
+        $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
+        if (!empty($motcle)) {
+            $stmtCount = $pdo->prepare("
+                SELECT COUNT(*) as total 
+                FROM offre o
+                JOIN entreprise e ON o.entreprise_id = e.id
+                WHERE o.titre LIKE :motcle OR o.description LIKE :motcle
+            ");
+            $stmtCount->execute(['motcle' => "%$motcle%"]);
+            $resCount = $stmtCount->fetch(\PDO::FETCH_ASSOC);
+            $total = $resCount['total'];
+            $totalPages = ceil($total / $limit);
+
+            $stmt = $pdo->prepare("
+                SELECT o.id, o.titre, o.description, o.remuneration,
+                       e.nom as entreprise
+                FROM offre o
+                JOIN entreprise e ON o.entreprise_id = e.id
+                WHERE o.titre LIKE :motcle OR o.description LIKE :motcle
+                ORDER BY o.id DESC
+                LIMIT :limit OFFSET :offset
+            ");
+            $stmt->bindValue(':motcle', "%$motcle%", \PDO::PARAM_STR);
+            $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->execute();
+            $offres = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            $this->index();
+            return;
+        }
+
+        $this->render('offres/index.twig', [
+            'offres' => $offres,
+            'motcle' => $motcle,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'competences' => ''
+        ]);
     }
 }

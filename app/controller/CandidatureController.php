@@ -3,11 +3,10 @@
 
 namespace app\controller;
 
-use app\controller\BaseController;
 use PDO;
 use PDOException;
 
-// Inclure la classe Database (définie dans app/config/database.php, sans namespace)
+// Inclusion de la classe Database (définie dans app/config/database.php, sans namespace)
 require_once __DIR__ . '/../config/database.php';
 
 class CandidatureController extends BaseController {
@@ -24,7 +23,6 @@ class CandidatureController extends BaseController {
         
         $userId   = $_SESSION['user']['id'];
         $userRole = $_SESSION['user']['role'];
-        // Utiliser \Database pour accéder à la classe globale
         $pdo = \Database::getInstance();
         
         if ($userRole === 'Admin') {
@@ -34,8 +32,6 @@ class CandidatureController extends BaseController {
                     INNER JOIN offre ON candidature.offre_id = offre.id
                     INNER JOIN entreprise ON offre.entreprise_id = entreprise.id
                     ORDER BY candidature.date_soumission DESC";
-
-
             $stmt = $pdo->query($sql);
         } else {
             $sql = "SELECT candidature.id, entreprise.nom AS entreprise, offre.titre,
@@ -45,14 +41,12 @@ class CandidatureController extends BaseController {
                     INNER JOIN entreprise ON offre.entreprise_id = entreprise.id
                     WHERE candidature.user_id = :user_id
                     ORDER BY candidature.date_soumission DESC";
-
-
             $stmt = $pdo->prepare($sql);
             $stmt->execute(['user_id' => $userId]);
         }
         $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        $this->render('candidatures/index.php', ['candidatures' => $candidatures]);
+        $this->render('candidatures/index.twig', ['candidatures' => $candidatures]);
     }
 
     /**
@@ -91,7 +85,6 @@ class CandidatureController extends BaseController {
             $lettreMotivation = isset($_POST['lettre_motivation']) ? trim($_POST['lettre_motivation']) : '';
     
             try {
-                // Utiliser \Database pour accéder à la classe Database globale
                 $pdo = \Database::getInstance();
     
                 $sql = "INSERT INTO candidature (user_id, offre_id, cv, lettre, date_soumission) 
@@ -104,43 +97,34 @@ class CandidatureController extends BaseController {
                     ':lettre' => $lettreMotivation,
                     ':date_soumission' => $dateCandidature
                 ]);
-
     
                 header("Location: " . BASE_URL . "index.php?controller=offre&action=detail&id=$offreId&success=1");
                 exit();
-
+    
             } catch (PDOException $e) {
                 die("Erreur lors de la candidature : " . $e->getMessage());
             }
         }
     }
 
-    public function updateStatus()
-{
-    session_start();
+    public function updateStatus() {
+        session_start();
+        
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
+            exit;
+        }
     
-    // Uniquement admin ou pilote
-    if (!isset($_SESSION['user']) 
-        || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) 
-    {
-        header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-        exit;
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $candidatureId = $_POST['candidature_id'];
+            $nouveauStatut = $_POST['statut'];
+    
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
+            $stmt->execute([$nouveauStatut, $candidatureId]);
+    
+            header("Location: " . BASE_URL . "index.php?controller=candidature&action=index");
+            exit;
+        }
     }
-
-    if ($_SERVER["REQUEST_METHOD"] === "POST") {
-        $candidatureId = $_POST['candidature_id'];
-        // On prévoit 3 valeurs : 0 => "en attente", 1 => "acceptée", 2 => "refusée"
-        $nouveauStatut = $_POST['statut'];
-
-        // Mise à jour en base
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
-        $stmt->execute([$nouveauStatut, $candidatureId]);
-
-        // Redirection (par exemple) vers la page candidatures
-        header("Location: " . BASE_URL . "index.php?controller=candidature&action=index");
-        exit;
-    }
-}
-
 }

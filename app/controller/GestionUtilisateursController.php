@@ -1,4 +1,6 @@
 <?php
+// app/controller/GestionUtilisateursController.php
+
 namespace app\controller;
 
 use app\controller\BaseController;
@@ -7,11 +9,9 @@ use Database;
 class GestionUtilisateursController extends BaseController
 {
     /**
-     * Affichage de la gestion des utilisateurs, avec pagination
-     * => réservé à l'admin
+     * Affichage de la gestion des utilisateurs, avec pagination -> réservé à l'Admin.
      */
-    public function index()
-    {
+    public function index() {
         session_start();
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
@@ -25,21 +25,18 @@ class GestionUtilisateursController extends BaseController
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
-        // Récupérer tous les utilisateurs
+        // Récupération des utilisateurs
         $sqlCount = "SELECT COUNT(*) as total FROM user";
         $resCount = $pdo->query($sqlCount)->fetch();
         $total = $resCount['total'];
 
-        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role
-                               FROM user
-                               ORDER BY id DESC
-                               LIMIT ? OFFSET ?");
+        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user ORDER BY id DESC LIMIT ? OFFSET ?");
         $stmt->bindValue(1, $limit, \PDO::PARAM_INT);
         $stmt->bindValue(2, $offset, \PDO::PARAM_INT);
         $stmt->execute();
         $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        // Stats globales
+        // Statistiques globales
         $stmtStats = $pdo->query("
             SELECT 
                 COUNT(*) AS total_users,
@@ -50,7 +47,7 @@ class GestionUtilisateursController extends BaseController
         ");
         $stats = $stmtStats->fetch(\PDO::FETCH_ASSOC);
 
-        $this->render('gestion_utilisateurs/index.php', [
+        $this->render('gestion_utilisateurs/index.twig', [
             'users' => $users,
             'stats' => $stats,
             'page' => $page,
@@ -60,11 +57,9 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * Création d'un utilisateur
-     * => réservé admin
+     * Création d'un utilisateur -> réservé à l'Admin.
      */
-    public function create()
-    {
+    public function create() {
         session_start();
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
@@ -80,10 +75,7 @@ class GestionUtilisateursController extends BaseController
 
             if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($role) && !empty($password)) {
                 $pdo = Database::getInstance();
-                $stmt = $pdo->prepare("
-                    INSERT INTO user (nom, prenom, email, role, password)
-                    VALUES (?, ?, ?, ?, ?)
-                ");
+                $stmt = $pdo->prepare("INSERT INTO user (nom, prenom, email, role, password) VALUES (?, ?, ?, ?, ?)");
                 $stmt->execute([$nom, $prenom, $email, $role, $password]);
 
                 $_SESSION["message"] = "Utilisateur ajouté avec succès.";
@@ -97,11 +89,9 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * Modification d'un utilisateur
-     * => réservé admin
+     * Modification d'un utilisateur -> réservé à l'Admin.
      */
-    public function update()
-    {
+    public function update() {
         session_start();
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
@@ -149,11 +139,9 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * Suppression d'un utilisateur
-     * => réservé admin
+     * Suppression d'un utilisateur -> réservé à l'Admin.
      */
-    public function delete()
-    {
+    public function delete() {
         session_start();
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
@@ -174,11 +162,9 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * Recherche d'un utilisateur
-     * => réservé admin
+     * Recherche d'un utilisateur -> réservé à l'Admin.
      */
-    public function search()
-    {
+    public function search() {
         session_start();
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
@@ -191,18 +177,14 @@ class GestionUtilisateursController extends BaseController
             $pdo = Database::getInstance();
 
             if (!empty($searchQuery)) {
-                $stmt = $pdo->prepare("
-                    SELECT *
-                    FROM user
-                    WHERE nom LIKE ? OR prenom LIKE ? OR email LIKE ?
-                ");
+                $stmt = $pdo->prepare("SELECT * FROM user WHERE nom LIKE ? OR prenom LIKE ? OR email LIKE ?");
                 $stmt->execute(["%$searchQuery%", "%$searchQuery%", "%$searchQuery%"]);
                 $search_result = $stmt->fetch(\PDO::FETCH_ASSOC);
             } else {
                 $search_result = null;
             }
 
-            // Récup stats
+            // Récupération des statistiques
             $stmtStats = $pdo->query("
                 SELECT COUNT(*) AS total_users,
                     SUM(CASE WHEN role = 'etudiant' THEN 1 ELSE 0 END) AS total_etudiants,
@@ -212,7 +194,7 @@ class GestionUtilisateursController extends BaseController
             ");
             $stats = $stmtStats->fetch(\PDO::FETCH_ASSOC);
 
-            $this->render('gestion_utilisateurs/index.php', [
+            $this->render('gestion_utilisateurs/index.twig', [
                 'search_result' => $search_result,
                 'stats' => $stats
             ]);
@@ -222,21 +204,18 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * SFx21 – Consulter les statistiques d’un compte Étudiant
-     * => admin ou pilote
+     * Consulter les statistiques d’un compte Étudiant -> réservé à Admin/Pilote.
      */
-    public function statsEtudiant($id)
-    {
+    public function statsEtudiant($id) {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
 
         $pdo = Database::getInstance();
 
-        // Vérifier que c’est bien un étudiant
+        // Vérifier que l'utilisateur est un étudiant
         $stmtUser = $pdo->prepare("SELECT * FROM user WHERE id = ? AND role = 'etudiant'");
         $stmtUser->execute([$id]);
         $etudiant = $stmtUser->fetch(\PDO::FETCH_ASSOC);
@@ -244,28 +223,19 @@ class GestionUtilisateursController extends BaseController
             die("Cet utilisateur n'est pas un étudiant ou n'existe pas.");
         }
 
-        // Compter candidatures
-        $stmtCandid = $pdo->prepare("
-            SELECT COUNT(*) AS nb_candidatures
-            FROM candidature
-            WHERE user_id = ?
-        ");
+        // Comptage des candidatures
+        $stmtCandid = $pdo->prepare("SELECT COUNT(*) AS nb_candidatures FROM candidature WHERE user_id = ?");
         $stmtCandid->execute([$id]);
         $rowCandid = $stmtCandid->fetch(\PDO::FETCH_ASSOC);
         $nbCandidatures = $rowCandid['nb_candidatures'];
 
-        // Compter la wishlist
-        $stmtWish = $pdo->prepare("
-            SELECT COUNT(*) AS nb_wishlist
-            FROM wishlist
-            WHERE user_id = ?
-        ");
+        // Comptage de la wishlist
+        $stmtWish = $pdo->prepare("SELECT COUNT(*) AS nb_wishlist FROM wishlist WHERE user_id = ?");
         $stmtWish->execute([$id]);
         $rowWish = $stmtWish->fetch(\PDO::FETCH_ASSOC);
         $nbWishlist = $rowWish['nb_wishlist'];
 
-        // Rendu
-        $this->render('gestion_utilisateurs/statsEtudiant.php', [
+        $this->render('gestion_utilisateurs/statsEtudiant.twig', [
             'etudiant' => $etudiant,
             'nbCandidatures' => $nbCandidatures,
             'nbWishlist' => $nbWishlist

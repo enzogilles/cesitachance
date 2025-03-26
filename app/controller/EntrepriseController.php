@@ -1,4 +1,6 @@
 <?php
+// app/controller/EntrepriseController.php
+
 namespace app\controller;
 
 use app\controller\BaseController;
@@ -8,86 +10,77 @@ use app\model\Entreprise;
 class EntrepriseController extends BaseController
 {
     /**
-     * Liste + recherche multi-critères + pagination
-     * => on peut laisser accès public ou exiger connexion.
-     *   Ici, je laisse accessible à tous (ou au moins logué).
+     * Liste, recherche multi-critères et pagination des entreprises.
      */
-    public function index()
-{
-    session_start();
-    $pdo = Database::getInstance();
+    public function index() {
+        session_start();
+        $pdo = Database::getInstance();
 
-    // Filtres
-    $nom = isset($_GET['nom']) ? trim($_GET['nom']) : '';
-    $ville = isset($_GET['ville']) ? trim($_GET['ville']) : '';
-    $secteur = isset($_GET['secteur']) ? trim($_GET['secteur']) : '';
+        // Filtres
+        $nom = isset($_GET['nom']) ? trim($_GET['nom']) : '';
+        $ville = isset($_GET['ville']) ? trim($_GET['ville']) : '';
+        $secteur = isset($_GET['secteur']) ? trim($_GET['secteur']) : '';
 
-    // Pagination
-    $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-    $limit = 10;
-    $offset = ($page - 1) * $limit;
+        // Pagination
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
 
-    // Construction de la clause WHERE avec filtres
-    $sqlFilter = " WHERE 1=1 ";
-    $params = [];
-    if ($nom !== '') {
-        $sqlFilter .= " AND nom LIKE ? ";
-        $params[] = "%$nom%";
-    }
-    if ($ville !== '') {
-        $sqlFilter .= " AND ville LIKE ? ";
-        $params[] = "%$ville%";
-    }
-    if ($secteur !== '') {
-        $sqlFilter .= " AND secteur LIKE ? ";
-        $params[] = "%$secteur%";
-    }
+        // Construction de la clause WHERE avec filtres
+        $sqlFilter = " WHERE 1=1 ";
+        $params = [];
+        if ($nom !== '') {
+            $sqlFilter .= " AND nom LIKE ? ";
+            $params[] = "%$nom%";
+        }
+        if ($ville !== '') {
+            $sqlFilter .= " AND ville LIKE ? ";
+            $params[] = "%$ville%";
+        }
+        if ($secteur !== '') {
+            $sqlFilter .= " AND secteur LIKE ? ";
+            $params[] = "%$secteur%";
+        }
 
-    // Count
-    $sqlCount = "SELECT COUNT(*) as total FROM entreprise " . $sqlFilter;
-    $stmtCount = $pdo->prepare($sqlCount);
-    $stmtCount->execute($params);
-    $rowCount = $stmtCount->fetch();
-    $total = $rowCount['total'];
+        // Count
+        $sqlCount = "SELECT COUNT(*) as total FROM entreprise " . $sqlFilter;
+        $stmtCount = $pdo->prepare($sqlCount);
+        $stmtCount->execute($params);
+        $rowCount = $stmtCount->fetch();
+        $total = $rowCount['total'];
 
-    // Data
-    $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT ? OFFSET ?";
-    $stmtData = $pdo->prepare($sqlData);
-    $p = 1;
-    foreach ($params as $val) {
-        $stmtData->bindValue($p, $val);
+        // Data
+        $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT ? OFFSET ?";
+        $stmtData = $pdo->prepare($sqlData);
+        $p = 1;
+        foreach ($params as $val) {
+            $stmtData->bindValue($p, $val);
+            $p++;
+        }
+        $stmtData->bindValue($p, $limit, \PDO::PARAM_INT);
         $p++;
+        $stmtData->bindValue($p, $offset, \PDO::PARAM_INT);
+        $stmtData->execute();
+        $entreprises = $stmtData->fetchAll(\PDO::FETCH_ASSOC);
+
+        $totalPages = ceil($total / $limit);
+
+        $this->render('entreprises/index.twig', [
+            'entreprises' => $entreprises,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'nom' => $nom,
+            'ville' => $ville,
+            'secteur' => $secteur
+        ]);
     }
-    $stmtData->bindValue($p, $limit, \PDO::PARAM_INT);
-    $p++;
-    $stmtData->bindValue($p, $offset, \PDO::PARAM_INT);
-    $stmtData->execute();
-    $entreprises = $stmtData->fetchAll(\PDO::FETCH_ASSOC);
-
-    // Calcul du nombre total de pages
-    $totalPages = ceil($total / $limit);
-
-    // Rendu en passant aussi les filtres pour préserver les critères
-    $this->render('entreprises/index.php', [
-        'entreprises' => $entreprises,
-        'page' => $page,
-        'totalPages' => $totalPages,
-        'nom' => $nom,
-        'ville' => $ville,
-        'secteur' => $secteur
-    ]);
-}
-
 
     /**
-     * Créer une entreprise
-     * => réservé admin/pilote
+     * Créer une entreprise -> réservé Admin/Pilote.
      */
-    public function creer()
-    {
+    public function creer() {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -117,20 +110,15 @@ class EntrepriseController extends BaseController
             }
         }
 
-        // On peut soit faire un render vers une vue "creer.php",
-        // soit laisser la partie "form creation" dans index, etc.
-        $this->render('entreprises/gestion.php');
+        $this->render('entreprises/gestion.twig');
     }
 
     /**
-     * Modifier une entreprise
-     * => réservé admin/pilote
+     * Modifier une entreprise -> réservé Admin/Pilote.
      */
-    public function modifier($id)
-    {
+    public function modifier($id) {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -174,20 +162,17 @@ class EntrepriseController extends BaseController
             exit;
         }
 
-        $this->render('entreprises/modifier.php', [
+        $this->render('entreprises/modifier.twig', [
             'entreprise' => $entrepriseData
         ]);
     }
 
     /**
-     * Supprimer une entreprise
-     * => réservé admin/pilote
+     * Supprimer une entreprise -> réservé Admin/Pilote.
      */
-    public function supprimer()
-    {
+    public function supprimer() {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -205,20 +190,15 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Évaluer une entreprise
-     * => accessible aux étudiants ?
-     *   Ici, je mets tout user loggué, ou spécifiquement 'etudiant'.
+     * Évaluer une entreprise -> réservé aux étudiants.
      */
-    public function evaluer($id)
-    {
+    public function evaluer($id) {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || $_SESSION['user']['role'] !== 'etudiant') {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'etudiant') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
 
-        // Vérifier existence entreprise
         $pdo = Database::getInstance();
         $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
         $stmt->execute([$id]);
@@ -243,27 +223,27 @@ class EntrepriseController extends BaseController
             exit;
         }
 
-        // Affichage d’un formulaire
-        $this->render('entreprises/evaluer.php', [
+        $this->render('entreprises/evaluer.twig', [
             'entreprise' => $entreprise
         ]);
     }
 
-    public function details($id)
-{
-    session_start();
-    $pdo = Database::getInstance();
-    $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
-    $stmt->execute([$id]);
-    $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
+    /**
+     * Afficher les détails d'une entreprise.
+     */
+    public function details($id) {
+        session_start();
+        $pdo = Database::getInstance();
+        $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
+        $stmt->execute([$id]);
+        $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-    if (!$entrepriseData) {
-        die("Entreprise introuvable.");
+        if (!$entrepriseData) {
+            die("Entreprise introuvable.");
+        }
+
+        $this->render('entreprises/details.twig', [
+            'entreprise' => $entrepriseData
+        ]);
     }
-
-    $this->render('entreprises/details.php', [
-        'entreprise' => $entrepriseData
-    ]);
-}
-
 }

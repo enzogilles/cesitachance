@@ -1,4 +1,6 @@
 <?php
+// app/controller/DashboardController.php
+
 namespace app\controller;
 
 use app\controller\BaseController;
@@ -7,29 +9,25 @@ use Database;
 class DashboardController extends BaseController {
 
     /**
-     * - On décide que le dashboard principal est réservé
-     *   aux utilisateurs connectés (admin ou pilote ?).
+     * Dashboard principal réservé aux utilisateurs connectés (Admin ou Pilote).
      */
     public function index() {
         session_start();
 
-        // Soit on laisse tout user => false,
-        // Soit admin/pilote => ci-dessous :
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
 
-        $this->render('dashboard/index.php', ['user' => $_SESSION['user']]);
+        $this->render('dashboard/index.twig', ['user' => $_SESSION['user']]);
     }
 
-    // Statistiques sur les offres
-    // -> réservé admin/pilote
+    /**
+     * Statistiques sur les offres -> réservé à Admin/Pilote.
+     */
     public function offerStats() {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -61,6 +59,6 @@ class DashboardController extends BaseController {
         ");
         $stats['durees'] = $stmtDuree->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->render('dashboard/offerStats.php', ['stats' => $stats]);
+        $this->render('dashboard/offerStats.twig', ['stats' => $stats]);
     }
 }

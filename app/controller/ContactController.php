@@ -12,7 +12,7 @@ class ContactController extends BaseController {
      * Affiche le formulaire de contact (ouvert à tous).
      */
     public function index() {
-        $this->render('contact/index.php');
+        $this->render('contact/index.twig');
     }
     
     /**
@@ -52,8 +52,7 @@ class ContactController extends BaseController {
     }
 
     /**
-     * Affiche tous les messages reçus
-     * -> réservé à l'admin
+     * Affiche tous les messages reçus -> réservé à l'admin.
      */
     public function messages() {
         session_start();
@@ -67,6 +66,6 @@ class ContactController extends BaseController {
         $stmt = $pdo->query("SELECT * FROM contact_messages ORDER BY date_envoi DESC");
         $messages = $stmt->fetchAll(\PDO::FETCH_ASSOC);
     
-        $this->render('contact/messages.php', ['messages' => $messages]);
+        $this->render('contact/messages.twig', ['messages' => $messages]);
     }
 }

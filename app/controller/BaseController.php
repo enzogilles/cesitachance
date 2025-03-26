@@ -4,15 +4,21 @@
 namespace app\controller;
 
 class BaseController {
-    /**
-     * Méthode de rendu de la vue.
-     */
-    protected function render($view, $params = []) {
-        // Extraire les variables pour la vue
-        extract($params);
+    protected $twig;
 
-        require_once dirname(__DIR__) . '/views/layout/header.php';
-        require_once dirname(__DIR__) . '/views/' . $view;
-        require_once dirname(__DIR__) . '/views/layout/footer.php';
+    public function __construct() {
+        // Charge la configuration de Twig (assurez-vous que ce fichier existe et est correctement configuré)
+        require_once __DIR__ . '/../config/twig.php';
+        $this->twig = $twig;
+    }
+
+    /**
+     * Méthode pour rendre un template Twig.
+     *
+     * @param string $template Chemin du template depuis le dossier view (ex: "home/index.twig")
+     * @param array  $data     Variables à passer au template
+     */
+    protected function render($template, $data = []) {
+        echo $this->twig->render($template, $data);
     }
 }

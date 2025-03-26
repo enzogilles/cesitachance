@@ -1,4 +1,5 @@
 <?php
+// app/controller/OffreController.php
 
 namespace app\controller;
 
@@ -6,99 +7,91 @@ use app\controller\BaseController;
 use app\model\Offre;
 use Database;
 
-class OffreController extends BaseController
-{
+class OffreController extends BaseController {
     private $offreModel;
 
-    public function __construct()
-    {
+    public function __construct() {
+        parent::__construct();
         $this->offreModel = new Offre();
     }
 
     /**
-     * Liste des offres avec pagination et recherche multi-critères
-     * => libre ou nécessite connexion, selon vos choix
+     * Liste des offres avec pagination et recherche multi-critères.
      */
-    public function index()
-{
-    session_start();
-    $pdo = Database::getInstance();
+    public function index() {
+        session_start();
+        $pdo = Database::getInstance();
 
-    // Filtres
-    $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
-    $filtreCompetences = isset($_GET['competences']) ? trim($_GET['competences']) : '';
+        // Filtres
+        $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
+        $filtreCompetences = isset($_GET['competences']) ? trim($_GET['competences']) : '';
 
-    // Pagination
-    $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-    $limit = 10;
-    $offset = ($page - 1) * $limit;
+        // Pagination
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
 
-    // Construction de la clause WHERE avec filtres
-    $sqlFilter = " WHERE 1=1 ";
-    $params = [];
-    if ($motcle !== '') {
-        $sqlFilter .= " AND (o.titre LIKE ? OR o.description LIKE ?) ";
-        $params[] = "%$motcle%";
-        $params[] = "%$motcle%";
-    }
-    if ($filtreCompetences !== '') {
-        $sqlFilter .= " AND o.competences LIKE ? ";
-        $params[] = "%$filtreCompetences%";
-    }
+        // Construction de la clause WHERE
+        $sqlFilter = " WHERE 1=1 ";
+        $params = [];
+        if ($motcle !== '') {
+            $sqlFilter .= " AND (o.titre LIKE ? OR o.description LIKE ?) ";
+            $params[] = "%$motcle%";
+            $params[] = "%$motcle%";
+        }
+        if ($filtreCompetences !== '') {
+            $sqlFilter .= " AND o.competences LIKE ? ";
+            $params[] = "%$filtreCompetences%";
+        }
 
-    // Récupérer le nombre total d'offres filtrées
-    $sqlCount = "SELECT COUNT(*) as total FROM offre o " . $sqlFilter;
-    $stmtCount = $pdo->prepare($sqlCount);
-    $stmtCount->execute($params);
-    $rowCount = $stmtCount->fetch(\PDO::FETCH_ASSOC);
-    $total = $rowCount['total'];
+        // Récupération du nombre total d'offres
+        $sqlCount = "SELECT COUNT(*) as total FROM offre o " . $sqlFilter;
+        $stmtCount = $pdo->prepare($sqlCount);
+        $stmtCount->execute($params);
+        $rowCount = $stmtCount->fetch(\PDO::FETCH_ASSOC);
+        $total = $rowCount['total'];
 
-    // Récupérer les offres avec pagination
-    $sqlData = "
-        SELECT o.id, o.titre, o.description, o.remuneration,
-               o.date_debut, o.date_fin, o.competences,
-               e.nom as entreprise,
-               (SELECT COUNT(*) FROM candidature c WHERE c.offre_id = o.id) as nb_candidats
-        FROM offre o
-        JOIN entreprise e ON o.entreprise_id = e.id
-        " . $sqlFilter . "
-        ORDER BY o.id DESC
-        LIMIT ? OFFSET ?
-    ";
-    $stmtData = $pdo->prepare($sqlData);
-    $pIndex = 1;
-    foreach ($params as $val) {
-        $stmtData->bindValue($pIndex, $val);
+        // Récupération des offres avec pagination
+        $sqlData = "
+            SELECT o.id, o.titre, o.description, o.remuneration,
+                   o.date_debut, o.date_fin, o.competences,
+                   e.nom as entreprise,
+                   (SELECT COUNT(*) FROM candidature c WHERE c.offre_id = o.id) as nb_candidats
+            FROM offre o
+            JOIN entreprise e ON o.entreprise_id = e.id
+            " . $sqlFilter . "
+            ORDER BY o.id DESC
+            LIMIT ? OFFSET ?
+        ";
+        $stmtData = $pdo->prepare($sqlData);
+        $pIndex = 1;
+        foreach ($params as $val) {
+            $stmtData->bindValue($pIndex, $val);
+            $pIndex++;
+        }
+        $stmtData->bindValue($pIndex, $limit, \PDO::PARAM_INT);
         $pIndex++;
+        $stmtData->bindValue($pIndex, $offset, \PDO::PARAM_INT);
+        $stmtData->execute();
+        $offres = $stmtData->fetchAll(\PDO::FETCH_ASSOC);
+
+        $totalPages = ceil($total / $limit);
+
+        $this->render('offres/index.twig', [
+            'offres' => $offres,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'motcle' => $motcle,
+            'competences' => $filtreCompetences
+        ]);
     }
-    $stmtData->bindValue($pIndex, $limit, \PDO::PARAM_INT);
-    $pIndex++;
-    $stmtData->bindValue($pIndex, $offset, \PDO::PARAM_INT);
-    $stmtData->execute();
-    $offres = $stmtData->fetchAll(\PDO::FETCH_ASSOC);
-
-    // Calcul du nombre total de pages
-    $totalPages = ceil($total / $limit);
-
-    $this->render('offres/index.php', [
-        'offres' => $offres,
-        'page' => $page,
-        'totalPages' => $totalPages,
-        'motcle' => $motcle,
-        'competences' => $filtreCompetences
-    ]);
-}
-
 
     /**
-     * Page d'administration : gérer toutes les offres
-     * => réservé admin/pilote
+     * Page d'administration : gérer toutes les offres -> réservé Admin/Pilote.
      */
-    public function gererOffres()
-    {
+    public function gererOffres() {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -113,14 +106,13 @@ class OffreController extends BaseController
         ");
         $offres = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->render('offres/gerer.php', ['offres' => $offres]);
+        $this->render('offres/gerer.twig', ['offres' => $offres]);
     }
 
     /**
-     * Détail d’une offre (accessible à tous loggués ou non ?)
+     * Détail d’une offre.
      */
-    public function detail($id)
-    {
+    public function detail($id) {
         session_start();
         if (!$id) {
             die("Erreur : ID de l'offre manquant.");
@@ -129,18 +121,15 @@ class OffreController extends BaseController
         if (!$offre) {
             die("Erreur : Offre introuvable.");
         }
-        $this->render('offres/detail.php', ['offre' => $offre]);
+        $this->render('offres/detail.twig', ['offre' => $offre]);
     }
 
     /**
-     * Créer une nouvelle offre
-     * => réservé admin/pilote
+     * Créer une nouvelle offre -> réservé Admin/Pilote.
      */
-    public function create()
-    {
+    public function create() {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -174,18 +163,15 @@ class OffreController extends BaseController
                 $_SESSION['error'] = "Veuillez remplir tous les champs obligatoires.";
             }
         }
-        $this->render('offres/create.php');
+        $this->render('offres/create.twig');
     }
 
     /**
-     * Modifier une offre
-     * => réservé admin/pilote
+     * Modifier une offre -> réservé Admin/Pilote.
      */
-    public function modifier($id)
-    {
+    public function modifier($id) {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -233,7 +219,6 @@ class OffreController extends BaseController
             }
         }
 
-        // Récup l'offre existante
         $stmt = $pdo->prepare("SELECT * FROM offre WHERE id = ?");
         $stmt->execute([$id]);
         $offre = $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -242,18 +227,15 @@ class OffreController extends BaseController
             die("Erreur : Offre introuvable.");
         }
 
-        $this->render('offres/modifier.php', ['offre' => $offre]);
+        $this->render('offres/modifier.twig', ['offre' => $offre]);
     }
 
     /**
-     * Supprimer une offre
-     * => réservé admin/pilote
+     * Supprimer une offre -> réservé Admin/Pilote.
      */
-    public function supprimer($id)
-    {
+    public function supprimer($id) {
         session_start();
-        if (!isset($_SESSION['user']) 
-            || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
@@ -277,60 +259,54 @@ class OffreController extends BaseController
     }
 
     /**
-     * Ancienne méthode search() => idem
-     * => accessible à tous
+     * Recherche d'offres par mot-clé.
      */
-    public function search()
-{
-    session_start();
-    $pdo = Database::getInstance();
+    public function search() {
+        session_start();
+        $pdo = Database::getInstance();
 
-    $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
-    $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-    $limit = 10;
-    $offset = ($page - 1) * $limit;
+        $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
 
-    if (!empty($motcle)) {
-        // Calculer le nombre total d'offres correspondant au mot-clé
-        $stmtCount = $pdo->prepare("
-            SELECT COUNT(*) as total 
-            FROM offre o
-            JOIN entreprise e ON o.entreprise_id = e.id
-            WHERE o.titre LIKE :motcle OR o.description LIKE :motcle
-        ");
-        $stmtCount->execute(['motcle' => "%$motcle%"]);
-        $resCount = $stmtCount->fetch(\PDO::FETCH_ASSOC);
-        $total = $resCount['total'];
-        $totalPages = ceil($total / $limit);
+        if (!empty($motcle)) {
+            $stmtCount = $pdo->prepare("
+                SELECT COUNT(*) as total 
+                FROM offre o
+                JOIN entreprise e ON o.entreprise_id = e.id
+                WHERE o.titre LIKE :motcle OR o.description LIKE :motcle
+            ");
+            $stmtCount->execute(['motcle' => "%$motcle%"]);
+            $resCount = $stmtCount->fetch(\PDO::FETCH_ASSOC);
+            $total = $resCount['total'];
+            $totalPages = ceil($total / $limit);
 
-        // Récupérer les offres avec pagination
-        $stmt = $pdo->prepare("
-            SELECT o.id, o.titre, o.description, o.remuneration,
-                   e.nom as entreprise
-            FROM offre o
-            JOIN entreprise e ON o.entreprise_id = e.id
-            WHERE o.titre LIKE :motcle OR o.description LIKE :motcle
-            ORDER BY o.id DESC
-            LIMIT :limit OFFSET :offset
-        ");
-        $stmt->bindValue(':motcle', "%$motcle%", \PDO::PARAM_STR);
-        $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
-        $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
-        $stmt->execute();
-        $offres = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    } else {
-        // Si aucun mot-clé, redirige vers la méthode index
-        $this->index();
-        return;
+            $stmt = $pdo->prepare("
+                SELECT o.id, o.titre, o.description, o.remuneration,
+                       e.nom as entreprise
+                FROM offre o
+                JOIN entreprise e ON o.entreprise_id = e.id
+                WHERE o.titre LIKE :motcle OR o.description LIKE :motcle
+                ORDER BY o.id DESC
+                LIMIT :limit OFFSET :offset
+            ");
+            $stmt->bindValue(':motcle', "%$motcle%", \PDO::PARAM_STR);
+            $stmt->bindValue(':limit', $limit, \PDO::PARAM_INT);
+            $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+            $stmt->execute();
+            $offres = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } else {
+            $this->index();
+            return;
+        }
+
+        $this->render('offres/index.twig', [
+            'offres' => $offres,
+            'motcle' => $motcle,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'competences' => ''
+        ]);
     }
-
-    $this->render('offres/index.php', [
-        'offres' => $offres,
-        'motcle' => $motcle,
-        'page' => $page,
-        'totalPages' => $totalPages,
-        'competences' => ''  // ou récupérer un filtre s'il existe
-    ]);
-}
-
 }

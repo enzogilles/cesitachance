@@ -21,6 +21,6 @@ class HomeController extends BaseController {
         ");
         $offres = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        $this->render('home/index.php', ['offres' => $offres]);
+        $this->render('home/index.twig', ['offres' => $offres]);
     }
 }
