@@ -1,3 +1,6 @@
+{% extends "layout/base.twig" %}
+{% block title %}Messages reçus{% endblock %}
+{% block content %}
 <section class="content">
     <h3>Messages reçus</h3>
     <table class="styled-table">
@@ -10,20 +13,21 @@
             </tr>
         </thead>
         <tbody>
-            <?php if (!empty($messages)): ?>
-                <?php foreach ($messages as $message): ?>
+            {% if messages is not empty %}
+                {% for message in messages %}
                     <tr>
-                        <td><?= htmlspecialchars($message['nom']) ?></td>
-                        <td><?= htmlspecialchars($message['email']) ?></td>
-                        <td><?= nl2br(htmlspecialchars($message['message'])) ?></td>
-                        <td><?= htmlspecialchars($message['date_envoi']) ?></td>
+                        <td>{{ message.nom|e }}</td>
+                        <td>{{ message.email|e }}</td>
+                        <td>{{ message.message|e|nl2br }}</td>
+                        <td>{{ message.date_envoi|e }}</td>
                     </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+                {% endfor %}
+            {% else %}
                 <tr>
                     <td colspan="4" style="text-align:center;">Aucun message reçu</td>
                 </tr>
-            <?php endif; ?>
+            {% endif %}
         </tbody>
     </table>
 </section>
+{% endblock %}

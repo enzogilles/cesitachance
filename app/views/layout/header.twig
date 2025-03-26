@@ -1,87 +1,51 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-?>
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CESI Ta Chance</title>
-    <link rel="stylesheet" href="<?= BASE_URL ?>styles/styles.css">
-</head>
-<body>
-
+{# On suppose que la variable "user" et "controller" sont passées par le contrôleur #}
 <header>
     <div class="header-logo">
-        <?php 
-        $isHomePage = isset($_GET['controller']) && $_GET['controller'] == 'home';
-        if ($isHomePage): ?>
+        {% if controller is defined and controller == 'home' %}
             <h1>CESI Ta Chance</h1>
-        <?php else: ?>
-            <img src="<?= BASE_URL ?>images/logo.png" alt="Logo">
-        <?php endif; ?>
+        {% else %}
+            <img src="{{ BASE_URL }}images/logo.png" alt="Logo">
+        {% endif %}
     </div>
-
     <nav>
-        <a href="<?= BASE_URL ?>index.php?controller=home&action=index">Accueil</a>
-        <a href="<?= BASE_URL ?>index.php?controller=offre&action=index">Offres</a>
-        <a href="<?= BASE_URL ?>index.php?controller=entreprise&action=index">Entreprises</a>
-        <!-- Lien Candidatures visible uniquement si l'utilisateur est connecté -->
-        <?php if(isset($_SESSION['user'])): ?>
-            <a href="<?= BASE_URL ?>index.php?controller=candidature&action=index">Candidatures</a>
-        <?php endif; ?>
-
-        <!-- Wishlist : désormais visible pour Admin OU Étudiant -->
-        <?php if (isset($_SESSION['user']) && (
-             $_SESSION['user']['role'] === 'Étudiant' 
-             || $_SESSION['user']['role'] === 'Admin'
-        )): ?>
-            <a href="<?= BASE_URL ?>index.php?controller=wishlist&action=index">Ma Wishlist</a>
-        <?php endif; ?>
-
-        <a href="<?= BASE_URL ?>index.php?controller=contact&action=index">Contact</a>
-
-        <!-- Dashboard : Admin ou pilote -->
-        <?php if (isset($_SESSION['user']) && 
-                  ( $_SESSION['user']['role'] === 'Admin' 
-                    || $_SESSION['user']['role'] === 'pilote' ) ): ?>
-            <a href="<?= BASE_URL ?>index.php?controller=dashboard&action=index">Dashboard</a>
-        <?php endif; ?>
+        <a href="{{ BASE_URL }}index.php?controller=home&action=index">Accueil</a>
+        <a href="{{ BASE_URL }}index.php?controller=offre&action=index">Offres</a>
+        <a href="{{ BASE_URL }}index.php?controller=entreprise&action=index">Entreprises</a>
+        {% if user is defined %}
+            <a href="{{ BASE_URL }}index.php?controller=candidature&action=index">Candidatures</a>
+        {% endif %}
+        {% if user is defined and (user.role == 'Étudiant' or user.role == 'Admin') %}
+            <a href="{{ BASE_URL }}index.php?controller=wishlist&action=index">Ma Wishlist</a>
+        {% endif %}
+        <a href="{{ BASE_URL }}index.php?controller=contact&action=index">Contact</a>
+        {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
+            <a href="{{ BASE_URL }}index.php?controller=dashboard&action=index">Dashboard</a>
+        {% endif %}
     </nav>
-
     <div id="user-menu">
-        <?php if (isset($_SESSION['user'])): ?>
-            <!-- Icône utilisateur si connecté -->
+        {% if user is defined %}
             <div id="user-icon" class="dropdown">
-                <img src="<?= BASE_URL ?>images/logo_deco.png" alt="Déconnexion" class="user-logo">
+                <img src="{{ BASE_URL }}images/logo_deco.png" alt="Déconnexion" class="user-logo">
                 <div class="dropdown-menu">
-                    <p>Bienvenue, <strong><?= htmlspecialchars($_SESSION['user']['prenom']) ?></strong></p>
-                    <form action="<?= BASE_URL ?>index.php?controller=utilisateur&action=logout" method="POST">
+                    <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
+                    <form action="{{ BASE_URL }}index.php?controller=utilisateur&action=logout" method="POST">
                         <button type="submit">Déconnexion</button>
                     </form>
                 </div>
             </div>
-        <?php else: ?>
-            <!-- Bouton Connexion si l'utilisateur n'est pas connecté -->
-            <a href="<?= BASE_URL ?>index.php?controller=utilisateur&action=connexion" id="login-btn" class="btn-login">Connexion</a>
-        <?php endif; ?>
+        {% else %}
+            <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=connexion" id="login-btn" class="btn-login">Connexion</a>
+        {% endif %}
     </div>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let userIcon = document.getElementById("user-icon");
+        let dropdownMenu = document.querySelector(".dropdown-menu");
+        if (userIcon && dropdownMenu) {
+            userIcon.addEventListener("click", function() {
+                dropdownMenu.classList.toggle("show");
+            });
+        }
+    });
+    </script>
 </header>
-
-<!-- Script pour gérer le menu utilisateur -->
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-    let userIcon = document.getElementById("user-icon");
-    let dropdownMenu = document.querySelector(".dropdown-menu");
-    
-    if (userIcon && dropdownMenu) {
-        userIcon.addEventListener("click", function() {
-            dropdownMenu.classList.toggle("show");
-        });
-    }
-});
-</script>
-</body>
-</html>

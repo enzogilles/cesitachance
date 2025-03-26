@@ -5,7 +5,7 @@
 require_once __DIR__ . '/../../vendor/autoload.php';
 
 // Définir le dossier qui contient vos templates Twig
-$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../view');
+$loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../views');
 
 // Initialiser l'environnement Twig
 $twig = new \Twig\Environment($loader, [

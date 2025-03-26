@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mon Site{% endblock %}</title>
+    <!-- On part du principe que le dossier public est la racine -->
+    <link rel="stylesheet" type="text/css" href="{{ BASE_URL }}styles/styles.css">
+</head>
+<body>
+    {% include "layout/header.twig" %}
+    {% block content %}{% endblock %}
+    {% include "layout/footer.twig" %}
+</body>
+</html>

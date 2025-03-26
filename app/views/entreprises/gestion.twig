@@ -1,3 +1,6 @@
+{% extends "layout/base.twig" %}
+{% block title %}Gérer l'Entreprise{% endblock %}
+{% block content %}
 <section class="content">
     <h2>Gérer l'Entreprise</h2>
     <p>Dans cet espace, vous pouvez créer, modifier, évaluer ou supprimer une entreprise.</p>
@@ -9,10 +12,9 @@
             <li><a href="#supprimer" class="btn-login">Supprimer</a></li>
         </ul>
     </div>
-    <!-- Formulaire de création d'entreprise -->
     <div id="creer" style="margin-top: 40px;">
         <h3>Créer une Entreprise</h3>
-        <form id="create-entreprise-form" action="<?= BASE_URL ?>entreprises/gestion.php?action=create" method="POST">
+        <form id="create-entreprise-form" action="{{ BASE_URL }}entreprises/gestion.php?action=create" method="POST">
             <label for="nom-creation">Nom :</label>
             <input type="text" id="nom-creation" name="nom" required>
             <label for="secteur">Secteur :</label>
@@ -24,10 +26,9 @@
             <button type="submit" class="btn">Créer</button>
         </form>
     </div>
-    <!-- Formulaire de modification d'entreprise -->
     <div id="modifier" style="margin-top: 40px;">
         <h3>Modifier une Entreprise</h3>
-        <form id="update-entreprise-form" action="<?= BASE_URL ?>entreprises/gestion.php?action=update" method="POST">
+        <form id="update-entreprise-form" action="{{ BASE_URL }}entreprises/gestion.php?action=update" method="POST">
             <label for="id-modif">ID de l’entreprise :</label>
             <input type="number" id="id-modif" name="id" required>
             <label for="nom-modif">Nouveau nom :</label>
@@ -41,13 +42,13 @@
             <button type="submit" class="btn">Modifier</button>
         </form>
     </div>
-    <!-- Formulaire de suppression d'entreprise -->
     <div id="supprimer" style="margin-top: 40px;">
         <h3>Supprimer une Entreprise</h3>
-        <form id="delete-entreprise-form" action="<?= BASE_URL ?>entreprises/gestion.php?action=delete" method="POST">
+        <form id="delete-entreprise-form" action="{{ BASE_URL }}entreprises/gestion.php?action=delete" method="POST">
             <label for="id-suppr">ID de l’entreprise :</label>
             <input type="number" id="id-suppr" name="id" required>
             <button type="submit" class="btn">Supprimer</button>
         </form>
     </div>
 </section>
+{% endblock %}

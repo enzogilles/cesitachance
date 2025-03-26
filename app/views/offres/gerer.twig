@@ -1,8 +1,8 @@
-<?php include_once __DIR__ . '/../layout/header.php'; ?>
-
+{% extends "layout/base.twig" %}
+{% block title %}Gérer les Offres{% endblock %}
+{% block content %}
 <section class="content">
   <h2>Gérer les Offres</h2>
-
   <table class="styled-table">
     <thead>
       <tr>
@@ -15,26 +15,22 @@
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($offres as $offre): ?>
+      {% for offre in offres %}
         <tr>
-          <td><?= htmlspecialchars($offre['titre']) ?></td>
-          <td><?= htmlspecialchars($offre['entreprise']) ?></td>
-          <td><?= htmlspecialchars($offre['remuneration']) ?>€</td>
-          <td><?= htmlspecialchars($offre['date_debut']) ?></td>
-          <td><?= htmlspecialchars($offre['date_fin']) ?></td>
+          <td>{{ offre.titre|e }}</td>
+          <td>{{ offre.entreprise|e }}</td>
+          <td>{{ offre.remuneration|e }}€</td>
+          <td>{{ offre.date_debut|e }}</td>
+          <td>{{ offre.date_fin|e }}</td>
           <td>
-            <div class='offer-buttons'>
-            <a href="<?= BASE_URL ?>index.php?controller=offre&action=modifier&id=<?= $offre['id'] ?>" class="btn-modifier">Modifier</a>
-            <a href="<?= BASE_URL ?>index.php?controller=offre&action=supprimer&id=<?= $offre['id'] ?>" class='btn-supprimer'>Supprimer</a>
+            <div class="offer-buttons">
+              <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" class="btn-modifier">Modifier</a>
+              <a href="{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}" class="btn-supprimer">Supprimer</a>
             </div>
-
           </td>
-
-
         </tr>
-      <?php endforeach; ?>
+      {% endfor %}
     </tbody>
   </table>
 </section>
-
-<?php include_once __DIR__ . '/../layout/footer.php'; ?>
+{% endblock %}

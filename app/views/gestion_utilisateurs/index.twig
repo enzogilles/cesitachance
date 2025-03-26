@@ -1,12 +1,11 @@
-<?php include_once __DIR__ . '/../layout/header.php'; ?>
-
+{% extends "layout/base.twig" %}
+{% block title %}Gestion des Utilisateurs{% endblock %}
+{% block content %}
 <main class="content">
     <h2>Gestion des Utilisateurs</h2>
-
-    <?php if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin'): ?>
+    {% if user is not defined or user.role != 'Admin' %}
         <p>Accès refusé</p>
-    <?php else: ?>
-
+    {% else %}
         <div class="dashboard-actions">
             <ul>
                 <li><a href="#recherche" class="btn-login">Rechercher un Utilisateur</a></li>
@@ -16,101 +15,76 @@
                 <li><a href="#statistiques" class="btn-login">Statistiques</a></li>
             </ul>
         </div>
-
-        <!-- Recherche d'utilisateur -->
         <div id="recherche" style="margin-top: 40px;">
             <h3>Rechercher un Utilisateur</h3>
-            <form action="<?= BASE_URL ?>index.php?controller=gestionutilisateurs&action=search" method="POST">
+            <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=search" method="POST">
                 <label for="search-user">Nom, Prénom ou Email :</label>
                 <input type="text" id="search-user" name="search_query" required>
                 <button type="submit" class="btn">Rechercher</button>
             </form>
         </div>
-
         <hr>
-
-        <!-- Résultat de la recherche -->
-        <?php if (isset($search_result) && !empty($search_result)): ?>
+        {% if search_result is defined and search_result is not empty %}
             <div id="resultat">
                 <h3>Résultat de la recherche :</h3>
-                <p><strong>Nom :</strong> <?= htmlspecialchars($search_result['nom']) ?></p>
-                <p><strong>Prénom :</strong> <?= htmlspecialchars($search_result['prenom']) ?></p>
-                <p><strong>Email :</strong> <?= htmlspecialchars($search_result['email']) ?></p>
-                <p><strong>Rôle :</strong> <?= htmlspecialchars($search_result['role']) ?></p>
-
+                <p><strong>Nom :</strong> {{ search_result.nom|e }}</p>
+                <p><strong>Prénom :</strong> {{ search_result.prenom|e }}</p>
+                <p><strong>Email :</strong> {{ search_result.email|e }}</p>
+                <p><strong>Rôle :</strong> {{ search_result.role|e }}</p>
                 <h3>Modifier cet utilisateur</h3>
-                <form action="<?= BASE_URL ?>index.php?controller=gestionutilisateurs&action=update" method="POST">
-                    <input type="hidden" name="id" value="<?= $search_result['id'] ?>">
-
+                <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=update" method="POST">
+                    <input type="hidden" name="id" value="{{ search_result.id }}">
                     <label>Nouveau Nom :</label>
-                    <input type="text" name="nom" value="<?= htmlspecialchars($search_result['nom']) ?>">
-
+                    <input type="text" name="nom" value="{{ search_result.nom|e }}">
                     <label>Nouveau Prénom :</label>
-                    <input type="text" name="prenom" value="<?= htmlspecialchars($search_result['prenom']) ?>">
-
+                    <input type="text" name="prenom" value="{{ search_result.prenom|e }}">
                     <label>Nouvel Email :</label>
-                    <input type="email" name="email" value="<?= htmlspecialchars($search_result['email']) ?>">
-
+                    <input type="email" name="email" value="{{ search_result.email|e }}">
                     <label>Nouveau Rôle :</label>
                     <select name="role">
-                        <option value="Etudiant" <?= $search_result['role'] == 'Etudiant' ? 'selected' : '' ?>>Étudiant</option>
-                        <option value="pilote" <?= $search_result['role'] == 'pilote' ? 'selected' : '' ?>>Pilote</option>
-                        <option value="Admin" <?= $search_result['role'] == 'Admin' ? 'selected' : '' ?>>Administrateur</option>
+                        <option value="Etudiant" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
+                        <option value="pilote" {% if search_result.role == 'pilote' %}selected{% endif %}>Pilote</option>
+                        <option value="Admin" {% if search_result.role == 'Admin' %}selected{% endif %}>Administrateur</option>
                     </select>
-
                     <button type="submit" class="btn">Modifier</button>
                 </form>
-
                 <h3>Supprimer cet utilisateur</h3>
-                <form action="<?= BASE_URL ?>index.php?controller=gestionutilisateurs&action=delete" method="POST">
-                    <input type="hidden" name="id" value="<?= $search_result['id'] ?>">
+                <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete" method="POST">
+                    <input type="hidden" name="id" value="{{ search_result.id }}">
                     <button type="submit" class="btn" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
                 </form>
             </div>
-        <?php elseif (isset($search_result) && empty($search_result)): ?>
+        {% elseif search_result is defined and search_result is empty %}
             <p>Aucun utilisateur trouvé.</p>
-        <?php endif; ?>
-
+        {% endif %}
         <hr>
-
-        <!-- Créer un utilisateur -->
         <div id="creer" style="margin-top: 40px;">
             <h3>Créer un Utilisateur</h3>
-            <form action="<?= BASE_URL ?>index.php?controller=gestionutilisateurs&action=create" method="POST">
+            <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create" method="POST">
                 <label for="nom-create-user">Nom :</label>
                 <input type="text" id="nom-create-user" name="nom" required>
-
                 <label for="prenom-create-user">Prénom :</label>
                 <input type="text" id="prenom-create-user" name="prenom" required>
-
                 <label for="email-create-user">Email :</label>
                 <input type="email" id="email-create-user" name="email" required>
-
                 <label for="role-create-user">Rôle :</label>
                 <select id="role-create-user" name="role" required>
                     <option value="Etudiant">Étudiant</option>
                     <option value="pilote">Pilote</option>
                     <option value="Admin">Administrateur</option>
                 </select>
-
                 <label for="password-create-user">Mot de passe :</label>
                 <input type="password" id="password-create-user" name="password" required>
-
                 <button type="submit" class="btn">Créer</button>
             </form>
         </div>
-
-        <!-- Statistiques -->
         <div id="statistiques" style="margin-top: 40px;">
             <h3>Statistiques</h3>
-            <p>Nombre total d'utilisateurs : <?= $stats['total_users'] ?? 'N/A' ?></p>
-            <p>Nombre d'étudiants : <?= $stats['total_etudiants'] ?? 'N/A' ?></p>
-            <p>Nombre de pilotes : <?= $stats['total_pilotes'] ?? 'N/A' ?></p>
-            <p>Nombre d'administrateurs : <?= $stats['total_admins'] ?? 'N/A' ?></p>
+            <p>Nombre total d'utilisateurs : {{ stats.total_users|default('N/A') }}</p>
+            <p>Nombre d'étudiants : {{ stats.total_etudiants|default('N/A') }}</p>
+            <p>Nombre de pilotes : {{ stats.total_pilotes|default('N/A') }}</p>
+            <p>Nombre d'administrateurs : {{ stats.total_admins|default('N/A') }}</p>
         </div>
-
-    <?php endif; ?>
-
+    {% endif %}
 </main>
-
-<?php include_once __DIR__ . '/../layout/footer.php'; ?>
+{% endblock %}
