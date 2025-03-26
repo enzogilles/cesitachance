@@ -9,7 +9,7 @@ if (session_status() == PHP_SESSION_NONE) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CESI Ta Chance</title>
-    <link rel="stylesheet" href="/site_web/public/styles/styles.css">
+    <link rel="stylesheet" href="<?= BASE_URL ?>styles/styles.css">
 </head>
 <body>
 
