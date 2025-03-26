@@ -1,7 +1,7 @@
 <?php
 // app/controller/BaseController.php
 
-namespace App\Controller;
+namespace app\controller;
 
 class BaseController {
     /**
