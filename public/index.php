@@ -6,12 +6,12 @@ error_reporting(E_ALL);
 
 
 // Charger la configuration globale et les classes...
-require_once __DIR__ . '/../app/config/config.php';
-require_once __DIR__ . '/../app/config/database.php';
+require_once __DIR__ . '/../App/config/config.php';
+require_once __DIR__ . '/../App/config/database.php';
 
 spl_autoload_register(function ($class) {
     $prefix = 'App\\';
-    $base_dir = __DIR__ . '/../app/';
+    $base_dir = __DIR__ . '/../App/';
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
         return;
