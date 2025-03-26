@@ -8,8 +8,8 @@ class Database {
         if (self::$instance === null) {
             $host     = 'localhost';
             $dbname   = 'projet_web';
-            $username = 'root';
-            $password = '';
+            $username = 'tuteur';
+            $password = 'Cesi123!';
             $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
 
             try {
