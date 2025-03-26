@@ -10,7 +10,7 @@ require_once __DIR__ . '/../app/config/config.php';
 require_once __DIR__ . '/../app/config/database.php';
 
 spl_autoload_register(function ($class) {
-    $prefix = 'App\\';
+    $prefix = 'app\\';
     $base_dir = __DIR__ . '/../app/';
     $len = strlen($prefix);
     if (strncmp($prefix, $class, $len) !== 0) {
@@ -29,7 +29,7 @@ $actionName = isset($_GET['action']) ? $_GET['action'] : 'index';
 
 
 // Construire le nom complet du contrôleur
-$controllerClass = 'App\\Controller\\' . ucfirst($controllerName) . 'Controller';
+$controllerClass = 'app\\controller\\' . ucfirst($controllerName) . 'Controller';
 
 if (class_exists($controllerClass)) {
     $controller = new $controllerClass();
