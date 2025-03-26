@@ -3,7 +3,7 @@
 
 namespace App\Controller;
 
-use App\Controller\BaseController;
+use app\controller\BaseController;
 use Database;
 
 class HomeController extends BaseController {
