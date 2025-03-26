@@ -1,9 +1,9 @@
 <?php
 // app/controller/MentionsLegalesController.php
 
-namespace App\Controller;
+namespace app\controller;
 
-use App\Controller\BaseController;
+use app\controller\BaseController;
 
 class MentionsLegalesController extends BaseController {
 

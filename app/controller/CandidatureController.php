@@ -1,9 +1,9 @@
 <?php
 // app/controller/CandidatureController.php
 
-namespace App\Controller;
+namespace app\controller;
 
-use App\Controller\BaseController;
+use app\controller\BaseController;
 use PDO;
 use PDOException;
 

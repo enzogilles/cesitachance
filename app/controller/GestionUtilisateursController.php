@@ -1,7 +1,7 @@
 <?php
-namespace App\Controller;
+namespace app\controller;
 
-use App\Controller\BaseController;
+use app\controller\BaseController;
 use Database;
 
 class GestionUtilisateursController extends BaseController

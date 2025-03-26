@@ -1,9 +1,9 @@
 <?php
-namespace App\Controller;
+namespace app\controller;
 
-use App\Controller\BaseController;
+use app\controller\BaseController;
 use Database;
-use App\Model\Entreprise;
+use app\model\Entreprise;
 
 class EntrepriseController extends BaseController
 {

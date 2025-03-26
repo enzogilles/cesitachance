@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controller;
+namespace app\controller;
 
-use App\Controller\BaseController;
-use App\Model\Offre;
+use app\controller\BaseController;
+use app\model\Offre;
 use Database;
 
 class OffreController extends BaseController
