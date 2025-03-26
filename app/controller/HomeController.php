@@ -1,7 +1,7 @@
 <?php
 // app/controller/HomeController.php
 
-namespace App\Controller;
+namespace app\controller;
 
 use app\controller\BaseController;
 use Database;
