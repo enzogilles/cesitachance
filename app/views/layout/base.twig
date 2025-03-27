@@ -7,7 +7,6 @@
     <link rel="stylesheet" type="text/css" href="{{ BASE_URL }}styles/styles.css">
 </head>
 <body>
-    <p>Session user : {{ session.user.role|default('aucun') }}</p>
 
     {% include "layout/header.twig" %}
     {% block content %}{% endblock %}
