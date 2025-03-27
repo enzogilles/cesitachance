@@ -19,7 +19,10 @@ class OffreController extends BaseController {
      * Liste des offres avec pagination et recherche multi-critères.
      */
     public function index() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $pdo = Database::getInstance();
 
         // Filtres
@@ -90,7 +93,10 @@ class OffreController extends BaseController {
      * Page d'administration : gérer toutes les offres -> réservé Admin/Pilote.
      */
     public function gererOffres() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -113,7 +119,10 @@ class OffreController extends BaseController {
      * Détail d’une offre.
      */
     public function detail($id) {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!$id) {
             die("Erreur : ID de l'offre manquant.");
         }
@@ -128,7 +137,10 @@ class OffreController extends BaseController {
      * Créer une nouvelle offre -> réservé Admin/Pilote.
      */
     public function create() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -170,7 +182,10 @@ class OffreController extends BaseController {
      * Modifier une offre -> réservé Admin/Pilote.
      */
     public function modifier($id) {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -234,7 +249,10 @@ class OffreController extends BaseController {
      * Supprimer une offre -> réservé Admin/Pilote.
      */
     public function supprimer($id) {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -262,7 +280,10 @@ class OffreController extends BaseController {
      * Recherche d'offres par mot-clé.
      */
     public function search() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $pdo = Database::getInstance();
 
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';

@@ -26,8 +26,14 @@ class UtilisateurController extends BaseController {
      * Déconnecte l'utilisateur.
      */
     public function logout() {
-        session_start();
-        $_SESSION = []; // Vide le tableau de session
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+    
+        // Supprimer toutes les données de session
+        $_SESSION = [];
+    
+        // Supprimer le cookie de session
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
             setcookie(session_name(), '', time() - 42000,
@@ -35,17 +41,29 @@ class UtilisateurController extends BaseController {
                 $params["secure"], $params["httponly"]
             );
         }
+    
+        // Détruire la session côté serveur
         session_destroy();
+    
+        // ✅ Repartir sur une nouvelle session propre (évite les résurrections de session)
+        session_start();
+        session_regenerate_id(true);
+    
+        // Redirection
         header("Location: " . BASE_URL . "index.php?controller=home&action=index");
         exit();
     }
+    
     
 
     /**
      * Traitement de la connexion.
      */
     public function login() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $pdo = Database::getInstance();
     
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -90,7 +108,10 @@ class UtilisateurController extends BaseController {
      * Traitement de l'inscription.
      */
     public function register() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $pdo = Database::getInstance();
     
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -152,7 +173,10 @@ class UtilisateurController extends BaseController {
      * Traite la demande de réinitialisation du mot de passe.
      */
     public function sendResetLink() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $pdo = Database::getInstance();
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {

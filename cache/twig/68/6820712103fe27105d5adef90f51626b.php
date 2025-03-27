@@ -45,24 +45,23 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
         // line 5
         yield from $this->unwrap()->yieldBlock('title', $context, $blocks);
         yield "</title>
-    <!-- On part du principe que le dossier public est la racine -->
     <link rel=\"stylesheet\" type=\"text/css\" href=\"";
-        // line 7
+        // line 6
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "styles/styles.css\">
 </head>
 <body>
 
     ";
+        // line 10
+        yield from         $this->loadTemplate("layout/header.twig", "layout/base.twig", 10)->unwrap()->yield($context);
         // line 11
-        yield from         $this->loadTemplate("layout/header.twig", "layout/base.twig", 11)->unwrap()->yield($context);
-        // line 12
         yield "    ";
         yield from $this->unwrap()->yieldBlock('content', $context, $blocks);
-        // line 13
+        // line 12
         yield "    ";
-        yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 13)->unwrap()->yield($context);
-        // line 14
+        yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 12)->unwrap()->yield($context);
+        // line 13
         yield "</body>
 </html>
 ";
@@ -77,7 +76,7 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
         return; yield '';
     }
 
-    // line 12
+    // line 11
     public function block_content($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -105,7 +104,7 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
      */
     public function getDebugInfo()
     {
-        return array (  81 => 12,  73 => 5,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  51 => 7,  46 => 5,  40 => 1,);
+        return array (  80 => 11,  72 => 5,  65 => 13,  62 => 12,  59 => 11,  57 => 10,  50 => 6,  46 => 5,  40 => 1,);
     }
 
     public function getSourceContext()
@@ -115,7 +114,6 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
 <head>
     <meta charset=\"UTF-8\">
     <title>{% block title %}Mon Site{% endblock %}</title>
-    <!-- On part du principe que le dossier public est la racine -->
     <link rel=\"stylesheet\" type=\"text/css\" href=\"{{ BASE_URL }}styles/styles.css\">
 </head>
 <body>

@@ -12,7 +12,10 @@ class GestionUtilisateursController extends BaseController
      * Affichage de la gestion des utilisateurs, avec pagination -> réservé à l'Admin.
      */
     public function index() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -60,7 +63,10 @@ class GestionUtilisateursController extends BaseController
      * Création d'un utilisateur -> réservé à l'Admin.
      */
     public function create() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -92,7 +98,10 @@ class GestionUtilisateursController extends BaseController
      * Modification d'un utilisateur -> réservé à l'Admin.
      */
     public function update() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -142,7 +151,10 @@ class GestionUtilisateursController extends BaseController
      * Suppression d'un utilisateur -> réservé à l'Admin.
      */
     public function delete() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -165,7 +177,10 @@ class GestionUtilisateursController extends BaseController
      * Recherche d'un utilisateur -> réservé à l'Admin.
      */
     public function search() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -207,7 +222,10 @@ class GestionUtilisateursController extends BaseController
      * Consulter les statistiques d’un compte Étudiant -> réservé à Admin/Pilote.
      */
     public function statsEtudiant($id) {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;

@@ -1,18 +1,16 @@
 <?php
-// app/config/twig.php
+// Initialise l’environnement Twig pour le templating
 
-// Charger l'autoloader de Composer
 require_once __DIR__ . '/../../vendor/autoload.php';
 
-// Définir le dossier qui contient vos templates Twig
+// Définit le dossier où se trouvent les fichiers .twig
 $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../views');
 
-// Initialiser l'environnement Twig
+// Crée l’environnement Twig avec options : cache et debug
 $twig = new \Twig\Environment($loader, [
-    // Pour le développement, vous pouvez désactiver le cache :
-    'cache' => __DIR__ . '/../../cache/twig', // Veillez à créer le dossier "cache/twig" ou mettez 'cache' => false
-    'debug' => true,
+    'cache' => __DIR__ . '/../../cache/twig', // Cache des templates compilés
+    'debug' => true,                          // Mode debug (désactiver en production)
 ]);
 
-// Ajouter l'extension debug pour faciliter le développement (optionnel)
+// Ajout de l’extension debug (dump dans Twig)
 $twig->addExtension(new \Twig\Extension\DebugExtension());

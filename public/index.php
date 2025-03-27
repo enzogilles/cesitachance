@@ -1,6 +1,11 @@
 <?php
 // public/index.php
 
+
+session_start();
+// Démarre la session pour accéder aux données de session
+
+
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
@@ -24,8 +29,9 @@ spl_autoload_register(function ($class) {
 });
 
 // Récupérer le contrôleur et l'action demandés
-$controllerName = isset($_GET['controller']) ? $_GET['controller'] : 'home';
-$actionName = isset($_GET['action']) ? $_GET['action'] : 'index';
+$controllerName = $_REQUEST['controller'] ?? 'home';
+$actionName = $_REQUEST['action'] ?? 'index';
+
 
 
 // Construire le nom complet du contrôleur

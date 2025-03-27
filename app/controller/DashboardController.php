@@ -12,7 +12,10 @@ class DashboardController extends BaseController {
      * Dashboard principal réservé aux utilisateurs connectés (Admin ou Pilote).
      */
     public function index() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
 
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
@@ -26,7 +29,10 @@ class DashboardController extends BaseController {
      * Statistiques sur les offres -> réservé à Admin/Pilote.
      */
     public function offerStats() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
