@@ -41,22 +41,21 @@ class __TwigTemplate_d5378014e6c234748408b1251b1e4081 extends Template
     <a href=\"";
         // line 4
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=mentionsLegales&action=mentions\">Mentions légales</a> | 
-    <a href=\"";
-        // line 5
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=mentionsLegales&action=conditions\">Conditions générales</a> | 
+        yield "index.php?controller=mentionsLegales&action=mentions\" 
+       class=\"footer-btn\">Mentions légales</a> | 
     <a href=\"";
         // line 6
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=mentionsLegales&action=confidentialite\">Politique de confidentialité</a> | 
+        yield "index.php?controller=mentionsLegales&action=conditions\" 
+       class=\"footer-btn\">Conditions générales</a> | 
+    <a href=\"";
+        // line 8
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "index.php?controller=mentionsLegales&action=confidentialite\" 
+       class=\"footer-btn\">Politique de confidentialité</a> | 
     Contact : contact@cesitachance.com
   </p>
 </footer>
-<script src=\"";
-        // line 10
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "js/header.js\"></script>
 ";
         return; yield '';
     }
@@ -82,7 +81,7 @@ class __TwigTemplate_d5378014e6c234748408b1251b1e4081 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  58 => 10,  51 => 6,  47 => 5,  43 => 4,  38 => 1,);
+        return array (  53 => 8,  48 => 6,  43 => 4,  38 => 1,);
     }
 
     public function getSourceContext()
@@ -90,13 +89,15 @@ class __TwigTemplate_d5378014e6c234748408b1251b1e4081 extends Template
         return new Source("<footer>
   <p>
     © 2025 - CESI Ta Chance | 
-    <a href=\"{{ BASE_URL }}index.php?controller=mentionsLegales&action=mentions\">Mentions légales</a> | 
-    <a href=\"{{ BASE_URL }}index.php?controller=mentionsLegales&action=conditions\">Conditions générales</a> | 
-    <a href=\"{{ BASE_URL }}index.php?controller=mentionsLegales&action=confidentialite\">Politique de confidentialité</a> | 
+    <a href=\"{{ BASE_URL }}index.php?controller=mentionsLegales&action=mentions\" 
+       class=\"footer-btn\">Mentions légales</a> | 
+    <a href=\"{{ BASE_URL }}index.php?controller=mentionsLegales&action=conditions\" 
+       class=\"footer-btn\">Conditions générales</a> | 
+    <a href=\"{{ BASE_URL }}index.php?controller=mentionsLegales&action=confidentialite\" 
+       class=\"footer-btn\">Politique de confidentialité</a> | 
     Contact : contact@cesitachance.com
   </p>
 </footer>
-<script src=\"{{ BASE_URL }}js/header.js\"></script>
 ", "layout/footer.twig", "C:\\wamp64\\www\\cesitachance-1\\app\\views\\layout\\footer.twig");
     }
 }

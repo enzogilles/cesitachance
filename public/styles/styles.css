@@ -1125,6 +1125,21 @@ button {
   background-color: #f0f0f0;
 }
 
+.footer-btn {
+  display: inline-block;
+  padding: 8px 12px;
+  background-color: #FFD700;
+  color: #000;
+  border-radius: 10px;
+  text-decoration: none;
+  margin: 0 5px;
+  transition: background-color 0.3s;
+}
+.footer-btn:hover {
+  background-color: #f0f0f0;
+}
+
+
 
 
 

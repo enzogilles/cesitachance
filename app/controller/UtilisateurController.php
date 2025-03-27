@@ -44,8 +44,10 @@ class UtilisateurController extends BaseController {
             $password = $_POST["password"];
     
             if (empty($email) || empty($password)) {
-                echo json_encode(["success" => false, "message" => "Veuillez remplir tous les champs."]);
-                exit;
+                // On réaffiche la page connexion.twig avec un message
+                $error = "Veuillez remplir tous les champs.";
+                $this->render('utilisateurs/connexion.twig', ['error' => $error]);
+                return;
             }
     
             $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role, password FROM user WHERE email = ?");
@@ -53,10 +55,13 @@ class UtilisateurController extends BaseController {
             $user = $stmt->fetch(\PDO::FETCH_ASSOC);
     
             if (!$user || !password_verify($password, $user['password'])) {
-                echo json_encode(["success" => false, "message" => "Email ou mot de passe incorrect."]);
-                exit;
+                // Email ou mot de passe incorrect
+                $error = "Email ou mot de passe incorrect.";
+                $this->render('utilisateurs/connexion.twig', ['error' => $error]);
+                return;
             }
     
+            // Si tout est OK, on connecte l'utilisateur
             $_SESSION["user"] = [
                 "id" => $user["id"],
                 "nom" => $user["nom"],
@@ -65,15 +70,12 @@ class UtilisateurController extends BaseController {
                 "role" => $user["role"]
             ];
     
-            if (!isset($_SESSION["user"])) {
-                echo json_encode(["success" => false, "message" => "Erreur lors de la création de la session."]);
-                exit;
-            }
-    
+            // Redirection vers le dashboard
             header("Location: " . BASE_URL . "index.php?controller=dashboard&action=index");
             exit;
         }
     }
+    
 
     /**
      * Traitement de l'inscription.

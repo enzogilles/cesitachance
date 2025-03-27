@@ -15,11 +15,23 @@
             <tbody>
                 {% for entreprise in entreprises %}
                     <tr>
-                        <td>{{ entreprise.nom|e }}</td>
-                        <td>{{ entreprise.ville|e }}</td>
                         <td>
-                            <a href="{{ BASE_URL }}index.php?controller=entreprise&action=details&id={{ entreprise.id }}" class="btn-voir">Détails</a>
-                        </td>
+                            <!-- Bouton "Modifier" qui redirige vers le formulaire de modification -->
+                            <a href="{{ BASE_URL }}index.php?controller=entreprise&action=modifier&id={{ entreprise.id }}" 
+                            class="btn-modifier">Modifier</a>
+
+                            <!-- Bouton "Supprimer" : on envoie un formulaire POST vers l'action supprimer -->
+                            <form action="{{ BASE_URL }}index.php?controller=entreprise&action=supprimer" 
+                                method="POST" 
+                                style="display:inline;">
+                                <input type="hidden" name="id" value="{{ entreprise.id }}">
+                                <button type="submit" class="btn-supprimer"
+                                        onclick="return confirm('Voulez-vous vraiment supprimer cette entreprise ?');">
+                                    Supprimer
+                                </button>
+                            </form>
+                        </td>   
+                    
                     </tr>
                 {% endfor %}
             </tbody>
