@@ -43,36 +43,54 @@ class EntrepriseController extends BaseController
         }
 
         // Count
+        // Count
         $sqlCount = "SELECT COUNT(*) as total FROM entreprise " . $sqlFilter;
         $stmtCount = $pdo->prepare($sqlCount);
         $stmtCount->execute($params);
         $rowCount = $stmtCount->fetch();
         $total = $rowCount['total'];
+        $totalPages = ceil($total / $limit); // Définition de $totalPages
 
         // Data
-        $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT ? OFFSET ?";
+        $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
         $stmtData = $pdo->prepare($sqlData);
-        $p = 1;
-        foreach ($params as $val) {
-            $stmtData->bindValue($p, $val);
-            $p++;
-        }
-        $stmtData->bindValue($p, $limit, \PDO::PARAM_INT);
-        $p++;
-        $stmtData->bindValue($p, $offset, \PDO::PARAM_INT);
-        $stmtData->execute();
+        $stmtData->execute($params);
         $entreprises = $stmtData->fetchAll(\PDO::FETCH_ASSOC);
 
-        $totalPages = ceil($total / $limit);
 
-        $this->render('entreprises/index.twig', [
-            'entreprises' => $entreprises,
-            'page' => $page,
-            'totalPages' => $totalPages,
-            'nom' => $nom,
-            'ville' => $ville,
-            'secteur' => $secteur
-        ]);
+
+    // On construit la colonne "actions" pour chaque entreprise
+foreach ($entreprises as &$entreprise) {
+    // Toujours le bouton "Détails"
+    $detailLink = '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn-voir">Détails</a>';
+
+    // Si l'utilisateur est connecté ET a le rôle Admin ou pilote
+    if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+        $modifyLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn-modifier">Modifier</a>';
+        $deleteLink = ' <form action="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer" method="POST" style="display:inline;">
+                            <input type="hidden" name="id" value="' . $entreprise['id'] . '">
+                            <button type="submit" class="btn-supprimer" onclick="return confirm(\'Voulez-vous vraiment supprimer cette entreprise ?\');">Supprimer</button>
+                        </form>';
+        $entreprise['actions'] = $detailLink . $modifyLink . $deleteLink;
+    } else {
+        // Pour les étudiants ou non connectés, on affiche seulement "Détails"
+        $entreprise['actions'] = $detailLink;
+    }
+}
+unset($entreprise);
+ // Bonne pratique pour libérer la référence
+
+    // (4) Calcul du totalPages etc. pour ta pagination...
+
+    // (5) On passe le tableau complet à Twig
+    $this->render('entreprises/index.twig', [
+        'entreprises' => $entreprises,
+        'page'        => $page,
+        'totalPages'  => $totalPages,
+        'nom'         => $nom,
+        'ville'       => $ville,
+        'secteur'     => $secteur
+    ]);
     }
 
     /**

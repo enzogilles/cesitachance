@@ -19,6 +19,10 @@ class BaseController {
      * @param array  $data     Variables à passer au template
      */
     protected function render($template, $data = []) {
-        echo $this->twig->render($template, $data);
+        if (session_status() !== PHP_SESSION_ACTIVE) {
+            session_start();
+        }
+        echo $this->twig->render($template, array_merge($data, ['session' => $_SESSION]));
     }
+    
 }

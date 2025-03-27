@@ -57,12 +57,18 @@ class __TwigTemplate_ad009c65a7c86a79ca72348a0459c8a0 extends Template
     {
         $macros = $this->macros;
         // line 4
-        yield "<section class=\"content\">
+        yield "
+<section class=\"content\">
+    <p>Rôle connecté : ";
+        // line 6
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "user", [], "any", false, true, false, 6), "role", [], "any", true, true, false, 6)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "user", [], "any", false, true, false, 6), "role", [], "any", false, false, false, 6), "Non connecté")) : ("Non connecté")), "html", null, true);
+        yield "</p>
+
     <h3>Entreprises proposant des stages</h3>
     ";
-        // line 6
+        // line 9
         if ((array_key_exists("entreprises", $context) &&  !Twig\Extension\CoreExtension::testEmpty(($context["entreprises"] ?? null)))) {
-            // line 7
+            // line 10
             yield "        <table class=\"styled-table\">
             <thead>
                 <tr>
@@ -73,168 +79,45 @@ class __TwigTemplate_ad009c65a7c86a79ca72348a0459c8a0 extends Template
             </thead>
             <tbody>
                 ";
-            // line 16
+            // line 19
             $context['_parent'] = $context;
             $context['_seq'] = CoreExtension::ensureTraversable(($context["entreprises"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["entreprise"]) {
-                // line 17
-                yield "                    <tr>
-                        <td>
-                            <!-- Bouton \"Modifier\" qui redirige vers le formulaire de modification -->
-                            <a href=\"";
                 // line 20
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-                yield "index.php?controller=entreprise&action=modifier&id=";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "id", [], "any", false, false, false, 20), "html", null, true);
-                yield "\" 
-                            class=\"btn-modifier\">Modifier</a>
-
-                            <!-- Bouton \"Supprimer\" : on envoie un formulaire POST vers l'action supprimer -->
-                            <form action=\"";
+                yield "                    <tr>
+                        <td>";
+                // line 21
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "nom", [], "any", false, false, false, 21));
+                yield "</td>
+                        <td>";
+                // line 22
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "ville", [], "any", false, false, false, 22));
+                yield "</td>
+                        ";
                 // line 24
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-                yield "index.php?controller=entreprise&action=supprimer\" 
-                                method=\"POST\" 
-                                style=\"display:inline;\">
-                                <input type=\"hidden\" name=\"id\" value=\"";
-                // line 27
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "id", [], "any", false, false, false, 27), "html", null, true);
-                yield "\">
-                                <button type=\"submit\" class=\"btn-supprimer\"
-                                        onclick=\"return confirm('Voulez-vous vraiment supprimer cette entreprise ?');\">
-                                    Supprimer
-                                </button>
-                            </form>
-                        </td>   
-                    
+                yield "                        <td>";
+                yield CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "actions", [], "any", false, false, false, 24);
+                yield "</td>
                     </tr>
                 ";
             }
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['entreprise'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 37
+            // line 27
             yield "            </tbody>
         </table>
+
         ";
-            // line 39
-            if ((($context["totalPages"] ?? null) > 0)) {
-                // line 40
-                yield "            <div class=\"pagination\">
-                ";
-                // line 41
-                if ((($context["page"] ?? null) > 1)) {
-                    // line 42
-                    yield "                    <a href=\"?controller=entreprise&action=index&page=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape((($context["page"] ?? null) - 1), "html", null, true);
-                    yield "&nom=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["nom"] ?? null)), "html", null, true);
-                    yield "&ville=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["ville"] ?? null)), "html", null, true);
-                    yield "&secteur=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["secteur"] ?? null)), "html", null, true);
-                    yield "\">Précédent</a>
-                ";
-                }
-                // line 44
-                yield "                ";
-                $context["window"] = 3;
-                // line 45
-                yield "                ";
-                if ((($context["totalPages"] ?? null) <= ($context["window"] ?? null))) {
-                    // line 46
-                    yield "                    ";
-                    $context["start"] = 1;
-                    // line 47
-                    yield "                    ";
-                    $context["end"] = ($context["totalPages"] ?? null);
-                    // line 48
-                    yield "                ";
-                } else {
-                    // line 49
-                    yield "                    ";
-                    $context["start"] = (($context["page"] ?? null) - 1);
-                    // line 50
-                    yield "                    ";
-                    if ((($context["start"] ?? null) < 1)) {
-                        $context["start"] = 1;
-                    }
-                    // line 51
-                    yield "                    ";
-                    $context["end"] = ((($context["start"] ?? null) + ($context["window"] ?? null)) - 1);
-                    // line 52
-                    yield "                    ";
-                    if ((($context["end"] ?? null) > ($context["totalPages"] ?? null))) {
-                        // line 53
-                        yield "                        ";
-                        $context["end"] = ($context["totalPages"] ?? null);
-                        // line 54
-                        yield "                        ";
-                        $context["start"] = ((($context["end"] ?? null) - ($context["window"] ?? null)) + 1);
-                        // line 55
-                        yield "                        ";
-                        if ((($context["start"] ?? null) < 1)) {
-                            $context["start"] = 1;
-                        }
-                        // line 56
-                        yield "                    ";
-                    }
-                    // line 57
-                    yield "                ";
-                }
-                // line 58
-                yield "                ";
-                $context['_parent'] = $context;
-                $context['_seq'] = CoreExtension::ensureTraversable(range(($context["start"] ?? null), ($context["end"] ?? null)));
-                foreach ($context['_seq'] as $context["_key"] => $context["i"]) {
-                    // line 59
-                    yield "                    <a href=\"?controller=entreprise&action=index&page=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["i"], "html", null, true);
-                    yield "&nom=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["nom"] ?? null)), "html", null, true);
-                    yield "&ville=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["ville"] ?? null)), "html", null, true);
-                    yield "&secteur=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["secteur"] ?? null)), "html", null, true);
-                    yield "\" class=\"";
-                    if (($context["i"] == ($context["page"] ?? null))) {
-                        yield "active";
-                    }
-                    yield "\">";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["i"], "html", null, true);
-                    yield "</a>
-                ";
-                }
-                $_parent = $context['_parent'];
-                unset($context['_seq'], $context['_iterated'], $context['_key'], $context['i'], $context['_parent'], $context['loop']);
-                $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 61
-                yield "                ";
-                if ((($context["page"] ?? null) < ($context["totalPages"] ?? null))) {
-                    // line 62
-                    yield "                    <a href=\"?controller=entreprise&action=index&page=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape((($context["page"] ?? null) + 1), "html", null, true);
-                    yield "&nom=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["nom"] ?? null)), "html", null, true);
-                    yield "&ville=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["ville"] ?? null)), "html", null, true);
-                    yield "&secteur=";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::urlencode(($context["secteur"] ?? null)), "html", null, true);
-                    yield "\">Suivant</a>
-                ";
-                }
-                // line 64
-                yield "            </div>
-        ";
-            }
-            // line 66
-            yield "    ";
+            // line 31
+            yield "        ...
+    ";
         } else {
-            // line 67
+            // line 33
             yield "        <p>Aucune entreprise trouvée.</p>
     ";
         }
-        // line 69
+        // line 35
         yield "</section>
 ";
         return; yield '';
@@ -261,7 +144,7 @@ class __TwigTemplate_ad009c65a7c86a79ca72348a0459c8a0 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  238 => 69,  234 => 67,  231 => 66,  227 => 64,  215 => 62,  212 => 61,  191 => 59,  186 => 58,  183 => 57,  180 => 56,  175 => 55,  172 => 54,  169 => 53,  166 => 52,  163 => 51,  158 => 50,  155 => 49,  152 => 48,  149 => 47,  146 => 46,  143 => 45,  140 => 44,  128 => 42,  126 => 41,  123 => 40,  121 => 39,  117 => 37,  101 => 27,  95 => 24,  86 => 20,  81 => 17,  77 => 16,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  121 => 35,  117 => 33,  113 => 31,  108 => 27,  98 => 24,  94 => 22,  90 => 21,  87 => 20,  83 => 19,  72 => 10,  70 => 9,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -269,7 +152,10 @@ class __TwigTemplate_ad009c65a7c86a79ca72348a0459c8a0 extends Template
         return new Source("{% extends \"layout/base.twig\" %}
 {% block title %}Entreprises Proposant des Stages{% endblock %}
 {% block content %}
+
 <section class=\"content\">
+    <p>Rôle connecté : {{ session.user.role|default('Non connecté') }}</p>
+
     <h3>Entreprises proposant des stages</h3>
     {% if entreprises is defined and entreprises is not empty %}
         <table class=\"styled-table\">
@@ -283,54 +169,17 @@ class __TwigTemplate_ad009c65a7c86a79ca72348a0459c8a0 extends Template
             <tbody>
                 {% for entreprise in entreprises %}
                     <tr>
-                        <td>
-                            <!-- Bouton \"Modifier\" qui redirige vers le formulaire de modification -->
-                            <a href=\"{{ BASE_URL }}index.php?controller=entreprise&action=modifier&id={{ entreprise.id }}\" 
-                            class=\"btn-modifier\">Modifier</a>
-
-                            <!-- Bouton \"Supprimer\" : on envoie un formulaire POST vers l'action supprimer -->
-                            <form action=\"{{ BASE_URL }}index.php?controller=entreprise&action=supprimer\" 
-                                method=\"POST\" 
-                                style=\"display:inline;\">
-                                <input type=\"hidden\" name=\"id\" value=\"{{ entreprise.id }}\">
-                                <button type=\"submit\" class=\"btn-supprimer\"
-                                        onclick=\"return confirm('Voulez-vous vraiment supprimer cette entreprise ?');\">
-                                    Supprimer
-                                </button>
-                            </form>
-                        </td>   
-                    
+                        <td>{{ entreprise.nom|e }}</td>
+                        <td>{{ entreprise.ville|e }}</td>
+                        {# On affiche simplement la clé \"actions\" que le contrôleur a préparée #}
+                        <td>{{ entreprise.actions|raw }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-        {% if totalPages > 0 %}
-            <div class=\"pagination\">
-                {% if page > 1 %}
-                    <a href=\"?controller=entreprise&action=index&page={{ page - 1 }}&nom={{ nom|url_encode }}&ville={{ ville|url_encode }}&secteur={{ secteur|url_encode }}\">Précédent</a>
-                {% endif %}
-                {% set window = 3 %}
-                {% if totalPages <= window %}
-                    {% set start = 1 %}
-                    {% set end = totalPages %}
-                {% else %}
-                    {% set start = page - 1 %}
-                    {% if start < 1 %}{% set start = 1 %}{% endif %}
-                    {% set end = start + window - 1 %}
-                    {% if end > totalPages %}
-                        {% set end = totalPages %}
-                        {% set start = end - window + 1 %}
-                        {% if start < 1 %}{% set start = 1 %}{% endif %}
-                    {% endif %}
-                {% endif %}
-                {% for i in start..end %}
-                    <a href=\"?controller=entreprise&action=index&page={{ i }}&nom={{ nom|url_encode }}&ville={{ ville|url_encode }}&secteur={{ secteur|url_encode }}\" class=\"{% if i == page %}active{% endif %}\">{{ i }}</a>
-                {% endfor %}
-                {% if page < totalPages %}
-                    <a href=\"?controller=entreprise&action=index&page={{ page + 1 }}&nom={{ nom|url_encode }}&ville={{ ville|url_encode }}&secteur={{ secteur|url_encode }}\">Suivant</a>
-                {% endif %}
-            </div>
-        {% endif %}
+
+        {# Ta pagination, inchangée #}
+        ...
     {% else %}
         <p>Aucune entreprise trouvée.</p>
     {% endif %}

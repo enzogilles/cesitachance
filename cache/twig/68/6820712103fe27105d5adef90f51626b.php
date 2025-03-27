@@ -52,16 +52,21 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
         yield "styles/styles.css\">
 </head>
 <body>
-    ";
+    <p>Session user : ";
         // line 10
-        yield from         $this->loadTemplate("layout/header.twig", "layout/base.twig", 10)->unwrap()->yield($context);
-        // line 11
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "user", [], "any", false, true, false, 10), "role", [], "any", true, true, false, 10)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "user", [], "any", false, true, false, 10), "role", [], "any", false, false, false, 10), "aucun")) : ("aucun")), "html", null, true);
+        yield "</p>
+
+    ";
+        // line 12
+        yield from         $this->loadTemplate("layout/header.twig", "layout/base.twig", 12)->unwrap()->yield($context);
+        // line 13
         yield "    ";
         yield from $this->unwrap()->yieldBlock('content', $context, $blocks);
-        // line 12
+        // line 14
         yield "    ";
-        yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 12)->unwrap()->yield($context);
-        // line 13
+        yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 14)->unwrap()->yield($context);
+        // line 15
         yield "</body>
 </html>
 ";
@@ -76,7 +81,7 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
         return; yield '';
     }
 
-    // line 11
+    // line 13
     public function block_content($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -104,7 +109,7 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
      */
     public function getDebugInfo()
     {
-        return array (  80 => 11,  72 => 5,  65 => 13,  62 => 12,  59 => 11,  57 => 10,  51 => 7,  46 => 5,  40 => 1,);
+        return array (  85 => 13,  77 => 5,  70 => 15,  67 => 14,  64 => 13,  62 => 12,  57 => 10,  51 => 7,  46 => 5,  40 => 1,);
     }
 
     public function getSourceContext()
@@ -118,6 +123,8 @@ class __TwigTemplate_61867cde1ebfba0abc5c2a23889b7dde extends Template
     <link rel=\"stylesheet\" type=\"text/css\" href=\"{{ BASE_URL }}styles/styles.css\">
 </head>
 <body>
+    <p>Session user : {{ session.user.role|default('aucun') }}</p>
+
     {% include \"layout/header.twig\" %}
     {% block content %}{% endblock %}
     {% include \"layout/footer.twig\" %}
