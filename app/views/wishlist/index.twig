@@ -10,7 +10,7 @@
                     {{ item.titre|e }} - {{ item.entreprise|e }}
                     <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
                         <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
-                        <button type="submit" class="btn">Supprimer</button>
+                        <button type="submit" class="btn-register">Supprimer</button>
                     </form>
                 </li>
             {% endfor %}
@@ -19,4 +19,8 @@
         <p>Votre wishlist est vide.</p>
     {% endif %}
 </main>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
 {% endblock %}

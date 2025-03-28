@@ -89,10 +89,9 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
                 // line 21
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "ville", [], "any", false, false, false, 21));
                 yield "</td>
-                        ";
-                // line 23
-                yield "                        <td>";
-                yield CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "actions", [], "any", false, false, false, 23);
+                        <td>";
+                // line 22
+                yield CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "actions", [], "any", false, false, false, 22);
                 yield "</td>
                     </tr>
                 ";
@@ -100,20 +99,17 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['entreprise'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 26
+            // line 25
             yield "            </tbody>
         </table>
-
-        ";
-            // line 30
-            yield "        ...
+        ...
     ";
         } else {
-            // line 32
+            // line 29
             yield "        <p>Aucune entreprise trouvée.</p>
     ";
         }
-        // line 34
+        // line 31
         yield "</section>
 ";
         return; yield '';
@@ -140,7 +136,7 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  117 => 34,  113 => 32,  109 => 30,  104 => 26,  94 => 23,  90 => 21,  86 => 20,  83 => 19,  79 => 18,  68 => 9,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  113 => 31,  109 => 29,  103 => 25,  94 => 22,  90 => 21,  86 => 20,  83 => 19,  79 => 18,  68 => 9,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -166,20 +162,17 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
                     <tr>
                         <td>{{ entreprise.nom|e }}</td>
                         <td>{{ entreprise.ville|e }}</td>
-                        {# On affiche simplement la clé \"actions\" que le contrôleur a préparée #}
                         <td>{{ entreprise.actions|raw }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        {# Ta pagination, inchangée #}
         ...
     {% else %}
         <p>Aucune entreprise trouvée.</p>
     {% endif %}
 </section>
 {% endblock %}
-", "entreprises/index.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\entreprises\\index.twig");
+", "entreprises/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\entreprises\\index.twig");
     }
 }

@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.textContent = message;
     notification.style.position = "fixed";
     notification.style.top = "130px";
-    notification.style.left = "40%";
+    notification.style.left = "37%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
     document.body.appendChild(notification);
