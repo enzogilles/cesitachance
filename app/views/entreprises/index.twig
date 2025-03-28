@@ -3,7 +3,6 @@
 {% block content %}
 
 <section class="content">
-    <p>Rôle connecté : {{ session.user.role|default('Non connecté') }}</p>
 
     <h3>Entreprises proposant des stages</h3>
     {% if entreprises is defined and entreprises is not empty %}

@@ -6,16 +6,15 @@ namespace app\controller;
 use PDO;
 use PDOException;
 
-// Inclusion de la classe Database (définie dans app/config/database.php, sans namespace)
 require_once __DIR__ . '/../config/database.php';
 
 class CandidatureController extends BaseController {
 
-    /**
-     * Affiche la liste des candidatures.
-     */
     public function index() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']['id'])) {
             header("Location: " . BASE_URL . "login.php");
             exit;
@@ -46,15 +45,21 @@ class CandidatureController extends BaseController {
         }
         $candidatures = $stmt->fetchAll(PDO::FETCH_ASSOC);
         
-        $this->render('candidatures/index.twig', ['candidatures' => $candidatures]);
-    }
+        $this->render('candidatures/index.twig', [
+            'candidatures' => $candidatures,
+            'userRole' => $userRole // ✅ ajoute cette ligne
+        ]);
+            }
 
     /**
      * Postuler à une offre avec CV et lettre de motivation.
      */
     public function postuler() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            session_start();
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+            
             
             if (!isset($_SESSION['user']['id'])) {
                 die("Erreur : utilisateur non connecté.");
@@ -93,7 +98,7 @@ class CandidatureController extends BaseController {
                 $stmt->execute([
                     ':user_id' => $userId,
                     ':offre_id' => $offreId,
-                    ':cv' => 'uploads/' . time() . "_" . $cvName, // Chemin relatif
+                    ':cv' => 'uploads/' . time() . "_" . $cvName,
                     ':lettre' => $lettreMotivation,
                     ':date_soumission' => $dateCandidature
                 ]);
@@ -108,7 +113,10 @@ class CandidatureController extends BaseController {
     }
 
     public function updateStatus() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");

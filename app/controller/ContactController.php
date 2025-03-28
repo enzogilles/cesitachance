@@ -19,7 +19,10 @@ class ContactController extends BaseController {
      * Traite l'envoi du formulaire de contact (ouvert à tous).
      */
     public function send() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
     
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             $_SESSION["error"] = "Méthode non autorisée.";
@@ -55,7 +58,10 @@ class ContactController extends BaseController {
      * Affiche tous les messages reçus -> réservé à l'admin.
      */
     public function messages() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
     
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=contact&action=index");

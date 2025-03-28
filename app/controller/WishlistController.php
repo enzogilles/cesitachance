@@ -12,7 +12,10 @@ class WishlistController extends BaseController {
      * Affiche la wishlist de l'utilisateur connecté -> réservé aux Étudiants ou Admin.
      */
     public function index() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
@@ -38,7 +41,10 @@ class WishlistController extends BaseController {
      * Ajouter une offre à la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function add() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
@@ -74,7 +80,10 @@ class WishlistController extends BaseController {
      * Retirer une offre de la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function remove() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
@@ -93,7 +102,10 @@ class WishlistController extends BaseController {
      * Recherche d'offres dans la wishlist (ancienne méthode).
      */
     public function search() {
-        session_start();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+        
         $pdo = Database::getInstance();
 
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';

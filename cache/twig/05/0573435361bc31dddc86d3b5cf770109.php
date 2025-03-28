@@ -67,7 +67,7 @@ class __TwigTemplate_3424ac8b02931fdf024803bbea3c7044 extends Template
         yield "index.php?controller=entreprise&action=index\">Entreprises</a>
         ";
         // line 14
-        if (array_key_exists("user", $context)) {
+        if (($context["user"] ?? null)) {
             // line 15
             yield "            <a href=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
@@ -99,38 +99,39 @@ class __TwigTemplate_3424ac8b02931fdf024803bbea3c7044 extends Template
         // line 24
         yield "    </nav>
     <div id=\"user-menu\">
-        ";
+    ";
         // line 26
-        if (array_key_exists("user", $context)) {
+        if (($context["user"] ?? null)) {
             // line 27
-            yield "            <div id=\"user-icon\" class=\"dropdown\">
-                <img src=\"";
+            yield "        <div id=\"user-icon\" class=\"dropdown\">
+            <img src=\"";
             // line 28
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
-                <div class=\"dropdown-menu\">
-                    <p>Bienvenue, <strong>";
+            <div class=\"dropdown-menu\">
+                <p>Bienvenue, <strong>";
             // line 30
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "prenom", [], "any", false, false, false, 30));
             yield "</strong></p>
-                    <form action=\"";
+                <form action=\"";
             // line 31
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=utilisateur&action=logout\" method=\"POST\">
-                        <button type=\"submit\">Déconnexion</button>
-                    </form>
-                </div>
+                    <button type=\"submit\">Déconnexion</button>
+                </form>
             </div>
-        ";
+        </div>
+    ";
         } else {
             // line 37
-            yield "            <a href=\"";
+            yield "        <a href=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
-        ";
+    ";
         }
         // line 39
-        yield "    </div>
+        yield "</div>
+
     <script>
     document.addEventListener(\"DOMContentLoaded\", function() {
         let userIcon = document.getElementById(\"user-icon\");
@@ -186,7 +187,7 @@ class __TwigTemplate_3424ac8b02931fdf024803bbea3c7044 extends Template
         <a href=\"{{ BASE_URL }}index.php?controller=home&action=index\">Accueil</a>
         <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\">Offres</a>
         <a href=\"{{ BASE_URL }}index.php?controller=entreprise&action=index\">Entreprises</a>
-        {% if user is defined %}
+        {% if user %}
             <a href=\"{{ BASE_URL }}index.php?controller=candidature&action=index\">Candidatures</a>
         {% endif %}
         {% if user is defined and (user.role == 'Étudiant' or user.role == 'Admin') %}
@@ -198,20 +199,21 @@ class __TwigTemplate_3424ac8b02931fdf024803bbea3c7044 extends Template
         {% endif %}
     </nav>
     <div id=\"user-menu\">
-        {% if user is defined %}
-            <div id=\"user-icon\" class=\"dropdown\">
-                <img src=\"{{ BASE_URL }}images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
-                <div class=\"dropdown-menu\">
-                    <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
-                    <form action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=logout\" method=\"POST\">
-                        <button type=\"submit\">Déconnexion</button>
-                    </form>
-                </div>
+    {% if user %}
+        <div id=\"user-icon\" class=\"dropdown\">
+            <img src=\"{{ BASE_URL }}images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
+            <div class=\"dropdown-menu\">
+                <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
+                <form action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=logout\" method=\"POST\">
+                    <button type=\"submit\">Déconnexion</button>
+                </form>
             </div>
-        {% else %}
-            <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
-        {% endif %}
-    </div>
+        </div>
+    {% else %}
+        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
+    {% endif %}
+</div>
+
     <script>
     document.addEventListener(\"DOMContentLoaded\", function() {
         let userIcon = document.getElementById(\"user-icon\");

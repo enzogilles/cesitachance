@@ -11,7 +11,7 @@
         <a href="{{ BASE_URL }}index.php?controller=home&action=index">Accueil</a>
         <a href="{{ BASE_URL }}index.php?controller=offre&action=index">Offres</a>
         <a href="{{ BASE_URL }}index.php?controller=entreprise&action=index">Entreprises</a>
-        {% if user is defined %}
+        {% if user %}
             <a href="{{ BASE_URL }}index.php?controller=candidature&action=index">Candidatures</a>
         {% endif %}
         {% if user is defined and (user.role == 'Étudiant' or user.role == 'Admin') %}
@@ -23,20 +23,21 @@
         {% endif %}
     </nav>
     <div id="user-menu">
-        {% if user is defined %}
-            <div id="user-icon" class="dropdown">
-                <img src="{{ BASE_URL }}images/logo_deco.png" alt="Déconnexion" class="user-logo">
-                <div class="dropdown-menu">
-                    <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
-                    <form action="{{ BASE_URL }}index.php?controller=utilisateur&action=logout" method="POST">
-                        <button type="submit">Déconnexion</button>
-                    </form>
-                </div>
+    {% if user %}
+        <div id="user-icon" class="dropdown">
+            <img src="{{ BASE_URL }}images/logo_deco.png" alt="Déconnexion" class="user-logo">
+            <div class="dropdown-menu">
+                <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
+                <form action="{{ BASE_URL }}index.php?controller=utilisateur&action=logout" method="POST">
+                    <button type="submit">Déconnexion</button>
+                </form>
             </div>
-        {% else %}
-            <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=connexion" id="login-btn" class="btn-login">Connexion</a>
-        {% endif %}
-    </div>
+        </div>
+    {% else %}
+        <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=connexion" id="login-btn" class="btn-login">Connexion</a>
+    {% endif %}
+</div>
+
     <script>
     document.addEventListener("DOMContentLoaded", function() {
         let userIcon = document.getElementById("user-icon");
