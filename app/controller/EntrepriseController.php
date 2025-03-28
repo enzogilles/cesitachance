@@ -212,7 +212,7 @@ class EntrepriseController extends BaseController
             session_start();
         }
         
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'etudiant') {
+        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Etudiant') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }

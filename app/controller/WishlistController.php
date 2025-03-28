@@ -99,7 +99,7 @@ class WishlistController extends BaseController {
     }
 
     /**
-     * Recherche d'offres dans la wishlist (ancienne méthode).
+     * Recherche d'offres dans la wishlist.
      */
     public function search() {
         if (session_status() === PHP_SESSION_NONE) {

@@ -36,17 +36,15 @@ $actionName = $_REQUEST['action'] ?? 'index';
 
 // Construire le nom complet du contrôleur
 $controllerClass = 'app\\controller\\' . ucfirst($controllerName) . 'Controller';
-
 if (class_exists($controllerClass)) {
     $controller = new $controllerClass();
-    
     if (method_exists($controller, $actionName)) {
         // Vérifier si l'action attend un paramètre (ex: id)
         $reflection = new ReflectionMethod($controller, $actionName);
         
         if ($reflection->getNumberOfRequiredParameters() > 0) {
             if (isset($_GET['id'])) {
-                $controller->$actionName($_GET['id']); // ✅ On passe bien l'ID ici
+                $controller->$actionName($_GET['id']); //  On passe l'ID ici
             } else {
                 die("Erreur : Paramètre 'id' manquant pour l'action '$actionName'.");
             }

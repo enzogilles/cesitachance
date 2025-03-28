@@ -3,6 +3,8 @@
 
 namespace App\Model;
 
+use PDO;
+
 class Wishlist extends BaseModel {
     public $id;
     public $user_id;
@@ -13,34 +15,52 @@ class Wishlist extends BaseModel {
     }
 
     /**
-     * Récupère la wishlist d'un utilisateur.
-     *
-     * @param int $user_id
-     * @return array
+     * Récupère la wishlist d'un utilisateur (avec jointure sur Offre et Entreprise).
      */
-    public static function findByUserId($user_id) {
+    public static function findByUserIdWithRelations($userId) {
         $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("SELECT * FROM wishlist WHERE user_id = ?");
-        $stmt->execute([$user_id]);
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $stmt = $pdo->prepare("
+            SELECT w.id AS wishlist_id,
+                   o.id AS offre_id,
+                   o.titre,
+                   e.nom AS entreprise
+            FROM wishlist w
+            JOIN offre o ON w.offre_id = o.id
+            JOIN entreprise e ON o.entreprise_id = e.id
+            WHERE w.user_id = ?
+        ");
+        $stmt->execute([$userId]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
-     * Sauvegarde l'entrée de la wishlist (insertion ou mise à jour).
-     *
-     * @return bool
+     * Vérifie l'existence d'une offre déjà en wishlist.
      */
-    public function save() {
-        if (isset($this->id)) {
-            $stmt = $this->pdo->prepare("UPDATE wishlist SET user_id = ?, offre_id = ? WHERE id = ?");
-            return $stmt->execute([$this->user_id, $this->offre_id, $this->id]);
-        } else {
-            $stmt = $this->pdo->prepare("INSERT INTO wishlist (user_id, offre_id) VALUES (?, ?)");
-            $result = $stmt->execute([$this->user_id, $this->offre_id]);
-            if ($result) {
-                $this->id = $this->pdo->lastInsertId();
-            }
-            return $result;
-        }
+    public static function exists($userId, $offreId)
+    {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("SELECT id FROM wishlist WHERE user_id = ? AND offre_id = ?");
+        $stmt->execute([$userId, $offreId]);
+        return $stmt->fetch() !== false;
+    }
+
+    /**
+     * Ajoute une offre en wishlist.
+     */
+    public static function add($userId, $offreId)
+    {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, offre_id) VALUES (?, ?)");
+        return $stmt->execute([$userId, $offreId]);
+    }
+
+    /**
+     * Supprime une entrée de la wishlist par son ID (clé primaire).
+     */
+    public static function remove($wishlistId)
+    {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("DELETE FROM wishlist WHERE id = ?");
+        return $stmt->execute([$wishlistId]);
     }
 }
