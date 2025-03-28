@@ -49,19 +49,20 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
         // line 6
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "public/styles/styles.css\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 </head>
 <body>
 
     ";
-        // line 10
-        yield from         $this->loadTemplate("layout/header.twig", "layout/base.twig", 10)->unwrap()->yield($context);
         // line 11
-        yield "    ";
-        yield from $this->unwrap()->yieldBlock('content', $context, $blocks);
+        yield from         $this->loadTemplate("layout/header.twig", "layout/base.twig", 11)->unwrap()->yield($context);
         // line 12
         yield "    ";
-        yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 12)->unwrap()->yield($context);
+        yield from $this->unwrap()->yieldBlock('content', $context, $blocks);
         // line 13
+        yield "    ";
+        yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 13)->unwrap()->yield($context);
+        // line 14
         yield "</body>
 </html>
 ";
@@ -76,7 +77,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
         return; yield '';
     }
 
-    // line 11
+    // line 12
     public function block_content($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -104,7 +105,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  80 => 11,  72 => 5,  65 => 13,  62 => 12,  59 => 11,  57 => 10,  50 => 6,  46 => 5,  40 => 1,);
+        return array (  81 => 12,  73 => 5,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
     }
 
     public function getSourceContext()
@@ -115,6 +116,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
     <meta charset=\"UTF-8\">
     <title>{% block title %}Mon Site{% endblock %}</title>
     <link rel=\"stylesheet\" type=\"text/css\" href=\"{{ BASE_URL }}public/styles/styles.css\">
+    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">
 </head>
 <body>
 
