@@ -226,6 +226,6 @@ class __TwigTemplate_a6e83b4be68573b3a1e2e369ab67c7a3 extends Template
     });
     </script>
 </header>
-", "layout/header.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\layout\\header.twig");
+", "layout/header.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\layout\\header.twig");
     }
 }
