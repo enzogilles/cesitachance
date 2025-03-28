@@ -270,6 +270,23 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
         }
         // line 76
         yield "</section>
+
+<script>
+document.addEventListener(\"DOMContentLoaded\", function () {
+  const resetButton = document.querySelector(\".search-form .bouton-reset\");
+
+  if (resetButton) {
+    resetButton.addEventListener(\"click\", function (e) {
+      e.preventDefault(); 
+      window.location.href = \"";
+        // line 85
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "index.php?controller=offre&action=index\";
+    });
+  }
+});
+</script>
+
 ";
         return; yield '';
     }
@@ -295,7 +312,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  272 => 76,  268 => 74,  256 => 72,  254 => 71,  251 => 70,  230 => 68,  226 => 67,  223 => 66,  220 => 65,  217 => 64,  214 => 63,  211 => 62,  208 => 61,  205 => 60,  202 => 59,  199 => 58,  196 => 57,  193 => 56,  190 => 55,  187 => 54,  184 => 53,  181 => 52,  178 => 51,  175 => 50,  172 => 49,  170 => 48,  167 => 47,  155 => 45,  153 => 44,  150 => 43,  148 => 42,  143 => 39,  139 => 37,  136 => 36,  128 => 33,  121 => 29,  116 => 28,  114 => 27,  108 => 26,  102 => 23,  98 => 22,  92 => 21,  89 => 20,  84 => 19,  82 => 18,  73 => 12,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  283 => 85,  272 => 76,  268 => 74,  256 => 72,  254 => 71,  251 => 70,  230 => 68,  226 => 67,  223 => 66,  220 => 65,  217 => 64,  214 => 63,  211 => 62,  208 => 61,  205 => 60,  202 => 59,  199 => 58,  196 => 57,  193 => 56,  190 => 55,  187 => 54,  184 => 53,  181 => 52,  178 => 51,  175 => 50,  172 => 49,  170 => 48,  167 => 47,  155 => 45,  153 => 44,  150 => 43,  148 => 42,  143 => 39,  139 => 37,  136 => 36,  128 => 33,  121 => 29,  116 => 28,  114 => 27,  108 => 26,  102 => 23,  98 => 22,  92 => 21,  89 => 20,  84 => 19,  82 => 18,  73 => 12,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -376,6 +393,20 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
         </div>
     {% endif %}
 </section>
+
+<script>
+document.addEventListener(\"DOMContentLoaded\", function () {
+  const resetButton = document.querySelector(\".search-form .bouton-reset\");
+
+  if (resetButton) {
+    resetButton.addEventListener(\"click\", function (e) {
+      e.preventDefault(); 
+      window.location.href = \"{{ BASE_URL }}index.php?controller=offre&action=index\";
+    });
+  }
+});
+</script>
+
 {% endblock %}
 ", "offres/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\index.twig");
     }

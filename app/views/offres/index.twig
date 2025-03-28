@@ -74,4 +74,18 @@
         </div>
     {% endif %}
 </section>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const resetButton = document.querySelector(".search-form .bouton-reset");
+
+  if (resetButton) {
+    resetButton.addEventListener("click", function (e) {
+      e.preventDefault(); 
+      window.location.href = "{{ BASE_URL }}index.php?controller=offre&action=index";
+    });
+  }
+});
+</script>
+
 {% endblock %}
