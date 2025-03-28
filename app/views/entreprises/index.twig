@@ -19,14 +19,11 @@
                     <tr>
                         <td>{{ entreprise.nom|e }}</td>
                         <td>{{ entreprise.ville|e }}</td>
-                        {# On affiche simplement la clé "actions" que le contrôleur a préparée #}
                         <td>{{ entreprise.actions|raw }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-
-        {# Ta pagination, inchangée #}
         ...
     {% else %}
         <p>Aucune entreprise trouvée.</p>

@@ -310,6 +310,11 @@ nav a:hover {
   margin-top: 10px;
 }
 
+.offers-container.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
 /* ================================
    BOUTONS
    ================================ */
@@ -857,7 +862,7 @@ a.btn-register:hover {
 .notification {
   position: fixed;
   top: 135px;
-  left: 40%;
+  left: 85%;
   transform: translateX(-50%);
   background-color: #007BFF;
   color: white;

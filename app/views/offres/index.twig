@@ -8,6 +8,7 @@
     <form class="search-form" method="GET" action="{{ BASE_URL }}index.php">
         <input type="hidden" name="controller" value="offre">
         <input type="hidden" name="action" value="search">
+        <input type="hidden" name="notif" value="1">
         <label for="motcle">Mot-clé :</label>
         <input type="text" id="motcle" name="motcle" value="{{ motcle is defined ? motcle|e : '' }}" required>
         <button type="submit" class="btn">Rechercher</button>
@@ -76,16 +77,10 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const resetButton = document.querySelector(".search-form .bouton-reset");
-
-  if (resetButton) {
-    resetButton.addEventListener("click", function (e) {
-      e.preventDefault(); 
-      window.location.href = "{{ BASE_URL }}index.php?controller=offre&action=index";
-    });
-  }
-});
+  const BASE_URL = "{{ BASE_URL }}";
 </script>
+
+
+<script src="{{ BASE_URL }}public/js/offres.js"></script>
 
 {% endblock %}
