@@ -72,6 +72,10 @@ nav a:hover {
   color: white;
 }
 
+/* ================================
+   CONNEXION/DÉCONNEXION
+   ================================ */
+
 .btn-login {
   background-color: #FFA07A;
   color: white;
@@ -86,37 +90,61 @@ nav a:hover {
   background-color: #FF6347;
 }
 
-/* ================================
-   BOUTON DÉCONNEXION
-   ================================ */
-   #logout-btn {
-    background-color: #DC3545;
-    color: white;
-    padding: 8px 12px;
-    border-radius: 5px;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    text-align: center;
-    transition: background-color 0.3s;
-  }
-  
-  #logout-btn:hover {
-    background-color: #a71d2a;
-  }
-  
-  
-  .hidden {
-    display: none !important;
-  }
-  
-  .header-logo h1 {
-    font-size: 24px;
-    font-weight: bold;
-    margin: 0;
-    color: #333;
-    text-align: center;
-  }
+#logout-btn {
+  background-color: #DC3545;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+#logout-btn:hover {
+  background-color: #a71d2a;
+}
+
+.forgot-password {
+  background-color: rgba(159, 159, 159, 0.936);
+  border-radius: 20px;
+  margin: 10px auto 15px auto;
+  padding: 10px 20px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+}
+
+.forgot-password a {
+  font-size: 14px;
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+.forgot-password a:hover {
+  color: white;
+  font-weight: bold;
+}
+
+
+
+.hidden {
+  display: none !important;
+}
+
+.header-logo h1 {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0;
+  color: #333;
+  text-align: center;
+}
 
 /* ================================
    HERO
@@ -165,81 +193,82 @@ nav a:hover {
 .section-title {
   margin-top: 30px;
 }
+
 /* ================================
    MENU DÉROULANT
    ================================ */
 
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 0;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    min-width: 150px;
-    z-index: 100;
-    padding: 10px;
-  }
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 50px;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  min-width: 150px;
+  z-index: 100;
+  padding: 10px;
+}
 
-  .dropdown-menu p {
-    margin: 0 0 10px;
-    font-size: 14px;
-    color: #333;
-  }
-  
-  .dropdown-menu form {
-    margin: 0;
-    padding: 0;
-  }
-  
-  .dropdown-menu button {
-    background: none;
-    border: none;
-    width: 100%;
-    padding: 10px;
-    text-align: left;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .dropdown-menu button:hover {
-    background-color: #f5f5f5;
-  }
-  
-  .dropdown-menu.show {
-    display: block;
-  }
+.dropdown-menu p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.dropdown-menu form {
+  margin: 0;
+  padding: 0;
+}
+
+.dropdown-menu button {
+  background: none;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-menu button:hover {
+  background-color: #f5f5f5;
+}
+
+.dropdown-menu.show {
+  display: block;
+}
 
 /* ================================
    BULLE UTILISATEUR
    ================================ */
-   #user-icon {
-    background-color: #FFA07A;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    margin-left: 15px;
-    position: relative;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  #user-icon:hover {
-    background-color: #FF6347;
-  }
-  
-  .user-logo {
-    width: 30px;
-    height: 30px;
-    filter:
-      invert(100%);
-  }
+#user-icon {
+  background-color: #FFA07A;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-left: 15px;
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#user-icon:hover {
+  background-color: #FF6347;
+}
+
+.user-logo {
+  width: 30px;
+  height: 30px;
+  filter:
+    invert(100%);
+}
 
 /* ================================
    OFFRES (CARD)
@@ -591,38 +620,38 @@ a.btn-register:hover {
 /* ==============================
    STYLE DU FORMULAIRE DE CANDIDATURE
    ============================== */
-   .form-candidature {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    max-width: 600px;
-    margin: 20px auto;
-    text-align: center;
-  }
-  
-  .form-candidature h3 {
-    font-size: 1.5rem;
-    color: #333;
-    margin-bottom: 15px;
-  }
-  
-  .form-candidature label {
-    display: block;
-    font-weight: 500;
-    margin-top: 10px;
-    text-align: left;
-  }
-  
-  .form-candidature textarea,
-  .form-candidature input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    margin-top: 5px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 14px;
-  }
+.form-candidature {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.form-candidature h3 {
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.form-candidature label {
+  display: block;
+  font-weight: 500;
+  margin-top: 10px;
+  text-align: left;
+}
+
+.form-candidature textarea,
+.form-candidature input[type="file"] {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
 
 /* ================================
    STATUTS
@@ -726,51 +755,51 @@ a.btn-register:hover {
 /* ================================
    STYLE DES BOUTONS DASHBOARD
    ================================ */
-   .dashboard-actions ul {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    list-style: none;
-    padding: 0;
-    margin: 20px 0;
-  }
-  
-  .dashboard-actions ul li {
-    margin: 10px;
-  }
-  
-  .dashboard-actions ul li a {
-    display: inline-block;
-    padding: 12px 20px;
-    font-size: 16px;
-    font-weight: 600;
-    font-family: 'Poppins', sans-serif;
-    text-transform: uppercase;
-    color: white;
-    text-decoration: none;
-    border-radius: 25px;
-    background-color: #FFA07A;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
-    text-align: center;
-  }
-  
-  .dashboard-actions ul li a:hover {
-    background-color: #FF6347;
-    transform: scale(1.05);
-    box-shadow: 0px 5px 15px rgba(255, 99, 71, 0.3);
-  }
-  
+.dashboard-actions ul {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.dashboard-actions ul li {
+  margin: 10px;
+}
+
+.dashboard-actions ul li a {
+  display: inline-block;
+  padding: 12px 20px;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: 'Poppins', sans-serif;
+  text-transform: uppercase;
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  background-color: #FFA07A;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+  text-align: center;
+}
+
+.dashboard-actions ul li a:hover {
+  background-color: #FF6347;
+  transform: scale(1.05);
+  box-shadow: 0px 5px 15px rgba(255, 99, 71, 0.3);
+}
+
 /* ==============================
    STYLE DU CHAMP DATE
    ============================== */
-   .form-candidature input[readonly] {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    font-weight: bold;
-    text-align: center;
-  }
+.form-candidature input[readonly] {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+  font-weight: bold;
+  text-align: center;
+}
 
 
 /* ================================
@@ -883,39 +912,39 @@ a.btn-register:hover {
 /* ================================
    STYLE DU MESSAGE "Bonjour, [Nom]"
    ================================ */
-   .welcome-message {
-    font-size: 18px;
-    font-weight: 500;
-    color: #333;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  #user-menu {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  
-  #user-icon {
-    background-color: #FFA07A;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-    margin-left: 15px;
-    position: relative;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  #user-icon:hover {
-    background-color: #FF6347;/
-  }
-  
+.welcome-message {
+  font-size: 18px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#user-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+#user-icon {
+  background-color: #FFA07A;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+  margin-left: 15px;
+  position: relative;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#user-icon:hover {
+  background-color: #FF6347;/
+}
+
 /* ================================
   POP-UP
    ================================ */
@@ -1094,6 +1123,3 @@ footer {
     width: 90%;
   }
 }
-
-
-
