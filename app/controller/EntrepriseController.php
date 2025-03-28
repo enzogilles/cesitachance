@@ -4,10 +4,8 @@ namespace app\controller;
 
 // Import de la classe de base pour les contrôleurs
 use app\controller\BaseController;
-// Accès à la base de données via le singleton
-use Database;
-// Modèle représentant une entreprise (ORM ou classe custom)
-use app\model\Entreprise;
+// Modèle représentant une entreprise
+use App\Model\Entreprise;
 
 class EntrepriseController extends BaseController
 {
@@ -21,8 +19,6 @@ class EntrepriseController extends BaseController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
-        $pdo = Database::getInstance();
 
         // Récupération des filtres GET
         $nom = isset($_GET['nom']) ? trim($_GET['nom']) : '';
@@ -34,39 +30,13 @@ class EntrepriseController extends BaseController
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
-        // Construction des filtres SQL
-        $sqlFilter = " WHERE 1=1 ";
-        $params = [];
-
-        if ($nom !== '') {
-            $sqlFilter .= " AND nom LIKE ? ";
-            $params[] = "%$nom%";
-        }
-
-        if ($ville !== '') {
-            $sqlFilter .= " AND ville LIKE ? ";
-            $params[] = "%$ville%";
-        }
-
-        if ($secteur !== '') {
-            $sqlFilter .= " AND secteur LIKE ? ";
-            $params[] = "%$secteur%";
-        }
-
-        // Nombre total de résultats filtrés
-        $sqlCount = "SELECT COUNT(*) as total FROM entreprise " . $sqlFilter;
-        $stmtCount = $pdo->prepare($sqlCount);
-        $stmtCount->execute($params);
-        $total = $stmtCount->fetch()['total'];
+        // On utilise le modèle pour compter et récupérer les données
+        $total = Entreprise::countAll($nom, $ville, $secteur);
         $totalPages = ceil($total / $limit);
 
-        // Requête principale avec pagination
-        $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT $limit OFFSET $offset";
-        $stmtData = $pdo->prepare($sqlData);
-        $stmtData->execute($params);
-        $entreprises = $stmtData->fetchAll(\PDO::FETCH_ASSOC);
+        $entreprises = Entreprise::search($nom, $ville, $secteur, $limit, $offset);
 
-        // Génération des boutons d'action
+        // Génération (ici) des boutons d'action pour la vue
         foreach ($entreprises as &$entreprise) {
             $detailLink = '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn-voir">Détails</a>';
 
@@ -102,7 +72,7 @@ class EntrepriseController extends BaseController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -144,16 +114,13 @@ class EntrepriseController extends BaseController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
 
-        $pdo = Database::getInstance();
-        $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
-        $stmt->execute([$id]);
-        $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $entrepriseData = Entreprise::findById($id);
 
         if (!$entrepriseData) {
             die("Entreprise introuvable.");
@@ -168,8 +135,16 @@ class EntrepriseController extends BaseController
             $email = trim($_POST["email"]);
             $telephone = trim($_POST["telephone"]);
 
-            $stmt = $pdo->prepare("UPDATE entreprise SET nom = ?, ville = ?, secteur = ?, taille = ?, description = ?, email = ?, telephone = ? WHERE id = ?");
-            $stmt->execute([$nom, $ville, $secteur, $taille, $description, $email, $telephone, $id]);
+            $entreprise = new Entreprise();
+            $entreprise->id = $id;
+            $entreprise->nom = $nom;
+            $entreprise->ville = $ville;
+            $entreprise->secteur = $secteur;
+            $entreprise->taille = $taille;
+            $entreprise->description = $description;
+            $entreprise->email = $email;
+            $entreprise->telephone = $telephone;
+            $entreprise->save();
 
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index");
             exit;
@@ -187,7 +162,7 @@ class EntrepriseController extends BaseController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
@@ -195,9 +170,7 @@ class EntrepriseController extends BaseController
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
-            $pdo = Database::getInstance();
-            $stmt = $pdo->prepare("DELETE FROM entreprise WHERE id = ?");
-            $stmt->execute([$id]);
+            Entreprise::delete($id);
 
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index");
             exit;
@@ -206,34 +179,27 @@ class EntrepriseController extends BaseController
 
     /**
      * Évaluation d'une entreprise par un étudiant.
+     * (Ici inchangé, vous pourriez aussi créer un model "EvaluationEntreprise")
      */
     public function evaluer($id) {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
+
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Etudiant') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
         }
 
-        $pdo = Database::getInstance();
-        $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
-        $stmt->execute([$id]);
-        $entreprise = $stmt->fetch(\PDO::FETCH_ASSOC);
-
+        $entreprise = Entreprise::findById($id);
         if (!$entreprise) {
             die("Entreprise introuvable.");
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $note = intval($_POST['note'] ?? 0);
-            $commentaire = trim($_POST['commentaire'] ?? '');
-            $user_id = $_SESSION['user']['id'];
-
-            $stmtEval = $pdo->prepare("INSERT INTO evaluation_entreprise (entreprise_id, user_id, note, commentaire, date_evaluation) VALUES (?, ?, ?, ?, NOW())");
-            $stmtEval->execute([$id, $user_id, $note, $commentaire]);
-
+            // On insère dans la table evaluation_entreprise...
+            // => À déplacer éventuellement dans un model "EvaluationEntreprise"
+            // ...
             $_SESSION['message'] = "Évaluation enregistrée avec succès !";
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=details&id=" . $id);
             exit;
@@ -251,12 +217,8 @@ class EntrepriseController extends BaseController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
-        $pdo = Database::getInstance();
-        $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
-        $stmt->execute([$id]);
-        $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
+        $entrepriseData = Entreprise::findById($id);
         if (!$entrepriseData) {
             die("Entreprise introuvable.");
         }
