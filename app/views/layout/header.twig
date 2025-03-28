@@ -4,7 +4,7 @@
         {% if controller is defined and controller == 'home' %}
             <h1>CESI Ta Chance</h1>
         {% else %}
-            <img src="{{ BASE_URL }}images/logo.png" alt="Logo">
+            <img src="{{ BASE_URL }}public/images/logo.png" alt="Logo">
         {% endif %}
     </div>
     <nav>
@@ -25,7 +25,7 @@
     <div id="user-menu">
     {% if user %}
         <div id="user-icon" class="dropdown">
-            <img src="{{ BASE_URL }}images/logo_deco.png" alt="Déconnexion" class="user-logo">
+            <img src="{{ BASE_URL }}public/images/logo_deco.png" alt="Déconnexion" class="user-logo">
             <div class="dropdown-menu">
                 <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
                 <form action="{{ BASE_URL }}index.php?controller=utilisateur&action=logout" method="POST">

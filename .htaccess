@@ -1,17 +1,7 @@
-# Activer le moteur de réécriture
 RewriteEngine On
+RewriteBase /
 
-# Rediriger les requêtes pour les fichiers JavaScript
-RewriteRule ^js/(.*)$ public/js/$1 [L]
-
-# Rediriger les requêtes pour les fichiers CSS
-RewriteRule ^css/(.*)$ public/styles/$1 [L]
-
-# Rediriger les requêtes pour les fichiers dans le dossier public
-RewriteRule ^public/(.*)$ public/$1 [L]
-
-# Rediriger les requêtes pour les fichiers PHP
-RewriteRule ^(.*)\.php$ public/$1.php [L]
-
-# Rediriger les requêtes pour les autres fichiers
-RewriteRule ^(.*)$ public/$1 [L]
+# Redirige toutes les requêtes vers index.php sauf si le fichier ou dossier existe
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
