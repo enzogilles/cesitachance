@@ -7,7 +7,7 @@
         <ul>
             {% for item in wishlist %}
                 <li>
-                    <strong>{{ item.titre|e }}</strong> - {{ item.entreprise|e }}
+                    {{ item.titre|e }} - {{ item.entreprise|e }}
                     <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
                         <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
                         <button type="submit" class="btn">Supprimer</button>
