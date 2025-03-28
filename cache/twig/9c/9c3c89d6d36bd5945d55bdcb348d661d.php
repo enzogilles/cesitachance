@@ -73,57 +73,58 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
         yield ((array_key_exists("motcle", $context)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["motcle"] ?? null))) : (""));
         yield "\" required>
         <button type=\"submit\" class=\"btn\">Rechercher</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
 
     <div class=\"offers-container\">
         ";
-        // line 17
+        // line 18
         if ( !Twig\Extension\CoreExtension::testEmpty(($context["offres"] ?? null))) {
-            // line 18
+            // line 19
             yield "            ";
             $context['_parent'] = $context;
             $context['_seq'] = CoreExtension::ensureTraversable(($context["offres"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["offre"]) {
-                // line 19
+                // line 20
                 yield "                <div class=\"offer-card\">
                     <h4>";
-                // line 20
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "titre", [], "any", false, false, false, 20));
+                // line 21
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "titre", [], "any", false, false, false, 21));
                 yield " - ";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "entreprise", [], "any", false, false, false, 20));
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "entreprise", [], "any", false, false, false, 21));
                 yield "</h4>
                     <p><strong>Rémunération :</strong> ";
-                // line 21
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "remuneration", [], "any", false, false, false, 21));
+                // line 22
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "remuneration", [], "any", false, false, false, 22));
                 yield "€</p>
                     <p>";
-                // line 22
-                yield ((CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "description", [], "any", true, true, false, 22)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "description", [], "any", false, false, false, 22))) : (""));
+                // line 23
+                yield ((CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "description", [], "any", true, true, false, 23)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "description", [], "any", false, false, false, 23))) : (""));
                 yield "</p>
                     
                     <div class=\"offer-buttons\">
                         <a href=\"";
-                // line 25
+                // line 26
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
                 yield "index.php?controller=offre&action=detail&id=";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 25), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 26), "html", null, true);
                 yield "\" class=\"btn-voir\">Voir</a>
                         ";
-                // line 26
-                if ((array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 26) == "Étudiant"))) {
-                    // line 27
+                // line 27
+                if ((array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 27) == "Étudiant"))) {
+                    // line 28
                     yield "                            <form action=\"";
                     yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
                     yield "index.php?controller=wishlist&action=add\" method=\"POST\" style=\"display:inline;\">
                                 <input type=\"hidden\" name=\"offre_id\" value=\"";
-                    // line 28
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 28), "html", null, true);
+                    // line 29
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 29), "html", null, true);
                     yield "\">
                                 <button type=\"submit\" class=\"btn\">Ajouter à la Wishlist</button>
                             </form>
                         ";
                 }
-                // line 32
+                // line 33
                 yield "                    </div>
                 </div>
             ";
@@ -131,26 +132,26 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['offre'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 35
+            // line 36
             yield "        ";
         } else {
-            // line 36
+            // line 37
             yield "            <p style=\"text-align: center; color: #777;\">Aucune offre trouvée.</p>
         ";
         }
-        // line 38
+        // line 39
         yield "    </div>
 
     <!-- Pagination -->
     ";
-        // line 41
+        // line 42
         if ((array_key_exists("totalPages", $context) && (($context["totalPages"] ?? null) > 0))) {
-            // line 42
+            // line 43
             yield "        <div class=\"pagination\">
             ";
-            // line 43
+            // line 44
             if ((($context["page"] ?? null) > 1)) {
-                // line 44
+                // line 45
                 yield "                <a href=\"?controller=offre&action=";
                 yield (( !Twig\Extension\CoreExtension::testEmpty(($context["motcle"] ?? null))) ? ("search") : ("index"));
                 yield "&page=";
@@ -162,70 +163,70 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
                 yield "\">Précédent</a>
             ";
             }
-            // line 46
+            // line 47
             yield "
             ";
-            // line 47
-            $context["window"] = 3;
             // line 48
+            $context["window"] = 3;
+            // line 49
             yield "            ";
             if ((($context["totalPages"] ?? null) <= ($context["window"] ?? null))) {
-                // line 49
-                yield "                ";
-                $context["start"] = 1;
                 // line 50
                 yield "                ";
-                $context["end"] = ($context["totalPages"] ?? null);
+                $context["start"] = 1;
                 // line 51
+                yield "                ";
+                $context["end"] = ($context["totalPages"] ?? null);
+                // line 52
                 yield "            ";
             } else {
-                // line 52
-                yield "                ";
-                $context["start"] = (($context["page"] ?? null) - 1);
                 // line 53
                 yield "                ";
+                $context["start"] = (($context["page"] ?? null) - 1);
+                // line 54
+                yield "                ";
                 if ((($context["start"] ?? null) < 1)) {
-                    // line 54
+                    // line 55
                     yield "                    ";
                     $context["start"] = 1;
-                    // line 55
+                    // line 56
                     yield "                ";
                 }
-                // line 56
-                yield "                ";
-                $context["end"] = ((($context["start"] ?? null) + ($context["window"] ?? null)) - 1);
                 // line 57
                 yield "                ";
+                $context["end"] = ((($context["start"] ?? null) + ($context["window"] ?? null)) - 1);
+                // line 58
+                yield "                ";
                 if ((($context["end"] ?? null) > ($context["totalPages"] ?? null))) {
-                    // line 58
-                    yield "                    ";
-                    $context["end"] = ($context["totalPages"] ?? null);
                     // line 59
                     yield "                    ";
-                    $context["start"] = ((($context["end"] ?? null) - ($context["window"] ?? null)) + 1);
+                    $context["end"] = ($context["totalPages"] ?? null);
                     // line 60
                     yield "                    ";
+                    $context["start"] = ((($context["end"] ?? null) - ($context["window"] ?? null)) + 1);
+                    // line 61
+                    yield "                    ";
                     if ((($context["start"] ?? null) < 1)) {
-                        // line 61
+                        // line 62
                         yield "                        ";
                         $context["start"] = 1;
-                        // line 62
+                        // line 63
                         yield "                    ";
                     }
-                    // line 63
+                    // line 64
                     yield "                ";
                 }
-                // line 64
+                // line 65
                 yield "            ";
             }
-            // line 65
+            // line 66
             yield "
             ";
-            // line 66
+            // line 67
             $context['_parent'] = $context;
             $context['_seq'] = CoreExtension::ensureTraversable(range(($context["start"] ?? null), ($context["end"] ?? null)));
             foreach ($context['_seq'] as $context["_key"] => $context["i"]) {
-                // line 67
+                // line 68
                 yield "                <a href=\"?controller=offre&action=";
                 yield (( !Twig\Extension\CoreExtension::testEmpty(($context["motcle"] ?? null))) ? ("search") : ("index"));
                 yield "&page=";
@@ -246,12 +247,12 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['i'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 69
+            // line 70
             yield "
             ";
-            // line 70
+            // line 71
             if ((($context["page"] ?? null) < ($context["totalPages"] ?? null))) {
-                // line 71
+                // line 72
                 yield "                <a href=\"?controller=offre&action=";
                 yield (( !Twig\Extension\CoreExtension::testEmpty(($context["motcle"] ?? null))) ? ("search") : ("index"));
                 yield "&page=";
@@ -263,11 +264,11 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
                 yield "\">Suivant</a>
             ";
             }
-            // line 73
+            // line 74
             yield "        </div>
     ";
         }
-        // line 75
+        // line 76
         yield "</section>
 ";
         return; yield '';
@@ -294,7 +295,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  271 => 75,  267 => 73,  255 => 71,  253 => 70,  250 => 69,  229 => 67,  225 => 66,  222 => 65,  219 => 64,  216 => 63,  213 => 62,  210 => 61,  207 => 60,  204 => 59,  201 => 58,  198 => 57,  195 => 56,  192 => 55,  189 => 54,  186 => 53,  183 => 52,  180 => 51,  177 => 50,  174 => 49,  171 => 48,  169 => 47,  166 => 46,  154 => 44,  152 => 43,  149 => 42,  147 => 41,  142 => 38,  138 => 36,  135 => 35,  127 => 32,  120 => 28,  115 => 27,  113 => 26,  107 => 25,  101 => 22,  97 => 21,  91 => 20,  88 => 19,  83 => 18,  81 => 17,  73 => 12,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  272 => 76,  268 => 74,  256 => 72,  254 => 71,  251 => 70,  230 => 68,  226 => 67,  223 => 66,  220 => 65,  217 => 64,  214 => 63,  211 => 62,  208 => 61,  205 => 60,  202 => 59,  199 => 58,  196 => 57,  193 => 56,  190 => 55,  187 => 54,  184 => 53,  181 => 52,  178 => 51,  175 => 50,  172 => 49,  170 => 48,  167 => 47,  155 => 45,  153 => 44,  150 => 43,  148 => 42,  143 => 39,  139 => 37,  136 => 36,  128 => 33,  121 => 29,  116 => 28,  114 => 27,  108 => 26,  102 => 23,  98 => 22,  92 => 21,  89 => 20,  84 => 19,  82 => 18,  73 => 12,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -312,6 +313,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
         <label for=\"motcle\">Mot-clé :</label>
         <input type=\"text\" id=\"motcle\" name=\"motcle\" value=\"{{ motcle is defined ? motcle|e : '' }}\" required>
         <button type=\"submit\" class=\"btn\">Rechercher</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
 
     <div class=\"offers-container\">
@@ -375,6 +377,6 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
     {% endif %}
 </section>
 {% endblock %}
-", "offres/index.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\offres\\index.twig");
+", "offres/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\index.twig");
     }
 }
