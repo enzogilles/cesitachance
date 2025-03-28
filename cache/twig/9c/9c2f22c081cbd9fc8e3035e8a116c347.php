@@ -77,9 +77,10 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         <label for=\"password\">Mot de passe :</label>
         <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
         <button type=\"submit\" class=\"btn\">Se connecter</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"";
-        // line 16
+        // line 17
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
@@ -87,7 +88,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     <div class=\"account-link\">
         <p>Pas encore de compte ?</p>
         <a href=\"";
-        // line 21
+        // line 22
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-add\">Créer un compte</a>
     </div>
@@ -117,7 +118,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  91 => 21,  83 => 16,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  92 => 22,  84 => 17,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -136,6 +137,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         <label for=\"password\">Mot de passe :</label>
         <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
         <button type=\"submit\" class=\"btn\">Se connecter</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
@@ -146,6 +148,6 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     </div>
 </section>
 {% endblock %}
-", "utilisateurs/connexion.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+", "utilisateurs/connexion.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
     }
 }

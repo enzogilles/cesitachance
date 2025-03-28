@@ -13,8 +13,8 @@ use Twig\Sandbox\SecurityNotAllowedFunctionError;
 use Twig\Source;
 use Twig\Template;
 
-/* utilisateurs/connexion.twig */
-class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
+/* utilisateurs/resetPassword.twig */
+class __TwigTemplate_20f374381e7b7d98ceb8b8887fa5a250 extends Template
 {
     private $source;
     private $macros = [];
@@ -40,7 +40,7 @@ class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        $this->parent = $this->loadTemplate("layout/base.twig", "utilisateurs/connexion.twig", 1);
+        $this->parent = $this->loadTemplate("layout/base.twig", "utilisateurs/resetPassword.twig", 1);
         yield from $this->parent->unwrap()->yield($context, array_merge($this->blocks, $blocks));
     }
 
@@ -48,7 +48,7 @@ class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
     public function block_title($context, array $blocks = [])
     {
         $macros = $this->macros;
-        yield "Connexion";
+        yield "Réinitialiser le mot de passe";
         return; yield '';
     }
 
@@ -58,7 +58,7 @@ class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
         $macros = $this->macros;
         // line 4
         yield "<section class=\"content\">
-    <h3>Connexion</h3>
+    <h3>Réinitialiser votre mot de passe</h3>
     ";
         // line 6
         if (array_key_exists("error", $context)) {
@@ -67,30 +67,22 @@ class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["error"] ?? null));
             yield "</p>
     ";
+        } elseif (        // line 8
+array_key_exists("message", $context)) {
+            // line 9
+            yield "        <p style=\"color: green; text-align: center;\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["message"] ?? null));
+            yield "</p>
+    ";
         }
-        // line 9
-        yield "    <form id=\"login-form\" action=\"";
+        // line 11
+        yield "    <form id=\"reset-password-form\" action=\"";
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=login\" method=\"POST\">
-        <label for=\"email\">Email :</label>
+        yield "index.php?controller=utilisateur&action=sendResetLink\" method=\"POST\">
+        <label for=\"email\">Entrez votre email :</label>
         <input type=\"email\" id=\"email\" name=\"email\" required>
-        <label for=\"password\">Mot de passe :</label>
-        <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
-        <button type=\"submit\" class=\"btn\">Se connecter</button>
-        <p class=\"forgot-password\">
-            <a href=\"";
-        // line 16
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
-        </p>
+        <button type=\"submit\" class=\"btn\">Envoyer le lien</button>
     </form>
-    <div class=\"account-link\">
-        <p>Pas encore de compte ?</p>
-        <a href=\"";
-        // line 21
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-add\">Créer un compte</a>
-    </div>
 </section>
 ";
         return; yield '';
@@ -101,7 +93,7 @@ class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
      */
     public function getTemplateName()
     {
-        return "utilisateurs/connexion.twig";
+        return "utilisateurs/resetPassword.twig";
     }
 
     /**
@@ -117,35 +109,28 @@ class __TwigTemplate_817f35dd87e2d8ea1477c4001c3b598a extends Template
      */
     public function getDebugInfo()
     {
-        return array (  91 => 21,  83 => 16,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  79 => 11,  73 => 9,  71 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
     {
         return new Source("{% extends \"layout/base.twig\" %}
-{% block title %}Connexion{% endblock %}
+{% block title %}Réinitialiser le mot de passe{% endblock %}
 {% block content %}
 <section class=\"content\">
-    <h3>Connexion</h3>
+    <h3>Réinitialiser votre mot de passe</h3>
     {% if error is defined %}
         <p style=\"color: red; text-align: center;\">{{ error|e }}</p>
+    {% elseif message is defined %}
+        <p style=\"color: green; text-align: center;\">{{ message|e }}</p>
     {% endif %}
-    <form id=\"login-form\" action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=login\" method=\"POST\">
-        <label for=\"email\">Email :</label>
+    <form id=\"reset-password-form\" action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=sendResetLink\" method=\"POST\">
+        <label for=\"email\">Entrez votre email :</label>
         <input type=\"email\" id=\"email\" name=\"email\" required>
-        <label for=\"password\">Mot de passe :</label>
-        <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
-        <button type=\"submit\" class=\"btn\">Se connecter</button>
-        <p class=\"forgot-password\">
-            <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
-        </p>
+        <button type=\"submit\" class=\"btn\">Envoyer le lien</button>
     </form>
-    <div class=\"account-link\">
-        <p>Pas encore de compte ?</p>
-        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=inscription\" class=\"btn-add\">Créer un compte</a>
-    </div>
 </section>
 {% endblock %}
-", "utilisateurs/connexion.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+", "utilisateurs/resetPassword.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\resetPassword.twig");
     }
 }

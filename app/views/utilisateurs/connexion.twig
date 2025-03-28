@@ -12,6 +12,7 @@
         <label for="password">Mot de passe :</label>
         <input type="password" id="password" name="password" required pattern=".{8,}" title="Au moins 8 caractères">
         <button type="submit" class="btn">Se connecter</button>
+        <button type="reset" class="bouton-reset">Réinitialiser</button>
         <p class="forgot-password">
             <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword">Mot de passe oublié ?</a>
         </p>

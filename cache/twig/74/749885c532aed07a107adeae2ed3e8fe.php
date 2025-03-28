@@ -86,6 +86,7 @@ class __TwigTemplate_a932518742319d1645a4a0e1bd078207 extends Template
         <label for=\"message\">Message :</label>
         <textarea id=\"message\" name=\"message\" required></textarea>
         <button type=\"submit\" class=\"btn\">Envoyer</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
 </section>
 ";
@@ -137,9 +138,10 @@ class __TwigTemplate_a932518742319d1645a4a0e1bd078207 extends Template
         <label for=\"message\">Message :</label>
         <textarea id=\"message\" name=\"message\" required></textarea>
         <button type=\"submit\" class=\"btn\">Envoyer</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
 </section>
 {% endblock %}
-", "contact/index.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\contact\\index.twig");
+", "contact/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\contact\\index.twig");
     }
 }
