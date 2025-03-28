@@ -535,20 +535,6 @@ a.btn-register:hover {
   outline: none;
 }
 
-.btn-login {
-  background-color: #FFA07A;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 20px;
-  text-decoration: none;
-  font-weight: 500;
-  transition: background-color 0.3s;
-}
-
-.btn-login:hover {
-  background-color: #FF6347;
-}
-
 /* ================================
    PAGINATION
    ================================ */
