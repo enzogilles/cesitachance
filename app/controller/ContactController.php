@@ -4,7 +4,7 @@
 namespace app\controller;
 
 use app\controller\BaseController;
-use Database;
+use App\Model\ContactMessage;
 
 class ContactController extends BaseController {
 
@@ -22,8 +22,7 @@ class ContactController extends BaseController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
-    
+
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             $_SESSION["error"] = "Méthode non autorisée.";
             header("Location: " . BASE_URL . "index.php?controller=contact&action=index");
@@ -39,12 +38,11 @@ class ContactController extends BaseController {
             header("Location: " . BASE_URL . "index.php?controller=contact&action=index");
             exit;
         }
-    
+
         try {
-            $pdo = Database::getInstance();
-            $stmt = $pdo->prepare("INSERT INTO contact_messages (nom, email, message) VALUES (?, ?, ?)");
-            $stmt->execute([$nom, $email, $message]);
-    
+            // Model
+            ContactMessage::create($nom, $email, $message);
+
             $_SESSION["success"] = "Votre message a bien été envoyé et enregistré.";
         } catch (\PDOException $e) {
             $_SESSION["error"] = "Erreur lors de l'enregistrement du message.";
@@ -61,16 +59,14 @@ class ContactController extends BaseController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-        
-    
+
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=contact&action=index");
             exit;
         }
-    
-        $pdo = Database::getInstance();
-        $stmt = $pdo->query("SELECT * FROM contact_messages ORDER BY date_envoi DESC");
-        $messages = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+
+        // Model
+        $messages = ContactMessage::findAll();
     
         $this->render('contact/messages.twig', ['messages' => $messages]);
     }

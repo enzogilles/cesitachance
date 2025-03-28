@@ -30,7 +30,4 @@ class BaseController {
             'BASE_URL' => BASE_URL
         ]));
     }
-    
-    
-    
 }
