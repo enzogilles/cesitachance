@@ -90,7 +90,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         <a href=\"";
         // line 22
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-add\">Créer un compte</a>
+        yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
     </div>
 </section>
 ";
@@ -144,7 +144,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     </form>
     <div class=\"account-link\">
         <p>Pas encore de compte ?</p>
-        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=inscription\" class=\"btn-add\">Créer un compte</a>
+        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
     </div>
 </section>
 {% endblock %}

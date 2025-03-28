@@ -136,6 +136,7 @@ class __TwigTemplate_8bca214f210d1ea1b29db6baa097e689 extends Template
         <textarea id=\"commentaire\" name=\"commentaire\"></textarea>
         <br>
         <button type=\"submit\" class=\"btn\">Envoyer l'évaluation</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
 </section>
 ";
@@ -202,6 +203,7 @@ class __TwigTemplate_8bca214f210d1ea1b29db6baa097e689 extends Template
         <textarea id=\"commentaire\" name=\"commentaire\"></textarea>
         <br>
         <button type=\"submit\" class=\"btn\">Envoyer l'évaluation</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
 </section>
 {% endblock %}
