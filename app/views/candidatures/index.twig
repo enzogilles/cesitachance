@@ -14,7 +14,6 @@
         </thead>
         <tbody>
             {% if candidatures is not empty %}
-                {# On suppose que "userRole" est passé en variable #}
                 {% for candidature in candidatures %}
                     {% if candidature.statut == 1 %}
                         {% set statut_class = 'accepted' %}
@@ -26,23 +25,12 @@
                         {% set statut_class = 'pending' %}
                         {% set statut_label = 'En attente' %}
                     {% endif %}
-                    <tr>
+                    <tr data-id="{{ candidature.id }}">
                         <td>{{ candidature.entreprise|e }}</td>
                         <td>{{ candidature.titre|e }}</td>
                         <td>{{ candidature.date_soumission|e }}</td>
-                        <td>
-                            <span class="status {{ statut_class }}">{{ statut_label }}</span>
-                            {% if userRole in ['Admin', 'pilote'] %}
-                                <form action="{{ BASE_URL }}index.php?controller=candidature&action=updateStatus" method="post" style="display:inline;">
-                                    <input type="hidden" name="candidature_id" value="{{ candidature.id }}">
-                                    <select name="statut">
-                                        <option value="0" {% if candidature.statut == 0 %}selected{% endif %}>En attente</option>
-                                        <option value="1" {% if candidature.statut == 1 %}selected{% endif %}>Acceptée</option>
-                                        <option value="2" {% if candidature.statut == 2 %}selected{% endif %}>Refusée</option>
-                                    </select>
-                                    <button type="submit" class="btn">Modifier</button>
-                                </form>
-                            {% endif %}
+                        <td class="status {{ statut_class }}">
+                            {{ statut_label }}
                         </td>
                     </tr>
                 {% endfor %}
@@ -53,5 +41,16 @@
             {% endif %}
         </tbody>
     </table>
+    {% if userRole in ['Admin', 'pilote'] %}
+        <p>Cliquez sur le statut pour modifier l'état de la candidature.</p>
+    {% endif %}
 </section>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+{% if userRole == 'Admin' %}
+    <script src="{{ BASE_URL }}public/js/candidatures.js"></script>
+{% endif %}
 {% endblock %}

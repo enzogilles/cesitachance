@@ -786,6 +786,98 @@ a.btn-register:hover {
   background-color: #FFCC00;
 }
 
+/* ============================= */
+/* Bouton Candidatures */
+/* ============================= */
+
+.status-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.btn-status {
+  background-color: #666;
+  color: white;
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  display: inline-block;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-status:hover {
+  background-color: #444;
+  transform: scale(1.05);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.status.no-status {
+  background-color: #B0B0B0;
+  color: black;
+}
+
+
+.status.accepted {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status.pending {
+  background-color: #FFA500;
+  color: white;
+}
+
+.status.refused {
+  background-color: #D32F2F;
+  color: white;
+}
+
+.status-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  position: absolute;
+  left: 80%;
+  transform: translateX(-50%); 
+  z-index: 10;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.status-btn {
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.status-btn.accepted {
+  background-color: #4CAF50;
+}
+
+.status-btn.pending {
+  background-color: #FFA500;
+}
+
+.status-btn.refused {
+  background-color: #D32F2F;
+}
+
+.status-btn:hover {
+  opacity: 0.9;
+}
+
+
 /* ================================
    DASHBOARD
    ================================ */
