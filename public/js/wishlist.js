@@ -20,13 +20,15 @@ document.addEventListener("DOMContentLoaded", function () {
           return;
         }
 
-        fetch("../api/remove_wishlist.php", {
+        fetch("index.php?controller=wishlist&action=remove", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ wishlist_id: wishlistId }),
         })
+        
           .then(response => response.json())
           .then(data => {
+            console.log("Réponse de l'API suppression :", data);
             if (data.success) {
               form.closest("li")?.remove();
               showNotification("ℹ️ Offre retirée de la wishlist.", "info");
@@ -53,25 +55,40 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(data => {
         if (data.success) {
           showNotification("Ajouté à la wishlist !", "success", true);
-
+  
           if (wishlistList) {
             const li = document.createElement("li");
-            li.textContent = offerTitle;
             li.classList.add("wishlist-item");
             li.dataset.title = offerTitle;
-
-            const removeBtn = document.createElement("button");
-            removeBtn.textContent = "Retirer";
-            removeBtn.classList.add("btn-remove");
-            removeBtn.setAttribute("data-wishlist-id", data.wishlist_id || offerTitle);
-
-            li.appendChild(removeBtn);
+  
+            const span = document.createElement("span");
+            span.textContent = offerTitle;
+  
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = `${BASE_URL}index.php?controller=wishlist&action=remove`;
+  
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "wishlist_id";
+            input.value = data.wishlist_id || offerTitle;
+  
+            const button = document.createElement("button");
+            button.type = "submit";
+            button.classList.add("btn-delete");
+            button.textContent = "Supprimer";
+  
+            form.appendChild(input);
+            form.appendChild(button);
+  
+            li.appendChild(span);
+            li.appendChild(form);
             wishlistList.appendChild(li);
           }
-
+  
           setTimeout(() => {
-            window.location.href = `wishlist.html?highlight=${encodeURIComponent(offerTitle)}`;
-          }, 1000);
+            window.location.href = `${BASE_URL}index.php?controller=wishlist&action=index&highlight=${encodeURIComponent(offerTitle)}`;
+          }, 2000);
         } else {
           showNotification("⚠️ " + data.message, "error");
         }
@@ -81,7 +98,7 @@ document.addEventListener("DOMContentLoaded", function () {
         showNotification("Erreur lors de l'ajout à la wishlist.", "error");
       });
   }
-
+  
   // Ajout via boutons
   document.querySelectorAll(".add-to-wishlist").forEach(button => {
     button.addEventListener("click", function () {
@@ -132,7 +149,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.className = `notification ${type}`;
     notification.style.position = "fixed";
     notification.style.top = "100px";
-    notification.style.left = "50%";
+    notification.style.left = "40%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "9999";
     notification.style.padding = "15px 25px";

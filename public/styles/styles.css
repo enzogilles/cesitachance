@@ -88,7 +88,7 @@ nav a:hover {
 
 .btn-login:hover {
   background-color: #FF6347;
-  color : black;
+  color: black;
 }
 
 #logout-btn {
@@ -550,7 +550,7 @@ a.btn-register:hover {
   font-size: 16px;
   font-weight: 500;
   transition: background-color 0.3s;
-  border: none; 
+  border: none;
   display: inline-block;
   cursor: pointer;
 }
@@ -595,9 +595,7 @@ a.btn-register:hover {
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #fff;
-  /* Fond blanc par défaut */
   color: #000;
-  /* Texte noir par défaut */
 }
 
 .pagination a.active {
@@ -816,17 +814,26 @@ a.btn-register:hover {
 /* ================================
    WISHLIST
    ================================ */
-.wishlist-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+   .wishlist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .wishlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+  }
 
-.wishlist-list li {
-  margin: 15px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.wishlist-item span {
+  flex: 1;
+  margin-right: 20px;
+  word-break: break-word;
 }
 
 .btn-wishlist {
@@ -855,6 +862,25 @@ a.btn-register:hover {
   content: "❤️";
   font-size: 16px;
 }
+
+button.btn-delete,
+a.btn-delete {
+  display: inline-block;
+  border-radius: 5px;
+  background-color: #808080;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button.btn-delete:hover,
+a.btn-delete:hover {
+  background-color: #666666;
+}
+
 
 /* ================================
    NOTIFICATIONS

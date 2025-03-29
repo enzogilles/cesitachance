@@ -68,20 +68,52 @@ class WishlistController extends BaseController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
+    
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
+            // Si c’est une requête AJAX
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+                exit;
+            }
+    
+            // Sinon, redirection classique
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
         }
-
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $wishlist_id = $_POST['wishlist_id'];
-            Wishlist::remove($wishlist_id);
-
-            header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
-            exit;
+            $data = file_get_contents("php://input");
+            $json = json_decode($data, true);
+    
+            // Si AJAX (fetch)
+            if ($json && isset($json['wishlist_id'])) {
+                $wishlist_id = $json['wishlist_id'];
+                $success = Wishlist::remove($wishlist_id);
+    
+                header('Content-Type: application/json');
+                echo json_encode(['success' => $success]);
+                exit;
+            }
+    
+            // Sinon, formulaire classique (non-AJAX)
+            if (isset($_POST['wishlist_id'])) {
+                $wishlist_id = $_POST['wishlist_id'];
+                Wishlist::remove($wishlist_id);
+    
+                header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
+                exit;
+            }
         }
+    
+        // Si aucune condition n'est remplie
+        if (!headers_sent()) {
+            header('Content-Type: application/json');
+        }
+        echo json_encode(['success' => false, 'message' => 'Requête invalide.']);
+        exit;
     }
+    
 
     /**
      * Recherche d'offres dans la wishlist (exemple).

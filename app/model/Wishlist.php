@@ -58,9 +58,9 @@ class Wishlist extends BaseModel {
      * Supprime une entrée de la wishlist par son ID (clé primaire).
      */
     public static function remove($wishlistId)
-    {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("DELETE FROM wishlist WHERE id = ?");
-        return $stmt->execute([$wishlistId]);
-    }
+{
+    $pdo = \Database::getInstance();
+    $stmt = $pdo->prepare("DELETE FROM wishlist WHERE id = ?");
+    return $stmt->execute([$wishlistId]); 
+}
 }

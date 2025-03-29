@@ -94,7 +94,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
                 yield " - ";
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "entreprise", [], "any", false, false, false, 22));
                 yield "</h4>
-                    <p><strong>Rémunération :</strong> ";
+                    <p>Rémunération : ";
                 // line 23
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "remuneration", [], "any", false, false, false, 23));
                 yield "€</p>
@@ -284,6 +284,10 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
         // line 84
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "public/js/offres.js\"></script>
+<script src=\"";
+        // line 85
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/wishlist.js\"></script>
 
 ";
         return; yield '';
@@ -310,7 +314,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  285 => 84,  278 => 80,  273 => 77,  269 => 75,  257 => 73,  255 => 72,  252 => 71,  231 => 69,  227 => 68,  224 => 67,  221 => 66,  218 => 65,  215 => 64,  212 => 63,  209 => 62,  206 => 61,  203 => 60,  200 => 59,  197 => 58,  194 => 57,  191 => 56,  188 => 55,  185 => 54,  182 => 53,  179 => 52,  176 => 51,  173 => 50,  171 => 49,  168 => 48,  156 => 46,  154 => 45,  151 => 44,  149 => 43,  144 => 40,  140 => 38,  137 => 37,  129 => 34,  122 => 30,  117 => 29,  115 => 28,  109 => 27,  103 => 24,  99 => 23,  93 => 22,  90 => 21,  85 => 20,  83 => 19,  74 => 13,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  289 => 85,  285 => 84,  278 => 80,  273 => 77,  269 => 75,  257 => 73,  255 => 72,  252 => 71,  231 => 69,  227 => 68,  224 => 67,  221 => 66,  218 => 65,  215 => 64,  212 => 63,  209 => 62,  206 => 61,  203 => 60,  200 => 59,  197 => 58,  194 => 57,  191 => 56,  188 => 55,  185 => 54,  182 => 53,  179 => 52,  176 => 51,  173 => 50,  171 => 49,  168 => 48,  156 => 46,  154 => 45,  151 => 44,  149 => 43,  144 => 40,  140 => 38,  137 => 37,  129 => 34,  122 => 30,  117 => 29,  115 => 28,  109 => 27,  103 => 24,  99 => 23,  93 => 22,  90 => 21,  85 => 20,  83 => 19,  74 => 13,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -337,7 +341,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
             {% for offre in offres %}
                 <div class=\"offer-card\">
                     <h4>{{ offre.titre|e }} - {{ offre.entreprise|e }}</h4>
-                    <p><strong>Rémunération :</strong> {{ offre.remuneration|e }}€</p>
+                    <p>Rémunération : {{ offre.remuneration|e }}€</p>
                     <p>{{ offre.description is defined ? offre.description|e : '' }}</p>
                     
                     <div class=\"offer-buttons\">
@@ -399,6 +403,7 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
 
 
 <script src=\"{{ BASE_URL }}public/js/offres.js\"></script>
+<script src=\"{{ BASE_URL }}public/js/wishlist.js\"></script>
 
 {% endblock %}
 ", "offres/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\index.twig");

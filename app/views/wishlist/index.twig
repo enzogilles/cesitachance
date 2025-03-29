@@ -4,23 +4,26 @@
 <main class="content">
     <h2>Ma Wishlist</h2>
     {% if wishlist is not empty %}
-        <ul>
-            {% for item in wishlist %}
-                <li>
-                    {{ item.titre|e }} - {{ item.entreprise|e }}
-                    <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
-                        <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
-                        <button type="submit" class="btn-register">Supprimer</button>
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
+        <ul class="wishlist-list">
+  {% for item in wishlist %}
+    <li class="wishlist-item">
+      <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+      <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
+        <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+        <button type="submit" class="btn-delete">Supprimer</button>
+      </form>
+    </li>
+  {% endfor %}
+</ul>
+
     {% else %}
         <p>Votre wishlist est vide.</p>
     {% endif %}
 </main>
-{% endblock %}
 
-{% block scripts %}
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
 <script src="{{ BASE_URL }}public/js/wishlist.js"></script>
 {% endblock %}
