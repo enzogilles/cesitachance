@@ -5,7 +5,8 @@ namespace App\Model;
 
 use PDO;
 
-class Candidature extends BaseModel {
+class Candidature extends BaseModel
+{
     public $id;
     public $user_id;
     public $offre_id;
@@ -14,17 +15,19 @@ class Candidature extends BaseModel {
     public $cv;
     public $lettre;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
     /**
-     * Récupère toutes les candidatures avec jointures (offre + entreprise).
+     * Récupère toutes les candidatures avec jointures (offre, entreprise et utilisateur).
      * Réservé aux rôles Admin/Pilote, ou si on veut la liste complète.
      *
      * @return array
      */
-    public static function findAllWithRelations() {
+    public static function findAllWithRelations()
+    {
         $pdo = \Database::getInstance();
         $sql = "
             SELECT c.id,
@@ -33,10 +36,13 @@ class Candidature extends BaseModel {
                    c.date_soumission,
                    c.cv,
                    c.lettre,
-                   c.statut
+                   c.statut,
+                   u.nom AS user_nom,
+                   u.prenom AS user_prenom
             FROM candidature c
             INNER JOIN offre o ON c.offre_id = o.id
             INNER JOIN entreprise e ON o.entreprise_id = e.id
+            INNER JOIN user u ON c.user_id = u.id
             ORDER BY c.date_soumission DESC
         ";
         $stmt = $pdo->query($sql);
@@ -49,7 +55,8 @@ class Candidature extends BaseModel {
      * @param int $userId
      * @return array
      */
-    public static function findAllByUserIdWithRelations($userId) {
+    public static function findAllByUserIdWithRelations($userId)
+    {
         $pdo = \Database::getInstance();
         $sql = "
             SELECT c.id,
@@ -58,10 +65,13 @@ class Candidature extends BaseModel {
                    c.date_soumission,
                    c.cv,
                    c.lettre,
-                   c.statut
+                   c.statut,
+                   u.nom AS user_nom,
+                   u.prenom AS user_prenom
             FROM candidature c
             INNER JOIN offre o ON c.offre_id = o.id
             INNER JOIN entreprise e ON o.entreprise_id = e.id
+            INNER JOIN user u ON c.user_id = u.id
             WHERE c.user_id = :user_id
             ORDER BY c.date_soumission DESC
         ";
@@ -75,7 +85,8 @@ class Candidature extends BaseModel {
      *
      * @return bool
      */
-    public function save() {
+    public function save()
+    {
         if (isset($this->id)) {
             // Mise à jour
             $sql = "
@@ -127,9 +138,28 @@ class Candidature extends BaseModel {
      * @param string $statut
      * @return bool
      */
-    public static function updateStatus($id, $statut) {
+    public static function updateStatus($id, $statut)
+    {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
         return $stmt->execute([$statut, $id]);
+    }
+
+    /**
+     * Supprime le fichier CV du serveur.
+     *
+     * @param string $filename
+     * @return bool
+     */
+    public static function deleteCvFile(string $filename): bool
+    {
+        $safeFilename = basename($filename);
+        $filePath = __DIR__ . '/../../uploads/' . $safeFilename;
+        
+        if (file_exists($filePath)) {
+            return unlink($filePath);
+        }
+        
+        return false;
     }
 }

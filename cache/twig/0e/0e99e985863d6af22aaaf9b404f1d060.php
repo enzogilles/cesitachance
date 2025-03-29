@@ -13,8 +13,8 @@ use Twig\Sandbox\SecurityNotAllowedFunctionError;
 use Twig\Source;
 use Twig\Template;
 
-/* utilisateurs/connexion.twig */
-class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
+/* utilisateurs/inscription.twig */
+class __TwigTemplate_e0e0fa3e9bf2bb5aedfc62c45b7f5f03 extends Template
 {
     private $source;
     private $macros = [];
@@ -40,7 +40,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     protected function doDisplay(array $context, array $blocks = [])
     {
         $macros = $this->macros;
-        $this->parent = $this->loadTemplate("layout/base.twig", "utilisateurs/connexion.twig", 1);
+        $this->parent = $this->loadTemplate("layout/base.twig", "utilisateurs/inscription.twig", 1);
         yield from $this->parent->unwrap()->yield($context, array_merge($this->blocks, $blocks));
     }
 
@@ -48,7 +48,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     public function block_title($context, array $blocks = [])
     {
         $macros = $this->macros;
-        yield "Connexion";
+        yield "Inscription";
         return; yield '';
     }
 
@@ -58,7 +58,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         $macros = $this->macros;
         // line 4
         yield "<section class=\"content\">
-    <h3>Connexion</h3>
+    <h3>Créer un compte</h3>
     ";
         // line 6
         if (array_key_exists("error", $context)) {
@@ -69,28 +69,35 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     ";
         }
         // line 9
-        yield "    <form id=\"login-form\" action=\"";
+        yield "    <form id=\"register-form\" action=\"";
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=login\" method=\"POST\">
+        yield "index.php?controller=utilisateur&action=register\" method=\"POST\">
+        <label for=\"nom\">Nom :</label>
+        <input type=\"text\" id=\"nom\" name=\"nom\" required>
+        <label for=\"prenom\">Prénom :</label>
+        <input type=\"text\" id=\"prenom\" name=\"prenom\" required>
         <label for=\"email\">Email :</label>
         <input type=\"email\" id=\"email\" name=\"email\" required>
+        <label for=\"role\">Rôle :</label>
+        <select id=\"role\" name=\"role\" required>
+            <option value=\"\" disabled selected hidden>Sélectionner un rôle</option>
+            <option value=\"Étudiant\">Étudiant</option>
+            <option value=\"Admin\">Admin</option>
+            <option value=\"pilote\">pilote</option>
+        </select>
         <label for=\"password\">Mot de passe :</label>
         <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
-        <button type=\"submit\" class=\"btn\">Se connecter</button>
-        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
-        <p class=\"forgot-password\">
-            <a href=\"";
-        // line 17
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
-        </p>
+        <label for=\"confirm-password\">Confirmer le mot de passe :</label>
+        <input type=\"password\" id=\"confirm-password\" name=\"confirm-password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
+        <p id=\"password-error\" class=\"error-message\" style=\"color: red; display: none;\">Les mots de passe ne correspondent pas.</p>
+        <button type=\"submit\" class=\"btn-register\">S'inscrire</button>
     </form>
     <div class=\"account-link\">
-        <p>Pas encore de compte ?</p>
+        <p>Vous avez déjà un compte ?</p>
         <a href=\"";
-        // line 22
+        // line 32
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
+        yield "index.php?controller=utilisateur&action=connexion\" class=\"btn-login\">Se connecter</a>
     </div>
 </section>
 ";
@@ -102,7 +109,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
      */
     public function getTemplateName()
     {
-        return "utilisateurs/connexion.twig";
+        return "utilisateurs/inscription.twig";
     }
 
     /**
@@ -118,36 +125,46 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  92 => 22,  84 => 17,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  99 => 32,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
     {
         return new Source("{% extends \"layout/base.twig\" %}
-{% block title %}Connexion{% endblock %}
+{% block title %}Inscription{% endblock %}
 {% block content %}
 <section class=\"content\">
-    <h3>Connexion</h3>
+    <h3>Créer un compte</h3>
     {% if error is defined %}
         <p style=\"color: red; text-align: center;\">{{ error|e }}</p>
     {% endif %}
-    <form id=\"login-form\" action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=login\" method=\"POST\">
+    <form id=\"register-form\" action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=register\" method=\"POST\">
+        <label for=\"nom\">Nom :</label>
+        <input type=\"text\" id=\"nom\" name=\"nom\" required>
+        <label for=\"prenom\">Prénom :</label>
+        <input type=\"text\" id=\"prenom\" name=\"prenom\" required>
         <label for=\"email\">Email :</label>
         <input type=\"email\" id=\"email\" name=\"email\" required>
+        <label for=\"role\">Rôle :</label>
+        <select id=\"role\" name=\"role\" required>
+            <option value=\"\" disabled selected hidden>Sélectionner un rôle</option>
+            <option value=\"Étudiant\">Étudiant</option>
+            <option value=\"Admin\">Admin</option>
+            <option value=\"pilote\">pilote</option>
+        </select>
         <label for=\"password\">Mot de passe :</label>
         <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
-        <button type=\"submit\" class=\"btn\">Se connecter</button>
-        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
-        <p class=\"forgot-password\">
-            <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
-        </p>
+        <label for=\"confirm-password\">Confirmer le mot de passe :</label>
+        <input type=\"password\" id=\"confirm-password\" name=\"confirm-password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
+        <p id=\"password-error\" class=\"error-message\" style=\"color: red; display: none;\">Les mots de passe ne correspondent pas.</p>
+        <button type=\"submit\" class=\"btn-register\">S'inscrire</button>
     </form>
     <div class=\"account-link\">
-        <p>Pas encore de compte ?</p>
-        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
+        <p>Vous avez déjà un compte ?</p>
+        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=connexion\" class=\"btn-login\">Se connecter</a>
     </div>
 </section>
 {% endblock %}
-", "utilisateurs/connexion.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+", "utilisateurs/inscription.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\inscription.twig");
     }
 }

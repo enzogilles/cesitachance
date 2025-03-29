@@ -88,6 +88,7 @@ nav a:hover {
 
 .btn-login:hover {
   background-color: #FF6347;
+  color: black;
 }
 
 #logout-btn {
@@ -308,6 +309,71 @@ nav a:hover {
   justify-content: center;
   margin-top: 10px;
 }
+
+.offers-container.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+.cv-upload {
+  background-color: #ff6600;
+  color: white;
+  font-weight: bold;
+  padding: 12px 20px;
+  text-align: center;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-block;
+  width: 220px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cv-upload input[type="file"] {
+  opacity: 0;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+
+.cv-upload:hover {
+  background-color: #e65c00;
+}
+
+.cv-label-container {
+  display: flex; 
+  align-items: center; 
+  gap: 10px;
+}
+
+.cv-btn {
+  background-color: rgb(252, 92, 92);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  margin-right: 10px;
+  display: none;
+}
+
+.cv-btn:hover {
+  background-color: rgb(250, 37, 37);
+}
+
+.cv-label {
+  color: rgb(124, 124, 124);
+  font-size: 13px;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+}
+
 
 /* ================================
    BOUTONS
@@ -544,7 +610,7 @@ a.btn-register:hover {
   font-size: 16px;
   font-weight: 500;
   transition: background-color 0.3s;
-  border: none; 
+  border: none;
   display: inline-block;
   cursor: pointer;
 }
@@ -589,9 +655,7 @@ a.btn-register:hover {
   border: 1px solid #ddd;
   border-radius: 4px;
   background-color: #fff;
-  /* Fond blanc par défaut */
   color: #000;
-  /* Texte noir par défaut */
 }
 
 .pagination a.active {
@@ -722,6 +786,116 @@ a.btn-register:hover {
   background-color: #FFCC00;
 }
 
+/* ============================= */
+/* Bouton Candidatures */
+/* ============================= */
+
+.status-button-container {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.btn-status {
+  background-color: #666;
+  color: white;
+  padding: 12px 25px;
+  font-size: 18px;
+  font-weight: bold;
+  text-decoration: none;
+  border-radius: 8px;
+  transition: background-color 0.3s ease-in-out, transform 0.2s ease-in-out;
+  display: inline-block;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-status:hover {
+  background-color: #444;
+  transform: scale(1.05);
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.status.no-status {
+  background-color: #B0B0B0;
+  color: black;
+}
+
+
+.status.accepted {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.status.pending {
+  background-color: #FFA500;
+  color: white;
+}
+
+.status.refused {
+  background-color: #D32F2F;
+  color: white;
+}
+
+.status-options {
+  display: flex;
+  gap: 10px;
+  margin-top: 5px;
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #fff;
+  position: absolute;
+  left: 80%;
+  transform: translateX(-50%); 
+  z-index: 10;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.status-btn {
+  padding: 10px 16px;
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.status-btn.accepted {
+  background-color: #4CAF50;
+}
+
+.status-btn.pending {
+  background-color: #FFA500;
+}
+
+.status-btn.refused {
+  background-color: #D32F2F;
+}
+
+.status-btn:hover {
+  opacity: 0.9;
+}
+
+.cv-link {
+  display: inline-block;
+  padding: 8px 16px;
+  background-color: rgb(73, 73, 254);
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.cv-link:hover {
+  background-color: rgb(39, 39, 255);
+}
+
+
+
+
 /* ================================
    DASHBOARD
    ================================ */
@@ -810,17 +984,26 @@ a.btn-register:hover {
 /* ================================
    WISHLIST
    ================================ */
-.wishlist-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+   .wishlist-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+  }
+  
+  .wishlist-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+    width: 100%;
+  }
 
-.wishlist-list li {
-  margin: 15px 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.wishlist-item span {
+  flex: 1;
+  margin-right: 20px;
+  word-break: break-word;
 }
 
 .btn-wishlist {
@@ -845,10 +1028,24 @@ a.btn-register:hover {
   transform: scale(1.05);
 }
 
-.btn-wishlist::before {
-  content: "❤️";
-  font-size: 16px;
+button.btn-delete,
+a.btn-delete {
+  display: inline-block;
+  border-radius: 5px;
+  background-color: #808080;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
+
+button.btn-delete:hover,
+a.btn-delete:hover {
+  background-color: #666666;
+}
+
 
 /* ================================
    NOTIFICATIONS
@@ -856,7 +1053,7 @@ a.btn-register:hover {
 .notification {
   position: fixed;
   top: 135px;
-  left: 40%;
+  left: 85%;
   transform: translateX(-50%);
   background-color: #007BFF;
   color: white;

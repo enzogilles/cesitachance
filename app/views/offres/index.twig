@@ -8,6 +8,7 @@
     <form class="search-form" method="GET" action="{{ BASE_URL }}index.php">
         <input type="hidden" name="controller" value="offre">
         <input type="hidden" name="action" value="search">
+        <input type="hidden" name="notif" value="1">
         <label for="motcle">Mot-clé :</label>
         <input type="text" id="motcle" name="motcle" value="{{ motcle is defined ? motcle|e : '' }}" required>
         <button type="submit" class="btn">Rechercher</button>
@@ -19,15 +20,13 @@
             {% for offre in offres %}
                 <div class="offer-card">
                     <h4>{{ offre.titre|e }} - {{ offre.entreprise|e }}</h4>
-                    <p><strong>Rémunération :</strong> {{ offre.remuneration|e }}€</p>
+                    <p>Rémunération : {{ offre.remuneration|e }}€</p>
                     <p>{{ offre.description is defined ? offre.description|e : '' }}</p>
                     
                     <div class="offer-buttons">
                         <a href="{{ BASE_URL }}index.php?controller=offre&action=detail&id={{ offre.id }}" class="btn-voir">Voir</a>
                         {% if user is defined and user.role == 'Étudiant' %}
-                            <form action="{{ BASE_URL }}index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
-                                <input type="hidden" name="offre_id" value="{{ offre.id }}">
-                                <button type="submit" class="btn">Ajouter à la Wishlist</button>
+                            <button class="btn btn-add-wishlist" style="display:inline;" data-offre-id="{{ offre.id }}" data-offre-title="{{ offre.titre|e('js') }} - {{ offre.entreprise|e('js') }}">Ajouter à la Wishlist</button>
                             </form>
                         {% endif %}
                     </div>
@@ -76,16 +75,11 @@
 </section>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const resetButton = document.querySelector(".search-form .bouton-reset");
-
-  if (resetButton) {
-    resetButton.addEventListener("click", function (e) {
-      e.preventDefault(); 
-      window.location.href = "{{ BASE_URL }}index.php?controller=offre&action=index";
-    });
-  }
-});
+  const BASE_URL = "{{ BASE_URL }}";
 </script>
+
+
+<script src="{{ BASE_URL }}public/js/offres.js"></script>
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
 
 {% endblock %}

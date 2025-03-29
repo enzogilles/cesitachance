@@ -73,19 +73,19 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
         yield ((CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "entreprise", [], "any", true, true, false, 9)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "entreprise", [], "any", false, false, false, 9))) : ("Entreprise inconnue"));
         yield "
     </h3>
-    <p><strong>Rémunération :</strong> ";
+    <p>Rémunération : ";
         // line 11
         ((CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "remuneration", [], "any", true, true, false, 11)) ? (yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "remuneration", [], "any", false, false, false, 11)) . "€"), "html", null, true)) : (yield "Non précisée"));
         yield "</p>
-    <p><strong>Date de début :</strong> ";
+    <p>Date de début : ";
         // line 12
         yield ((CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "date_debut", [], "any", true, true, false, 12)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "date_debut", [], "any", false, false, false, 12))) : ("Non précisée"));
         yield "</p>
-    <p><strong>Date de fin :</strong> ";
+    <p>Date de fin : ";
         // line 13
         yield ((CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "date_fin", [], "any", true, true, false, 13)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "date_fin", [], "any", false, false, false, 13))) : ("Non précisée"));
         yield "</p>
-    <p><strong>Description :</strong> ";
+    <p>Description : ";
         // line 14
         yield ((CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "description", [], "any", true, true, false, 14)) ? (Twig\Extension\CoreExtension::nl2br($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "description", [], "any", false, false, false, 14)))) : ("Aucune description"));
         yield "</p>
@@ -101,7 +101,7 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
             // line 18
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "id", [], "any", false, false, false, 18), "html", null, true);
             yield "\">
-                <button type=\"submit\" class=\"btn btn-wishlist\">❤️ Ajouter à la Wishlist</button>
+                <button type=\"submit\" class=\"btn btn-wishlist\">Ajouter à la Wishlist</button>
             </form>
         ";
         }
@@ -111,35 +111,93 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
         // line 23
         if ((($context["userRole"] ?? null) == "Étudiant")) {
             // line 24
-            yield "        <h3>Postuler à cette offre</h3>
-        <form action=\"";
+            yield "      <h3>Postuler à cette offre</h3>
+      <form id=\"postuler-form\" action=\"";
             // line 25
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=candidature&action=postuler\" method=\"post\" enctype=\"multipart/form-data\">
-            <input type=\"hidden\" name=\"offre_id\" value=\"";
+        <input type=\"hidden\" name=\"offre_id\" value=\"";
             // line 26
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "id", [], "any", false, false, false, 26), "html", null, true);
             yield "\">
-            <label for=\"cv\">CV (PDF uniquement) :</label>
-            <input type=\"file\" id=\"cv\" name=\"cv\" accept=\"application/pdf\" required>
-            <label for=\"lettre_motivation\">Lettre de motivation :</label>
-            <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
-            <button type=\"submit\" class=\"btn\">📩 Postuler</button>
-        </form>
+
+        <label for=\"cv\">CV (PDF uniquement) :</label>
+        <div class=\"cv-upload\" id=\"cv-upload-label\"> 
+            Ajouter mon CV
+            <input type=\"file\" id=\"cv\" name=\"cv\" accept=\".pdf\" required> 
+        </div>         
+        <div class=\"cv-label-container\">
+            <p id=\"cv-label\" class=\"cv-label\"></p>
+            <button type=\"button\" class=\"cv-btn\" id=\"remove-cv\">Retirer le CV</button>
+        </div>
+
+        <label for=\"lettre_motivation\">Lettre de motivation :</label>
+        <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
+
+        <button type=\"submit\" class=\"btn\">Postuler</button>
+        <button type=\"reset\" class=\"bouton-reset reset-btn\">Réinitialiser</button>
+      </form>
+
+    <script>
+      document.getElementById('cv').addEventListener('change', function() {
+        const removeButton = document.getElementById('remove-cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        if (this.files.length > 0) {
+        fileNameLabel.textContent = this.files[0].name;
+        removeButton.style.display = 'inline-block';
+        } else {
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+        }
+      });
+
+      document.getElementById('remove-cv').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        this.style.display = 'none';
+      });
+
+      document.querySelector('.reset-btn').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        const removeButton = document.getElementById('remove-cv');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+      });
+    </script>
     ";
         } else {
-            // line 34
-            yield "        <p>Seuls les étudiants peuvent postuler à une offre.</p>
+            // line 76
+            yield "      <p>Seuls les étudiants peuvent postuler à une offre.</p>
     ";
         }
-        // line 36
+        // line 78
         yield "    <div class=\"back-button-container\">
         <a href=\"";
-        // line 37
+        // line 79
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux offres</a>
     </div>
 </section>
+
+<script>
+  const BASE_URL = \"";
+        // line 84
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "\";
+</script>
+
+<script src=\"";
+        // line 87
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/offres.js\"></script>
+<script src=\"";
+        // line 88
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/wishlist.js\"></script>
 ";
         return; yield '';
     }
@@ -165,7 +223,7 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  139 => 37,  136 => 36,  132 => 34,  121 => 26,  117 => 25,  114 => 24,  112 => 23,  109 => 22,  102 => 18,  97 => 17,  95 => 16,  90 => 14,  86 => 13,  82 => 12,  78 => 11,  73 => 9,  69 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  199 => 88,  195 => 87,  189 => 84,  181 => 79,  178 => 78,  174 => 76,  121 => 26,  117 => 25,  114 => 24,  112 => 23,  109 => 22,  102 => 18,  97 => 17,  95 => 16,  90 => 14,  86 => 13,  82 => 12,  78 => 11,  73 => 9,  69 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -180,35 +238,84 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
         {{ offre.titre is defined ? offre.titre|e : 'Titre indisponible' }} - 
         {{ offre.entreprise is defined ? offre.entreprise|e : 'Entreprise inconnue' }}
     </h3>
-    <p><strong>Rémunération :</strong> {{ offre.remuneration is defined ? offre.remuneration|e ~ '€' : 'Non précisée' }}</p>
-    <p><strong>Date de début :</strong> {{ offre.date_debut is defined ? offre.date_debut|e : 'Non précisée' }}</p>
-    <p><strong>Date de fin :</strong> {{ offre.date_fin is defined ? offre.date_fin|e : 'Non précisée' }}</p>
-    <p><strong>Description :</strong> {{ offre.description is defined ? offre.description|e|nl2br : 'Aucune description' }}</p>
+    <p>Rémunération : {{ offre.remuneration is defined ? offre.remuneration|e ~ '€' : 'Non précisée' }}</p>
+    <p>Date de début : {{ offre.date_debut is defined ? offre.date_debut|e : 'Non précisée' }}</p>
+    <p>Date de fin : {{ offre.date_fin is defined ? offre.date_fin|e : 'Non précisée' }}</p>
+    <p>Description : {{ offre.description is defined ? offre.description|e|nl2br : 'Aucune description' }}</p>
     <div class=\"offer-buttons\">
         {% if userRole == 'Étudiant' %}
             <form action=\"{{ BASE_URL }}index.php?controller=wishlist&action=add\" method=\"POST\" style=\"display:inline;\">
                 <input type=\"hidden\" name=\"offre_id\" value=\"{{ offre.id }}\">
-                <button type=\"submit\" class=\"btn btn-wishlist\">❤️ Ajouter à la Wishlist</button>
+                <button type=\"submit\" class=\"btn btn-wishlist\">Ajouter à la Wishlist</button>
             </form>
         {% endif %}
     </div>
     {% if userRole == 'Étudiant' %}
-        <h3>Postuler à cette offre</h3>
-        <form action=\"{{ BASE_URL }}index.php?controller=candidature&action=postuler\" method=\"post\" enctype=\"multipart/form-data\">
-            <input type=\"hidden\" name=\"offre_id\" value=\"{{ offre.id }}\">
-            <label for=\"cv\">CV (PDF uniquement) :</label>
-            <input type=\"file\" id=\"cv\" name=\"cv\" accept=\"application/pdf\" required>
-            <label for=\"lettre_motivation\">Lettre de motivation :</label>
-            <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
-            <button type=\"submit\" class=\"btn\">📩 Postuler</button>
-        </form>
+      <h3>Postuler à cette offre</h3>
+      <form id=\"postuler-form\" action=\"{{ BASE_URL }}index.php?controller=candidature&action=postuler\" method=\"post\" enctype=\"multipart/form-data\">
+        <input type=\"hidden\" name=\"offre_id\" value=\"{{ offre.id }}\">
+
+        <label for=\"cv\">CV (PDF uniquement) :</label>
+        <div class=\"cv-upload\" id=\"cv-upload-label\"> 
+            Ajouter mon CV
+            <input type=\"file\" id=\"cv\" name=\"cv\" accept=\".pdf\" required> 
+        </div>         
+        <div class=\"cv-label-container\">
+            <p id=\"cv-label\" class=\"cv-label\"></p>
+            <button type=\"button\" class=\"cv-btn\" id=\"remove-cv\">Retirer le CV</button>
+        </div>
+
+        <label for=\"lettre_motivation\">Lettre de motivation :</label>
+        <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
+
+        <button type=\"submit\" class=\"btn\">Postuler</button>
+        <button type=\"reset\" class=\"bouton-reset reset-btn\">Réinitialiser</button>
+      </form>
+
+    <script>
+      document.getElementById('cv').addEventListener('change', function() {
+        const removeButton = document.getElementById('remove-cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        if (this.files.length > 0) {
+        fileNameLabel.textContent = this.files[0].name;
+        removeButton.style.display = 'inline-block';
+        } else {
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+        }
+      });
+
+      document.getElementById('remove-cv').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        this.style.display = 'none';
+      });
+
+      document.querySelector('.reset-btn').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        const removeButton = document.getElementById('remove-cv');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+      });
+    </script>
     {% else %}
-        <p>Seuls les étudiants peuvent postuler à une offre.</p>
+      <p>Seuls les étudiants peuvent postuler à une offre.</p>
     {% endif %}
     <div class=\"back-button-container\">
         <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux offres</a>
     </div>
 </section>
+
+<script>
+  const BASE_URL = \"{{ BASE_URL }}\";
+</script>
+
+<script src=\"{{ BASE_URL }}public/js/offres.js\"></script>
+<script src=\"{{ BASE_URL }}public/js/wishlist.js\"></script>
 {% endblock %}
 ", "offres/detail.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\detail.twig");
     }
