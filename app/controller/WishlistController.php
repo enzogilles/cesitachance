@@ -35,31 +35,55 @@ class WishlistController extends BaseController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
+    
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
+                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'Non autorisé']);
+                exit;
+            }
+    
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
         }
     
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['offre_id'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
+            strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
+    
+            $data = json_decode(file_get_contents("php://input"), true);
+    
+            if (!isset($data['offre_id'])) {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => false, 'message' => 'ID d\'offre manquant']);
+                exit;
+            }
+    
             $user_id = $_SESSION['user']['id'];
-            $offre_id = intval($_POST['offre_id']);
+            $offre_id = intval($data['offre_id']);
     
             if (Wishlist::exists($user_id, $offre_id)) {
-                $_SESSION['error'] = "Cette offre est déjà dans votre wishlist.";
+                echo json_encode(['success' => false, 'message' => 'Offre déjà dans la wishlist']);
             } else {
-                Wishlist::add($user_id, $offre_id);
-                $_SESSION['message'] = "Offre ajoutée à la wishlist !";
+                $success = Wishlist::add($user_id, $offre_id);
+                if ($success) {
+                    // On peut aussi récupérer l'ID inséré si nécessaire
+                    $pdo = \Database::getInstance();
+                    $wishlist_id = $pdo->lastInsertId();
+                    echo json_encode(['success' => true, 'wishlist_id' => $wishlist_id]);
+                } else {
+                    echo json_encode(['success' => false, 'message' => 'Erreur lors de l\'ajout']);
+                }
             }
-
-            header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
-            exit;
-        } else {
-            $_SESSION['error'] = "Une erreur est survenue.";
-            header("Location: " . BASE_URL . "index.php?controller=offre&action=index");
             exit;
         }
+    
+        // Fallback pour requêtes non conformes
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Requête invalide']);
+        exit;
     }
+    
 
     /**
      * Retirer une offre de la wishlist -> réservé aux Étudiants ou Admin.

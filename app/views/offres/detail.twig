@@ -16,7 +16,7 @@
         {% if userRole == 'Étudiant' %}
             <form action="{{ BASE_URL }}index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
                 <input type="hidden" name="offre_id" value="{{ offre.id }}">
-                <button type="submit" class="btn btn-wishlist">❤️ Ajouter à la Wishlist</button>
+                <button type="submit" class="btn btn-wishlist">Ajouter à la Wishlist</button>
             </form>
         {% endif %}
     </div>
@@ -37,4 +37,12 @@
         <a href="{{ BASE_URL }}index.php?controller=offre&action=index" class="btn btn-back">⬅ Retour aux offres</a>
     </div>
 </section>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+
+<script src="{{ BASE_URL }}public/js/offres.js"></script>
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
 {% endblock %}

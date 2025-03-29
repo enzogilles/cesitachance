@@ -101,7 +101,7 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
             // line 18
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "id", [], "any", false, false, false, 18), "html", null, true);
             yield "\">
-                <button type=\"submit\" class=\"btn btn-wishlist\">❤️ Ajouter à la Wishlist</button>
+                <button type=\"submit\" class=\"btn btn-wishlist\">Ajouter à la Wishlist</button>
             </form>
         ";
         }
@@ -188,7 +188,7 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
         {% if userRole == 'Étudiant' %}
             <form action=\"{{ BASE_URL }}index.php?controller=wishlist&action=add\" method=\"POST\" style=\"display:inline;\">
                 <input type=\"hidden\" name=\"offre_id\" value=\"{{ offre.id }}\">
-                <button type=\"submit\" class=\"btn btn-wishlist\">❤️ Ajouter à la Wishlist</button>
+                <button type=\"submit\" class=\"btn btn-wishlist\">Ajouter à la Wishlist</button>
             </form>
         {% endif %}
     </div>

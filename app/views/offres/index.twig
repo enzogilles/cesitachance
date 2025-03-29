@@ -26,9 +26,7 @@
                     <div class="offer-buttons">
                         <a href="{{ BASE_URL }}index.php?controller=offre&action=detail&id={{ offre.id }}" class="btn-voir">Voir</a>
                         {% if user is defined and user.role == 'Étudiant' %}
-                            <form action="{{ BASE_URL }}index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
-                                <input type="hidden" name="offre_id" value="{{ offre.id }}">
-                                <button type="submit" class="btn">Ajouter à la Wishlist</button>
+                            <button class="btn btn-add-wishlist" style="display:inline;" data-offre-id="{{ offre.id }}" data-offre-title="{{ offre.titre|e('js') }} - {{ offre.entreprise|e('js') }}">Ajouter à la Wishlist</button>
                             </form>
                         {% endif %}
                     </div>

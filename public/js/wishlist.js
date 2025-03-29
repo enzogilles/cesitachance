@@ -44,107 +44,85 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // === AJOUT D'UNE OFFRE ===
-  function addToWishlist(offerTitle) {
-    fetch("../api/add_wishlist.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ offer_title: offerTitle }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          showNotification("Ajouté à la wishlist !", "success", true);
-  
-          if (wishlistList) {
-            const li = document.createElement("li");
-            li.classList.add("wishlist-item");
-            li.dataset.title = offerTitle;
-  
-            const span = document.createElement("span");
-            span.textContent = offerTitle;
-  
-            const form = document.createElement("form");
-            form.method = "POST";
-            form.action = `${BASE_URL}index.php?controller=wishlist&action=remove`;
-  
-            const input = document.createElement("input");
-            input.type = "hidden";
-            input.name = "wishlist_id";
-            input.value = data.wishlist_id || offerTitle;
-  
-            const button = document.createElement("button");
-            button.type = "submit";
-            button.classList.add("btn-delete");
-            button.textContent = "Supprimer";
-  
-            form.appendChild(input);
-            form.appendChild(button);
-  
-            li.appendChild(span);
-            li.appendChild(form);
-            wishlistList.appendChild(li);
-          }
-  
-          setTimeout(() => {
-            window.location.href = `${BASE_URL}index.php?controller=wishlist&action=index&highlight=${encodeURIComponent(offerTitle)}`;
-          }, 2000);
-        } else {
-          showNotification("⚠️ " + data.message, "error");
-        }
-      })
-      .catch(error => {
-        console.error("Erreur lors de l'ajout :", error);
-        showNotification("Erreur lors de l'ajout à la wishlist.", "error");
-      });
-  }
-  
-  // Ajout via boutons
-  document.querySelectorAll(".add-to-wishlist").forEach(button => {
-    button.addEventListener("click", function () {
-      const offerTitle = this.getAttribute("data-title").trim();
-      addToWishlist(offerTitle);
-    });
-  });
+// === AJOUT D'UNE OFFRE ===
+function addToWishlist(offreId, offerTitle) {
+  fetch(`${BASE_URL}index.php?controller=wishlist&action=add`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ offre_id: offreId }),
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        showNotification("Ajouté à la wishlist !", "success");
 
-  // Ajout depuis page de détail
-  const detailWishlistButton = document.querySelector(".btn");
-  if (detailWishlistButton && detailWishlistButton.textContent.includes("Ajouter à la wishlist")) {
-    detailWishlistButton.addEventListener("click", function () {
-      const offerTitle = document.querySelector("h3").textContent.trim();
-      addToWishlist(offerTitle);
-    });
-  }
+        if (wishlistList) {
+          const li = document.createElement("li");
+          li.classList.add("wishlist-item");
+          li.dataset.title = offerTitle;
 
-  // Mise en surbrillance d'une offre ajoutée
-  const urlParams = new URLSearchParams(window.location.search);
-  const highlightedOffer = urlParams.get("highlight");
-  if (highlightedOffer) {
-    setTimeout(() => {
-      const offerElements = document.querySelectorAll(".wishlist-item");
-      let found = false;
-      offerElements.forEach(offer => {
-        if (offer.dataset.title.trim() === highlightedOffer.trim()) {
-          offer.classList.add("highlight-offer");
-          found = true;
-          setTimeout(() => {
-            offer.classList.remove("highlight-offer");
-            if (found) {
-              window.history.replaceState({}, document.title, window.location.pathname);
-            }
-          }, 3000);
+          const span = document.createElement("span");
+          span.textContent = offerTitle;
+
+          const form = document.createElement("form");
+          form.method = "POST";
+          form.action = `${BASE_URL}index.php?controller=wishlist&action=remove`;
+
+          const input = document.createElement("input");
+          input.type = "hidden";
+          input.name = "wishlist_id";
+          input.value = data.wishlist_id || offerTitle;
+
+          const button = document.createElement("button");
+          button.type = "submit";
+          button.classList.add("btn-delete");
+          button.textContent = "Supprimer";
+
+          form.appendChild(input);
+          form.appendChild(button);
+
+          li.appendChild(span);
+          li.appendChild(form);
+          wishlistList.appendChild(li);
         }
-      });
-      if (!found) {
-        window.history.replaceState({}, document.title, window.location.pathname);
+
+        setTimeout(() => {
+          window.location.href = `${BASE_URL}index.php?controller=wishlist&action=index&highlight=${encodeURIComponent(offerTitle)}`;
+        }, 2000);
+      } else {
+        showNotification("⚠️ " + data.message, "error");
       }
-    }, 500);
-  }
+    })
+    .catch(error => {
+      console.error("Erreur lors de l'ajout :", error);
+      showNotification("Erreur lors de l'ajout à la wishlist.", "error");
+    });
+}
+
+// Ajout via boutons (liste des offres)
+document.querySelectorAll(".btn-add-wishlist").forEach(button => {
+  button.addEventListener("click", function () {
+    const offreId = this.getAttribute("data-offre-id");
+    const offerTitle = this.getAttribute("data-offre-title");
+    addToWishlist(offreId, offerTitle);
+  });
+});
+
+// Ajout depuis page de détail
+const detailWishlistButton = document.querySelector(".btn.btn-wishlist");
+if (detailWishlistButton) {
+  detailWishlistButton.addEventListener("click", function (e) {
+    e.preventDefault(); // important pour éviter le submit classique
+    const offreId = document.querySelector('input[name="offre_id"]').value;
+    const offerTitle = document.querySelector("h3").textContent.trim();
+    addToWishlist(offreId, offerTitle);
+  });
+}
 
   // === NOTIFICATION ===
-  function showNotification(message, type = "info", withButton = false) {
+  function showNotification(message, type = "info") {
     document.querySelectorAll(".notification").forEach(n => n.remove());
-
+  
     const notification = document.createElement("div");
     notification.className = `notification ${type}`;
     notification.style.position = "fixed";
@@ -160,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.style.textAlign = "center";
     notification.style.transition = "opacity 0.4s ease";
     notification.style.opacity = "1";
-
+  
     // Couleurs par type
     switch (type) {
       case "success":
@@ -177,31 +155,10 @@ document.addEventListener("DOMContentLoaded", function () {
         notification.style.color = "#1e3a8a";
         break;
     }
-
+  
     notification.innerHTML = message;
-
-    if (withButton) {
-      const button = document.createElement("button");
-      button.classList.add("btn-view-wishlist");
-      button.textContent = "Voir la wishlist";
-      button.style.marginTop = "10px";
-      button.style.padding = "8px 16px";
-      button.style.border = "none";
-      button.style.background = "#2C3E60";
-      button.style.color = "#fff";
-      button.style.borderRadius = "5px";
-      button.style.cursor = "pointer";
-
-      button.addEventListener("click", function () {
-        window.location.href = "wishlist.html";
-      });
-
-      notification.appendChild(document.createElement("br"));
-      notification.appendChild(button);
-    }
-
     document.body.appendChild(notification);
-
+  
     // Fade out
     setTimeout(() => {
       notification.style.opacity = "0";
@@ -210,4 +167,5 @@ document.addEventListener("DOMContentLoaded", function () {
       }, 500);
     }, 3000);
   }
+  
 });

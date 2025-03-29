@@ -5,19 +5,22 @@ namespace App\Model;
 
 use PDO;
 
-class Wishlist extends BaseModel {
+class Wishlist extends BaseModel
+{
     public $id;
     public $user_id;
     public $offre_id;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
     /**
      * Récupère la wishlist d'un utilisateur (avec jointure sur Offre et Entreprise).
      */
-    public static function findByUserIdWithRelations($userId) {
+    public static function findByUserIdWithRelations($userId)
+    {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("
             SELECT w.id AS wishlist_id,
@@ -51,16 +54,18 @@ class Wishlist extends BaseModel {
     {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, offre_id) VALUES (?, ?)");
-        return $stmt->execute([$userId, $offreId]);
+        $stmt->execute([$userId, $offreId]);
+        return $stmt->rowCount() > 0;
     }
+
 
     /**
      * Supprime une entrée de la wishlist par son ID (clé primaire).
      */
     public static function remove($wishlistId)
-{
-    $pdo = \Database::getInstance();
-    $stmt = $pdo->prepare("DELETE FROM wishlist WHERE id = ?");
-    return $stmt->execute([$wishlistId]); 
-}
+    {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("DELETE FROM wishlist WHERE id = ?");
+        return $stmt->execute([$wishlistId]);
+    }
 }
