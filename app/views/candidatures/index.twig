@@ -37,13 +37,18 @@
                         <td>{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
                         <td>{{ candidature.date_soumission|e }}</td>
                         <td>
-    {% if candidature.cv is defined and candidature.cv != '' %}
-        <a href="{{ BASE_URL }}{{ candidature.cv }}" target="_blank" class="cv-link">Voir le CV</a>
-    {% else %}
-        Non fourni
-    {% endif %}
-</td>
-
+                            {% if candidature.cv is defined and candidature.cv != '' %}
+                                <a href="{{ BASE_URL }}{{ candidature.cv }}" target="_blank" class="cv-link">
+                                    {% if userRole == 'etudiant' %}
+                                        Voir mon CV
+                                    {% else %}
+                                        Voir le CV
+                                    {% endif %}
+                                </a>
+                            {% else %}
+                                Non fourni
+                            {% endif %}
+                        </td>
                         <td class="status {{ statut_class }}">
                             {{ statut_label }}
                         </td>
