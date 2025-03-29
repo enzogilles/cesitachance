@@ -2,13 +2,19 @@
 {% block title %}Vos Candidatures{% endblock %}
 {% block content %}
 <section class="content">
-    <h3>Vos Candidatures</h3>
+    {% if userRole in ['Admin', 'pilote'] %}
+        <h3>Candidatures des Étudiants</h3>
+    {% elseif userRole == 'etudiant' %}
+        <h3>Mes Candidatures</h3>
+    {% endif %}
     <table class="styled-table">
         <thead>
             <tr>
                 <th>Entreprise</th>
                 <th>Offre</th>
+                <th>Élève</th>
                 <th>Date</th>
+                <th>CV</th>
                 <th>Statut</th>
             </tr>
         </thead>
@@ -28,7 +34,16 @@
                     <tr data-id="{{ candidature.id }}">
                         <td>{{ candidature.entreprise|e }}</td>
                         <td>{{ candidature.titre|e }}</td>
+                        <td>{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
                         <td>{{ candidature.date_soumission|e }}</td>
+                        <td>
+    {% if candidature.cv is defined and candidature.cv != '' %}
+        <a href="{{ BASE_URL }}{{ candidature.cv }}" target="_blank" class="cv-link">Voir le CV</a>
+    {% else %}
+        Non fourni
+    {% endif %}
+</td>
+
                         <td class="status {{ statut_class }}">
                             {{ statut_label }}
                         </td>
@@ -36,7 +51,7 @@
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan="4" style="text-align:center;">Aucune candidature en cours</td>
+                    <td colspan="6" style="text-align:center;">Aucune candidature en cours</td>
                 </tr>
             {% endif %}
         </tbody>

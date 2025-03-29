@@ -58,77 +58,113 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
         $macros = $this->macros;
         // line 4
         yield "<section class=\"content\">
-    <h3>Vos Candidatures</h3>
-    <table class=\"styled-table\">
+    ";
+        // line 5
+        if (CoreExtension::inFilter(($context["userRole"] ?? null), ["Admin", "pilote"])) {
+            // line 6
+            yield "        <h3>Candidatures des Étudiants</h3>
+    ";
+        } elseif ((        // line 7
+($context["userRole"] ?? null) == "etudiant")) {
+            // line 8
+            yield "        <h3>Mes Candidatures</h3>
+    ";
+        }
+        // line 10
+        yield "    <table class=\"styled-table\">
         <thead>
             <tr>
                 <th>Entreprise</th>
                 <th>Offre</th>
+                <th>Élève</th>
                 <th>Date</th>
+                <th>CV</th>
                 <th>Statut</th>
             </tr>
         </thead>
         <tbody>
             ";
-        // line 16
+        // line 22
         if ( !Twig\Extension\CoreExtension::testEmpty(($context["candidatures"] ?? null))) {
-            // line 17
+            // line 23
             yield "                ";
             $context['_parent'] = $context;
             $context['_seq'] = CoreExtension::ensureTraversable(($context["candidatures"] ?? null));
             foreach ($context['_seq'] as $context["_key"] => $context["candidature"]) {
-                // line 18
+                // line 24
                 yield "                    ";
-                if ((CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "statut", [], "any", false, false, false, 18) == 1)) {
-                    // line 19
-                    yield "                        ";
-                    $context["statut_class"] = "accepted";
-                    // line 20
-                    yield "                        ";
-                    $context["statut_label"] = "Acceptée";
-                    // line 21
-                    yield "                    ";
-                } elseif ((CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "statut", [], "any", false, false, false, 21) == 2)) {
-                    // line 22
-                    yield "                        ";
-                    $context["statut_class"] = "refused";
-                    // line 23
-                    yield "                        ";
-                    $context["statut_label"] = "Refusée";
-                    // line 24
-                    yield "                    ";
-                } else {
+                if ((CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "statut", [], "any", false, false, false, 24) == 1)) {
                     // line 25
                     yield "                        ";
-                    $context["statut_class"] = "pending";
+                    $context["statut_class"] = "accepted";
                     // line 26
                     yield "                        ";
-                    $context["statut_label"] = "En attente";
+                    $context["statut_label"] = "Acceptée";
                     // line 27
                     yield "                    ";
+                } elseif ((CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "statut", [], "any", false, false, false, 27) == 2)) {
+                    // line 28
+                    yield "                        ";
+                    $context["statut_class"] = "refused";
+                    // line 29
+                    yield "                        ";
+                    $context["statut_label"] = "Refusée";
+                    // line 30
+                    yield "                    ";
+                } else {
+                    // line 31
+                    yield "                        ";
+                    $context["statut_class"] = "pending";
+                    // line 32
+                    yield "                        ";
+                    $context["statut_label"] = "En attente";
+                    // line 33
+                    yield "                    ";
                 }
-                // line 28
+                // line 34
                 yield "                    <tr data-id=\"";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "id", [], "any", false, false, false, 28), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "id", [], "any", false, false, false, 34), "html", null, true);
                 yield "\">
                         <td>";
-                // line 29
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "entreprise", [], "any", false, false, false, 29));
+                // line 35
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "entreprise", [], "any", false, false, false, 35));
                 yield "</td>
                         <td>";
-                // line 30
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "titre", [], "any", false, false, false, 30));
+                // line 36
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "titre", [], "any", false, false, false, 36));
                 yield "</td>
                         <td>";
-                // line 31
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "date_soumission", [], "any", false, false, false, 31));
+                // line 37
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "user_nom", [], "any", false, false, false, 37) . " ") . CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "user_prenom", [], "any", false, false, false, 37)), "html", null, true);
                 yield "</td>
+                        <td>";
+                // line 38
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "date_soumission", [], "any", false, false, false, 38));
+                yield "</td>
+                        <td>
+    ";
+                // line 40
+                if ((CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "cv", [], "any", true, true, false, 40) && (CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "cv", [], "any", false, false, false, 40) != ""))) {
+                    // line 41
+                    yield "        <a href=\"";
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["candidature"], "cv", [], "any", false, false, false, 41), "html", null, true);
+                    yield "\" target=\"_blank\" class=\"cv-link\">Voir le CV</a>
+    ";
+                } else {
+                    // line 43
+                    yield "        Non fourni
+    ";
+                }
+                // line 45
+                yield "</td>
+
                         <td class=\"status ";
-                // line 32
+                // line 47
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["statut_class"] ?? null), "html", null, true);
                 yield "\">
                             ";
-                // line 33
+                // line 48
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["statut_label"] ?? null), "html", null, true);
                 yield "
                         </td>
@@ -138,39 +174,39 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
             $_parent = $context['_parent'];
             unset($context['_seq'], $context['_iterated'], $context['_key'], $context['candidature'], $context['_parent'], $context['loop']);
             $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 37
+            // line 52
             yield "            ";
         } else {
-            // line 38
+            // line 53
             yield "                <tr>
-                    <td colspan=\"4\" style=\"text-align:center;\">Aucune candidature en cours</td>
+                    <td colspan=\"6\" style=\"text-align:center;\">Aucune candidature en cours</td>
                 </tr>
             ";
         }
-        // line 42
+        // line 57
         yield "        </tbody>
     </table>
     ";
-        // line 44
+        // line 59
         if (CoreExtension::inFilter(($context["userRole"] ?? null), ["Admin", "pilote"])) {
-            // line 45
+            // line 60
             yield "        <p>Cliquez sur le statut pour modifier l'état de la candidature.</p>
     ";
         }
-        // line 47
+        // line 62
         yield "</section>
 
 <script>
   const BASE_URL = \"";
-        // line 50
+        // line 65
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "\";
 </script>
 
 ";
-        // line 53
+        // line 68
         if ((($context["userRole"] ?? null) == "Admin")) {
-            // line 54
+            // line 69
             yield "    <script src=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "public/js/candidatures.js\"></script>
@@ -200,7 +236,7 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
      */
     public function getDebugInfo()
     {
-        return array (  174 => 54,  172 => 53,  166 => 50,  161 => 47,  157 => 45,  155 => 44,  151 => 42,  145 => 38,  142 => 37,  132 => 33,  128 => 32,  124 => 31,  120 => 30,  116 => 29,  111 => 28,  108 => 27,  105 => 26,  102 => 25,  99 => 24,  96 => 23,  93 => 22,  90 => 21,  87 => 20,  84 => 19,  81 => 18,  76 => 17,  74 => 16,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  210 => 69,  208 => 68,  202 => 65,  197 => 62,  193 => 60,  191 => 59,  187 => 57,  181 => 53,  178 => 52,  168 => 48,  164 => 47,  160 => 45,  156 => 43,  149 => 41,  147 => 40,  142 => 38,  138 => 37,  134 => 36,  130 => 35,  125 => 34,  122 => 33,  119 => 32,  116 => 31,  113 => 30,  110 => 29,  107 => 28,  104 => 27,  101 => 26,  98 => 25,  95 => 24,  90 => 23,  88 => 22,  74 => 10,  70 => 8,  68 => 7,  65 => 6,  63 => 5,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -209,13 +245,19 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
 {% block title %}Vos Candidatures{% endblock %}
 {% block content %}
 <section class=\"content\">
-    <h3>Vos Candidatures</h3>
+    {% if userRole in ['Admin', 'pilote'] %}
+        <h3>Candidatures des Étudiants</h3>
+    {% elseif userRole == 'etudiant' %}
+        <h3>Mes Candidatures</h3>
+    {% endif %}
     <table class=\"styled-table\">
         <thead>
             <tr>
                 <th>Entreprise</th>
                 <th>Offre</th>
+                <th>Élève</th>
                 <th>Date</th>
+                <th>CV</th>
                 <th>Statut</th>
             </tr>
         </thead>
@@ -235,7 +277,16 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
                     <tr data-id=\"{{ candidature.id }}\">
                         <td>{{ candidature.entreprise|e }}</td>
                         <td>{{ candidature.titre|e }}</td>
+                        <td>{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
                         <td>{{ candidature.date_soumission|e }}</td>
+                        <td>
+    {% if candidature.cv is defined and candidature.cv != '' %}
+        <a href=\"{{ BASE_URL }}{{ candidature.cv }}\" target=\"_blank\" class=\"cv-link\">Voir le CV</a>
+    {% else %}
+        Non fourni
+    {% endif %}
+</td>
+
                         <td class=\"status {{ statut_class }}\">
                             {{ statut_label }}
                         </td>
@@ -243,7 +294,7 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
                 {% endfor %}
             {% else %}
                 <tr>
-                    <td colspan=\"4\" style=\"text-align:center;\">Aucune candidature en cours</td>
+                    <td colspan=\"6\" style=\"text-align:center;\">Aucune candidature en cours</td>
                 </tr>
             {% endif %}
         </tbody>

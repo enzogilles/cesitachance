@@ -21,7 +21,7 @@ class Candidature extends BaseModel
     }
 
     /**
-     * Récupère toutes les candidatures avec jointures (offre + entreprise).
+     * Récupère toutes les candidatures avec jointures (offre, entreprise et utilisateur).
      * Réservé aux rôles Admin/Pilote, ou si on veut la liste complète.
      *
      * @return array
@@ -36,10 +36,13 @@ class Candidature extends BaseModel
                    c.date_soumission,
                    c.cv,
                    c.lettre,
-                   c.statut
+                   c.statut,
+                   u.nom AS user_nom,
+                   u.prenom AS user_prenom
             FROM candidature c
             INNER JOIN offre o ON c.offre_id = o.id
             INNER JOIN entreprise e ON o.entreprise_id = e.id
+            INNER JOIN user u ON c.user_id = u.id
             ORDER BY c.date_soumission DESC
         ";
         $stmt = $pdo->query($sql);
@@ -62,10 +65,13 @@ class Candidature extends BaseModel
                    c.date_soumission,
                    c.cv,
                    c.lettre,
-                   c.statut
+                   c.statut,
+                   u.nom AS user_nom,
+                   u.prenom AS user_prenom
             FROM candidature c
             INNER JOIN offre o ON c.offre_id = o.id
             INNER JOIN entreprise e ON o.entreprise_id = e.id
+            INNER JOIN user u ON c.user_id = u.id
             WHERE c.user_id = :user_id
             ORDER BY c.date_soumission DESC
         ";
