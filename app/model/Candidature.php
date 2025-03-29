@@ -5,7 +5,8 @@ namespace App\Model;
 
 use PDO;
 
-class Candidature extends BaseModel {
+class Candidature extends BaseModel
+{
     public $id;
     public $user_id;
     public $offre_id;
@@ -14,7 +15,8 @@ class Candidature extends BaseModel {
     public $cv;
     public $lettre;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
@@ -24,7 +26,8 @@ class Candidature extends BaseModel {
      *
      * @return array
      */
-    public static function findAllWithRelations() {
+    public static function findAllWithRelations()
+    {
         $pdo = \Database::getInstance();
         $sql = "
             SELECT c.id,
@@ -49,7 +52,8 @@ class Candidature extends BaseModel {
      * @param int $userId
      * @return array
      */
-    public static function findAllByUserIdWithRelations($userId) {
+    public static function findAllByUserIdWithRelations($userId)
+    {
         $pdo = \Database::getInstance();
         $sql = "
             SELECT c.id,
@@ -75,7 +79,8 @@ class Candidature extends BaseModel {
      *
      * @return bool
      */
-    public function save() {
+    public function save()
+    {
         if (isset($this->id)) {
             // Mise à jour
             $sql = "
@@ -127,9 +132,28 @@ class Candidature extends BaseModel {
      * @param string $statut
      * @return bool
      */
-    public static function updateStatus($id, $statut) {
+    public static function updateStatus($id, $statut)
+    {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
         return $stmt->execute([$statut, $id]);
+    }
+
+    /**
+     * Supprime le fichier CV du serveur.
+     *
+     * @param string $filename
+     * @return bool
+     */
+    public static function deleteCvFile(string $filename): bool
+    {
+        $safeFilename = basename($filename);
+        $filePath = __DIR__ . '/../../uploads/' . $safeFilename;
+        
+        if (file_exists($filePath)) {
+            return unlink($filePath);
+        }
+        
+        return false;
     }
 }

@@ -8,10 +8,10 @@
         {{ offre.titre is defined ? offre.titre|e : 'Titre indisponible' }} - 
         {{ offre.entreprise is defined ? offre.entreprise|e : 'Entreprise inconnue' }}
     </h3>
-    <p><strong>Rémunération :</strong> {{ offre.remuneration is defined ? offre.remuneration|e ~ '€' : 'Non précisée' }}</p>
-    <p><strong>Date de début :</strong> {{ offre.date_debut is defined ? offre.date_debut|e : 'Non précisée' }}</p>
-    <p><strong>Date de fin :</strong> {{ offre.date_fin is defined ? offre.date_fin|e : 'Non précisée' }}</p>
-    <p><strong>Description :</strong> {{ offre.description is defined ? offre.description|e|nl2br : 'Aucune description' }}</p>
+    <p>Rémunération : {{ offre.remuneration is defined ? offre.remuneration|e ~ '€' : 'Non précisée' }}</p>
+    <p>Date de début : {{ offre.date_debut is defined ? offre.date_debut|e : 'Non précisée' }}</p>
+    <p>Date de fin : {{ offre.date_fin is defined ? offre.date_fin|e : 'Non précisée' }}</p>
+    <p>Description : {{ offre.description is defined ? offre.description|e|nl2br : 'Aucune description' }}</p>
     <div class="offer-buttons">
         {% if userRole == 'Étudiant' %}
             <form action="{{ BASE_URL }}index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
@@ -21,17 +21,59 @@
         {% endif %}
     </div>
     {% if userRole == 'Étudiant' %}
-        <h3>Postuler à cette offre</h3>
-        <form action="{{ BASE_URL }}index.php?controller=candidature&action=postuler" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="offre_id" value="{{ offre.id }}">
-            <label for="cv">CV (PDF uniquement) :</label>
-            <input type="file" id="cv" name="cv" accept="application/pdf" required>
-            <label for="lettre_motivation">Lettre de motivation :</label>
-            <textarea id="lettre_motivation" name="lettre_motivation" required></textarea>
-            <button type="submit" class="btn">📩 Postuler</button>
-        </form>
+      <h3>Postuler à cette offre</h3>
+      <form id="postuler-form" action="{{ BASE_URL }}index.php?controller=candidature&action=postuler" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="offre_id" value="{{ offre.id }}">
+
+        <label for="cv">CV (PDF uniquement) :</label>
+        <div class="cv-upload" id="cv-upload-label"> 
+            Ajouter mon CV
+            <input type="file" id="cv" name="cv" accept=".pdf" required> 
+        </div>         
+        <div class="cv-label-container">
+            <p id="cv-label" class="cv-label"></p>
+            <button type="button" class="cv-btn" id="remove-cv">Retirer le CV</button>
+        </div>
+
+        <label for="lettre_motivation">Lettre de motivation :</label>
+        <textarea id="lettre_motivation" name="lettre_motivation" required></textarea>
+
+        <button type="submit" class="btn">Postuler</button>
+        <button type="reset" class="bouton-reset reset-btn">Réinitialiser</button>
+      </form>
+
+    <script>
+      document.getElementById('cv').addEventListener('change', function() {
+        const removeButton = document.getElementById('remove-cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        if (this.files.length > 0) {
+        fileNameLabel.textContent = this.files[0].name;
+        removeButton.style.display = 'inline-block';
+        } else {
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+        }
+      });
+
+      document.getElementById('remove-cv').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        this.style.display = 'none';
+      });
+
+      document.querySelector('.reset-btn').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        const removeButton = document.getElementById('remove-cv');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+      });
+    </script>
     {% else %}
-        <p>Seuls les étudiants peuvent postuler à une offre.</p>
+      <p>Seuls les étudiants peuvent postuler à une offre.</p>
     {% endif %}
     <div class="back-button-container">
         <a href="{{ BASE_URL }}index.php?controller=offre&action=index" class="btn btn-back">⬅ Retour aux offres</a>
@@ -41,7 +83,6 @@
 <script>
   const BASE_URL = "{{ BASE_URL }}";
 </script>
-
 
 <script src="{{ BASE_URL }}public/js/offres.js"></script>
 <script src="{{ BASE_URL }}public/js/wishlist.js"></script>
