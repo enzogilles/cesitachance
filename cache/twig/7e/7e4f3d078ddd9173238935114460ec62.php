@@ -107,39 +107,72 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
         }
         // line 22
         yield "    </div>
-    ";
+";
         // line 23
         if ((($context["userRole"] ?? null) == "Étudiant")) {
             // line 24
-            yield "        <h3>Postuler à cette offre</h3>
-        <form action=\"";
+            yield "  <h3>Postuler à cette offre</h3>
+  <form id=\"postuler-form\" action=\"";
             // line 25
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=candidature&action=postuler\" method=\"post\" enctype=\"multipart/form-data\">
-            <input type=\"hidden\" name=\"offre_id\" value=\"";
+    <input type=\"hidden\" name=\"offre_id\" value=\"";
             // line 26
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "id", [], "any", false, false, false, 26), "html", null, true);
             yield "\">
-            <label for=\"cv\">CV (PDF uniquement) :</label>
-            <input type=\"file\" id=\"cv\" name=\"cv\" accept=\"application/pdf\" required>
-            <label for=\"lettre_motivation\">Lettre de motivation :</label>
-            <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
-            <button type=\"submit\" class=\"btn\">📩 Postuler</button>
-        </form>
-    ";
+
+<label for=\"cv\">CV (PDF uniquement) :</label>
+<div class=\"cv-upload\" id=\"cv-upload-label\">
+    Ajouter mon CV
+    <input type=\"file\" id=\"cv\" name=\"cv\" accept=\".pdf\" required style=\"display: none;\">
+</div>
+<p id=\"cv-label\" class=\"file-name\"></p>
+<button type=\"button\" class=\"cv-btn\" id=\"remove-cv\" style=\"display: none;\">Retirer le CV</button>
+<input type=\"hidden\" name=\"cv_temp_name\" id=\"cv_temp_name\">
+
+
+
+    <label for=\"lettre_motivation\">Lettre de motivation :</label>
+    <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
+
+    <button type=\"submit\" class=\"btn\">Postuler</button>
+    <button type=\"reset\" class=\"bouton-reset reset-btn\">Réinitialiser</button>
+  </form>
+";
         } else {
-            // line 34
-            yield "        <p>Seuls les étudiants peuvent postuler à une offre.</p>
-    ";
+            // line 46
+            yield "  <p>Seuls les étudiants peuvent postuler à une offre.</p>
+";
         }
-        // line 36
+        // line 48
         yield "    <div class=\"back-button-container\">
         <a href=\"";
-        // line 37
+        // line 49
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux offres</a>
     </div>
 </section>
+
+<script>
+  const BASE_URL = \"";
+        // line 54
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "\";
+</script>
+
+
+<script src=\"";
+        // line 58
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/offres.js\"></script>
+<script src=\"";
+        // line 59
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/wishlist.js\"></script>
+<script src=\"";
+        // line 60
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/offre-detail.js\"></script>
 ";
         return; yield '';
     }
@@ -165,7 +198,7 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  139 => 37,  136 => 36,  132 => 34,  121 => 26,  117 => 25,  114 => 24,  112 => 23,  109 => 22,  102 => 18,  97 => 17,  95 => 16,  90 => 14,  86 => 13,  82 => 12,  78 => 11,  73 => 9,  69 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  174 => 60,  170 => 59,  166 => 58,  159 => 54,  151 => 49,  148 => 48,  144 => 46,  121 => 26,  117 => 25,  114 => 24,  112 => 23,  109 => 22,  102 => 18,  97 => 17,  95 => 16,  90 => 14,  86 => 13,  82 => 12,  78 => 11,  73 => 9,  69 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -192,23 +225,44 @@ class __TwigTemplate_3da1b0344c0b7e4375d8641a609f53e8 extends Template
             </form>
         {% endif %}
     </div>
-    {% if userRole == 'Étudiant' %}
-        <h3>Postuler à cette offre</h3>
-        <form action=\"{{ BASE_URL }}index.php?controller=candidature&action=postuler\" method=\"post\" enctype=\"multipart/form-data\">
-            <input type=\"hidden\" name=\"offre_id\" value=\"{{ offre.id }}\">
-            <label for=\"cv\">CV (PDF uniquement) :</label>
-            <input type=\"file\" id=\"cv\" name=\"cv\" accept=\"application/pdf\" required>
-            <label for=\"lettre_motivation\">Lettre de motivation :</label>
-            <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
-            <button type=\"submit\" class=\"btn\">📩 Postuler</button>
-        </form>
-    {% else %}
-        <p>Seuls les étudiants peuvent postuler à une offre.</p>
-    {% endif %}
+{% if userRole == 'Étudiant' %}
+  <h3>Postuler à cette offre</h3>
+  <form id=\"postuler-form\" action=\"{{ BASE_URL }}index.php?controller=candidature&action=postuler\" method=\"post\" enctype=\"multipart/form-data\">
+    <input type=\"hidden\" name=\"offre_id\" value=\"{{ offre.id }}\">
+
+<label for=\"cv\">CV (PDF uniquement) :</label>
+<div class=\"cv-upload\" id=\"cv-upload-label\">
+    Ajouter mon CV
+    <input type=\"file\" id=\"cv\" name=\"cv\" accept=\".pdf\" required style=\"display: none;\">
+</div>
+<p id=\"cv-label\" class=\"file-name\"></p>
+<button type=\"button\" class=\"cv-btn\" id=\"remove-cv\" style=\"display: none;\">Retirer le CV</button>
+<input type=\"hidden\" name=\"cv_temp_name\" id=\"cv_temp_name\">
+
+
+
+    <label for=\"lettre_motivation\">Lettre de motivation :</label>
+    <textarea id=\"lettre_motivation\" name=\"lettre_motivation\" required></textarea>
+
+    <button type=\"submit\" class=\"btn\">Postuler</button>
+    <button type=\"reset\" class=\"bouton-reset reset-btn\">Réinitialiser</button>
+  </form>
+{% else %}
+  <p>Seuls les étudiants peuvent postuler à une offre.</p>
+{% endif %}
     <div class=\"back-button-container\">
         <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux offres</a>
     </div>
 </section>
+
+<script>
+  const BASE_URL = \"{{ BASE_URL }}\";
+</script>
+
+
+<script src=\"{{ BASE_URL }}public/js/offres.js\"></script>
+<script src=\"{{ BASE_URL }}public/js/wishlist.js\"></script>
+<script src=\"{{ BASE_URL }}public/offre-detail.js\"></script>
 {% endblock %}
 ", "offres/detail.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\detail.twig");
     }

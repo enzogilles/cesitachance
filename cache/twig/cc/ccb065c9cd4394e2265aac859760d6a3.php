@@ -138,6 +138,12 @@ class __TwigTemplate_8bca214f210d1ea1b29db6baa097e689 extends Template
         <button type=\"submit\" class=\"btn\">Envoyer l'évaluation</button>
         <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
+        <div class=\"back-button-container\">
+        <a href=\"";
+        // line 38
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux Entreprises</a>
+    </div>
 </section>
 ";
         return; yield '';
@@ -164,7 +170,7 @@ class __TwigTemplate_8bca214f210d1ea1b29db6baa097e689 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  128 => 27,  125 => 26,  121 => 24,  115 => 22,  112 => 21,  110 => 20,  105 => 19,  99 => 17,  96 => 16,  90 => 14,  87 => 13,  81 => 11,  79 => 10,  75 => 9,  71 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  144 => 38,  128 => 27,  125 => 26,  121 => 24,  115 => 22,  112 => 21,  110 => 20,  105 => 19,  99 => 17,  96 => 16,  90 => 14,  87 => 13,  81 => 11,  79 => 10,  75 => 9,  71 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -205,6 +211,9 @@ class __TwigTemplate_8bca214f210d1ea1b29db6baa097e689 extends Template
         <button type=\"submit\" class=\"btn\">Envoyer l'évaluation</button>
         <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
+        <div class=\"back-button-container\">
+        <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux Entreprises</a>
+    </div>
 </section>
 {% endblock %}
 ", "entreprises/details.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\entreprises\\details.twig");
