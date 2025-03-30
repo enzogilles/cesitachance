@@ -36,7 +36,7 @@ class EntrepriseController extends BaseController
 
         $entreprises = Entreprise::search($nom, $ville, $secteur, $limit, $offset);
 
-        // Génération (ici) des boutons d'action pour la vue
+        // Boutons d'action pour la vue
         foreach ($entreprises as &$entreprise) {
             $detailLink = '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn-voir">Détails</a>';
 
@@ -51,9 +51,8 @@ class EntrepriseController extends BaseController
                 $entreprise['actions'] = $detailLink;
             }
         }
-        unset($entreprise); // Libération de la référence
+        unset($entreprise);
 
-        // Rendu de la vue avec Twig
         $this->render('entreprises/index.twig', [
             'entreprises' => $entreprises,
             'page' => $page,
@@ -197,9 +196,7 @@ class EntrepriseController extends BaseController
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // On insère dans la table evaluation_entreprise...
-            // => À déplacer éventuellement dans un model "EvaluationEntreprise"
-            // ...
+            // On insère dans la table evaluation_entreprise
             $_SESSION['message'] = "Évaluation enregistrée avec succès !";
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=details&id=" . $id);
             exit;
