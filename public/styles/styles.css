@@ -555,6 +555,9 @@ a.btn-register:hover {
 
 .btn-modifier,
 .btn-supprimer {
+  display: inline-flex;
+  justify-content: center; 
+  align-items: center;
   padding: 8px 15px;
   font-size: 14px;
   font-weight: bold;
@@ -565,6 +568,7 @@ a.btn-register:hover {
   text-transform: uppercase;
   text-align: center;
   width: 120px;
+  text-decoration: none;
 }
 
 .btn-modifier {
