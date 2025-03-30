@@ -1,24 +1,21 @@
 <?php
 // app/controller/WishlistController.php
 
-namespace app\controller;
+namespace App\Controller;
 
-use app\controller\BaseController;
+use app\Controller\BaseController;
 use App\Model\Wishlist;
-use App\Model\Utilisateur;  // Pour récupérer la liste des étudiants
-use App\Model\Offre;        // Pour effectuer des recherches d'offres
+use App\Model\Utilisateur;
+use App\Model\Offre;
 
-class WishlistController extends BaseController {
-
-    /**
-     * Affiche la wishlist de l'utilisateur connecté -> réservé aux Étudiants ou Admin.
-     */
-    public function index() {
+class WishlistController extends BaseController
+{
+    public function index()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        // On vérifie que l'utilisateur est connecté et a un rôle autorisé
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin', 'pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
@@ -27,26 +24,52 @@ class WishlistController extends BaseController {
         $role = $_SESSION['user']['role'];
 
         if ($role === 'Étudiant') {
-            // Pour un étudiant, on récupère sa propre wishlist
             $user_id = $_SESSION['user']['id'];
             $wishlist = Wishlist::findByUserIdWithRelations($user_id);
             $this->render('wishlist/index.twig', [
                 'wishlist' => $wishlist,
-                'userRole'  => $role,
-                'user'      => $_SESSION['user']
+                'userRole' => $role,
+                'user'     => $_SESSION['user']
             ]);
         } elseif (in_array($role, ['Admin', 'pilote'])) {
-            // Pour Admin/Pilote, on récupère la liste de tous les étudiants
             $students = Utilisateur::findAllEtudiants();
             $this->render('wishlist/index.twig', [
-                'students'  => $students,
-                'userRole'  => $role,
-                'user'      => $_SESSION['user']
+                'students' => $students,
+                'userRole' => $role,
+                'user'     => $_SESSION['user']
             ]);
         } else {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
         }
+    }
+
+    public function view()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
+            exit;
+        }
+
+        if (!isset($_GET['student_id'])) {
+            header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
+            exit;
+        }
+
+        $student_id = (int) $_GET['student_id'];
+
+        $wishlist = Wishlist::findByUserIdWithRelations($student_id);
+        $student  = Utilisateur::findById($student_id);
+
+        $this->render('wishlist/index.twig', [
+            'wishlist' => $wishlist,
+            'user'     => $_SESSION['user'],
+            'student'  => $student,
+        ]);
     }
 
     /**

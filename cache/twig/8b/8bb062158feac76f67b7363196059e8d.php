@@ -58,36 +58,38 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
         $macros = $this->macros;
         // line 4
         yield "<main class=\"content\">
+
   ";
-        // line 5
-        if ((Twig\Extension\CoreExtension::lower($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 5)) == "étudiant")) {
-            // line 6
+        // line 7
+        yield "  ";
+        if (((Twig\Extension\CoreExtension::lower($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 7)) == "étudiant") && array_key_exists("wishlist", $context))) {
+            // line 8
             yield "    <h2>Ma Wishlist</h2>
     ";
-            // line 7
+            // line 9
             if ( !Twig\Extension\CoreExtension::testEmpty(($context["wishlist"] ?? null))) {
-                // line 8
+                // line 10
                 yield "      <ul class=\"wishlist-list\">
         ";
-                // line 9
+                // line 11
                 $context['_parent'] = $context;
                 $context['_seq'] = CoreExtension::ensureTraversable(($context["wishlist"] ?? null));
                 foreach ($context['_seq'] as $context["_key"] => $context["item"]) {
-                    // line 10
+                    // line 12
                     yield "          <li class=\"wishlist-item\">
             <span>";
-                    // line 11
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "titre", [], "any", false, false, false, 11));
+                    // line 13
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "titre", [], "any", false, false, false, 13));
                     yield " - ";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "entreprise", [], "any", false, false, false, 11));
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "entreprise", [], "any", false, false, false, 13));
                     yield "</span>
             <form action=\"";
-                    // line 12
+                    // line 14
                     yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
                     yield "index.php?controller=wishlist&action=remove\" method=\"POST\">
               <input type=\"hidden\" name=\"wishlist_id\" value=\"";
-                    // line 13
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "wishlist_id", [], "any", false, false, false, 13), "html", null, true);
+                    // line 15
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "wishlist_id", [], "any", false, false, false, 15), "html", null, true);
                     yield "\">
               <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
             </form>
@@ -97,78 +99,131 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['item'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 18
+                // line 20
                 yield "      </ul>
     ";
             } else {
-                // line 20
+                // line 22
                 yield "      <p>Votre wishlist est vide.</p>
     ";
             }
-            // line 22
+            // line 24
+            yield "  
+  ";
+            // line 26
             yield "  ";
-        } elseif (CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 22), ["Admin", "pilote"])) {
-            // line 23
+        } elseif ((CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 26), ["Admin", "pilote"]) && array_key_exists("students", $context))) {
+            // line 27
             yield "    <h3>Liste des étudiants</h3>
     ";
-            // line 24
+            // line 28
             if ( !Twig\Extension\CoreExtension::testEmpty(($context["students"] ?? null))) {
-                // line 25
+                // line 29
                 yield "      <ul class=\"students-list\">
         ";
-                // line 26
+                // line 30
                 $context['_parent'] = $context;
                 $context['_seq'] = CoreExtension::ensureTraversable(($context["students"] ?? null));
                 foreach ($context['_seq'] as $context["_key"] => $context["student"]) {
-                    // line 27
+                    // line 31
                     yield "          <li class=\"student-item\">
             <span>";
-                    // line 28
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["student"], "nom", [], "any", false, false, false, 28));
+                    // line 32
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["student"], "nom", [], "any", false, false, false, 32));
                     yield " ";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["student"], "prenom", [], "any", false, false, false, 28));
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["student"], "prenom", [], "any", false, false, false, 32));
                     yield "</span>
-            <form action=\"";
-                    // line 29
+              <a class=\"btn-view\"
+   href=\"";
+                    // line 34
                     yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-                    yield "index.php?controller=wishlist&action=view\" method=\"GET\">
-              <input type=\"hidden\" name=\"student_id\" value=\"";
-                    // line 30
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["student"], "id", [], "any", false, false, false, 30), "html", null, true);
+                    yield "index.php?controller=wishlist&action=view&student_id=";
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["student"], "id", [], "any", false, false, false, 34), "html", null, true);
                     yield "\">
-              <button type=\"submit\" class=\"btn-view\">Voir la wishlist</button>
-            </form>
+  Voir la wishlist
+</a>
+   
           </li>
         ";
                 }
                 $_parent = $context['_parent'];
                 unset($context['_seq'], $context['_iterated'], $context['_key'], $context['student'], $context['_parent'], $context['loop']);
                 $context = array_intersect_key($context, $_parent) + $_parent;
-                // line 35
+                // line 40
                 yield "      </ul>
     ";
             } else {
-                // line 37
+                // line 42
                 yield "      <p>Aucun étudiant trouvé.</p>
     ";
             }
-            // line 39
+            // line 44
+            yield "  
+  ";
+            // line 46
+            yield "  ";
+        } elseif (((CoreExtension::inFilter(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 46), ["Admin", "pilote"]) && array_key_exists("student", $context)) && array_key_exists("wishlist", $context))) {
+            // line 47
+            yield "    <h3>Wishlist de ";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["student"] ?? null), "nom", [], "any", false, false, false, 47));
+            yield " ";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["student"] ?? null), "prenom", [], "any", false, false, false, 47));
+            yield "</h3>
+    ";
+            // line 48
+            if ( !Twig\Extension\CoreExtension::testEmpty(($context["wishlist"] ?? null))) {
+                // line 49
+                yield "      <ul class=\"wishlist-list\">
+        ";
+                // line 50
+                $context['_parent'] = $context;
+                $context['_seq'] = CoreExtension::ensureTraversable(($context["wishlist"] ?? null));
+                foreach ($context['_seq'] as $context["_key"] => $context["item"]) {
+                    // line 51
+                    yield "          <li class=\"wishlist-item\">
+            <span>";
+                    // line 52
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "titre", [], "any", false, false, false, 52));
+                    yield " - ";
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "entreprise", [], "any", false, false, false, 52));
+                    yield "</span>
+            <form action=\"";
+                    // line 53
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+                    yield "index.php?controller=wishlist&action=remove\" method=\"POST\">
+              <input type=\"hidden\" name=\"wishlist_id\" value=\"";
+                    // line 54
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "wishlist_id", [], "any", false, false, false, 54), "html", null, true);
+                    yield "\">
+                ";
+                    // line 55
+                    if ((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 55) == "Admin")) {
+                        // line 56
+                        yield "                <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
+                ";
+                    }
+                    // line 58
+                    yield "            </form>
+          </li>
+        ";
+                }
+                $_parent = $context['_parent'];
+                unset($context['_seq'], $context['_iterated'], $context['_key'], $context['item'], $context['_parent'], $context['loop']);
+                $context = array_intersect_key($context, $_parent) + $_parent;
+                // line 61
+                yield "      </ul>
+    ";
+            } else {
+                // line 63
+                yield "      <p>Cette wishlist est vide.</p>
+    ";
+            }
+            // line 65
             yield "  ";
         }
-        // line 40
-        yield "</main>
-
-<script>
-  const BASE_URL = \"";
-        // line 43
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "\";
-</script>
-
-<script src=\"";
-        // line 46
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "public/js/wishlist.js\"></script>
+        // line 66
+        yield "  
+</main>
 ";
         return; yield '';
     }
@@ -194,7 +249,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  170 => 46,  164 => 43,  159 => 40,  156 => 39,  152 => 37,  148 => 35,  137 => 30,  133 => 29,  127 => 28,  124 => 27,  120 => 26,  117 => 25,  115 => 24,  112 => 23,  109 => 22,  105 => 20,  101 => 18,  90 => 13,  86 => 12,  80 => 11,  77 => 10,  73 => 9,  70 => 8,  68 => 7,  65 => 6,  63 => 5,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  225 => 66,  222 => 65,  218 => 63,  214 => 61,  206 => 58,  202 => 56,  200 => 55,  196 => 54,  192 => 53,  186 => 52,  183 => 51,  179 => 50,  176 => 49,  174 => 48,  167 => 47,  164 => 46,  161 => 44,  157 => 42,  153 => 40,  139 => 34,  132 => 32,  129 => 31,  125 => 30,  122 => 29,  120 => 28,  117 => 27,  114 => 26,  111 => 24,  107 => 22,  103 => 20,  92 => 15,  88 => 14,  82 => 13,  79 => 12,  75 => 11,  72 => 10,  70 => 9,  67 => 8,  64 => 7,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -203,7 +258,9 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
 {% block title %}Ma Wishlist{% endblock %}
 {% block content %}
 <main class=\"content\">
-  {% if user.role|lower == 'étudiant' %}
+
+  {# Cas 1 : un étudiant connecté voit SA wishlist #}
+  {% if user.role|lower == 'étudiant' and wishlist is defined %}
     <h2>Ma Wishlist</h2>
     {% if wishlist is not empty %}
       <ul class=\"wishlist-list\">
@@ -220,31 +277,50 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
     {% else %}
       <p>Votre wishlist est vide.</p>
     {% endif %}
-  {% elseif user.role in ['Admin', 'pilote'] %}
+  
+  {# Cas 2 : un Admin/pilote regarde la liste des étudiants #}
+  {% elseif user.role in ['Admin', 'pilote'] and students is defined %}
     <h3>Liste des étudiants</h3>
     {% if students is not empty %}
       <ul class=\"students-list\">
         {% for student in students %}
           <li class=\"student-item\">
             <span>{{ student.nom|e }} {{ student.prenom|e }}</span>
-            <form action=\"{{ BASE_URL }}index.php?controller=wishlist&action=view\" method=\"GET\">
-              <input type=\"hidden\" name=\"student_id\" value=\"{{ student.id }}\">
-              <button type=\"submit\" class=\"btn-view\">Voir la wishlist</button>
-            </form>
+              <a class=\"btn-view\"
+   href=\"{{ BASE_URL }}index.php?controller=wishlist&action=view&student_id={{ student.id }}\">
+  Voir la wishlist
+</a>
+   
           </li>
         {% endfor %}
       </ul>
     {% else %}
       <p>Aucun étudiant trouvé.</p>
     {% endif %}
+  
+  {# Cas 3 : un Admin/pilote affiche la wishlist d'un étudiant précis #}
+  {% elseif user.role in ['Admin', 'pilote'] and student is defined and wishlist is defined %}
+    <h3>Wishlist de {{ student.nom|e }} {{ student.prenom|e }}</h3>
+    {% if wishlist is not empty %}
+      <ul class=\"wishlist-list\">
+        {% for item in wishlist %}
+          <li class=\"wishlist-item\">
+            <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+            <form action=\"{{ BASE_URL }}index.php?controller=wishlist&action=remove\" method=\"POST\">
+              <input type=\"hidden\" name=\"wishlist_id\" value=\"{{ item.wishlist_id }}\">
+                {% if user.role == 'Admin' %}
+                <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
+                {% endif %}
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Cette wishlist est vide.</p>
+    {% endif %}
   {% endif %}
+  
 </main>
-
-<script>
-  const BASE_URL = \"{{ BASE_URL }}\";
-</script>
-
-<script src=\"{{ BASE_URL }}public/js/wishlist.js\"></script>
 {% endblock %}
 ", "wishlist/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\wishlist\\index.twig");
     }

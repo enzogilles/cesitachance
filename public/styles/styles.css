@@ -1111,6 +1111,33 @@ a.btn-delete:hover {
   background-color: #c0392b;
 }
 
+.students-list,
+.wishlist-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.student-item,
+.wishlist-item {
+  width: 100%;              
+  display: flex;
+  align-items: center;
+  justify-content: space-between;  
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.student-item form,
+.wishlist-item form {
+  margin: 0;
+  padding: 0;
+}
+
 .btn-view {
   background-color: #3498db;
   color: white;
@@ -1119,39 +1146,14 @@ a.btn-delete:hover {
   border: none;
   cursor: pointer;
   font-weight: bold;
-  justify-content: left;
+  text-decoration: none;
+  text-align: center; 
+  transition: background-color 0.3s;
 }
 
 .btn-view:hover {
   background-color: #2980b9;
 }
-
-/* Liste des éléments de la wishlist */
-.wishlist-item,
-.student-item {
-  display: flex;
-  align-items: center;
-  justify-content: left; 
-  gap: 600px;                   
-  background-color: #f9f9f9;
-  border-radius: 5px;
-  padding: 10px 15px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.wishlist-item span,
-.student-item span {
-  font-size: 16px;
-  font-weight: 500;
-  color: #333;
-}
-
-.student-item form,
-.wishlist-item form {
-  margin-left: 20px;
-}
-
 
 
 /* ================================
