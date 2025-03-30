@@ -113,7 +113,7 @@ class __TwigTemplate_b84448463c42a2d218b2fd81c4c3fde2 extends Template
         // line 24
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "competences", [], "any", true, true, false, 24)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["offre"] ?? null), "competences", [], "any", false, false, false, 24), "")) : ("")));
         yield "</textarea>
-        <button type=\"submit\" class=\"btn btn-modifier\">Modifier l'Offre</button>
+        <button type=\"submit\" class=\"btn-login\">Modifier l'Offre</button>
     </form>
     <div class=\"back-button-container\">
         <a href=\"";
@@ -176,7 +176,7 @@ class __TwigTemplate_b84448463c42a2d218b2fd81c4c3fde2 extends Template
         <input type=\"date\" id=\"date_fin\" name=\"date_fin\" value=\"{{ offre.date_fin }}\" required>
         <label for=\"competences\">Compétences :</label>
         <textarea id=\"competences\" name=\"competences\">{{ offre.competences|default('')|e }}</textarea>
-        <button type=\"submit\" class=\"btn btn-modifier\">Modifier l'Offre</button>
+        <button type=\"submit\" class=\"btn-login\">Modifier l'Offre</button>
     </form>
     <div class=\"back-button-container\">
         <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux Offres</a>
