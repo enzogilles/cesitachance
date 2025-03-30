@@ -1096,6 +1096,63 @@ a.btn-delete:hover {
   background-color: #666666;
 }
 
+/* Boutons de la wishlist (admin/pilote) */
+.btn-delete {
+  background-color: #e74c3c;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.btn-delete:hover {
+  background-color: #c0392b;
+}
+
+.btn-view {
+  background-color: #3498db;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  justify-content: left;
+}
+
+.btn-view:hover {
+  background-color: #2980b9;
+}
+
+/* Liste des éléments de la wishlist */
+.wishlist-item,
+.student-item {
+  display: flex;
+  align-items: center;
+  justify-content: left; 
+  gap: 600px;                   
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  padding: 10px 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.wishlist-item span,
+.student-item span {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.student-item form,
+.wishlist-item form {
+  margin-left: 20px;
+}
+
+
 
 /* ================================
    NOTIFICATIONS

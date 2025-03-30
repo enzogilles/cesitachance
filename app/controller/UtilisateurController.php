@@ -14,7 +14,6 @@ class UtilisateurController extends BaseController {
     public function connexion() {
         $this->render('utilisateurs/connexion.twig');
     }
-
     /**
      * Page d'inscription -> accessible à tous.
      */

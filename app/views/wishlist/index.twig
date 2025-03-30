@@ -2,23 +2,41 @@
 {% block title %}Ma Wishlist{% endblock %}
 {% block content %}
 <main class="content">
+  {% if user.role|lower == 'étudiant' %}
     <h2>Ma Wishlist</h2>
     {% if wishlist is not empty %}
-        <ul class="wishlist-list">
-  {% for item in wishlist %}
-    <li class="wishlist-item">
-      <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
-      <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
-        <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
-        <button type="submit" class="btn-delete">Supprimer</button>
-      </form>
-    </li>
-  {% endfor %}
-</ul>
-
+      <ul class="wishlist-list">
+        {% for item in wishlist %}
+          <li class="wishlist-item">
+            <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+            <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
+              <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+              <button type="submit" class="btn-delete">Supprimer</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
-        <p>Votre wishlist est vide.</p>
+      <p>Votre wishlist est vide.</p>
     {% endif %}
+  {% elseif user.role in ['Admin', 'pilote'] %}
+    <h3>Liste des étudiants</h3>
+    {% if students is not empty %}
+      <ul class="students-list">
+        {% for student in students %}
+          <li class="student-item">
+            <span>{{ student.nom|e }} {{ student.prenom|e }}</span>
+            <form action="{{ BASE_URL }}index.php?controller=wishlist&action=view" method="GET">
+              <input type="hidden" name="student_id" value="{{ student.id }}">
+              <button type="submit" class="btn-view">Voir la wishlist</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Aucun étudiant trouvé.</p>
+    {% endif %}
+  {% endif %}
 </main>
 
 <script>

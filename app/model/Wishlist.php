@@ -18,6 +18,9 @@ class Wishlist extends BaseModel
 
     /**
      * Récupère la wishlist d'un utilisateur (avec jointure sur Offre et Entreprise).
+     *
+     * @param int $userId
+     * @return array
      */
     public static function findByUserIdWithRelations($userId)
     {
@@ -31,13 +34,18 @@ class Wishlist extends BaseModel
             JOIN offre o ON w.offre_id = o.id
             JOIN entreprise e ON o.entreprise_id = e.id
             WHERE w.user_id = ?
+            ORDER BY w.id DESC
         ");
         $stmt->execute([$userId]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
-     * Vérifie l'existence d'une offre déjà en wishlist.
+     * Vérifie si une offre est déjà présente dans la wishlist d'un utilisateur.
+     *
+     * @param int $userId
+     * @param int $offreId
+     * @return bool
      */
     public static function exists($userId, $offreId)
     {
@@ -48,19 +56,28 @@ class Wishlist extends BaseModel
     }
 
     /**
-     * Ajoute une offre en wishlist.
+     * Ajoute une offre à la wishlist d'un utilisateur.
+     *
+     * @param int $userId
+     * @param int $offreId
+     * @return bool
      */
     public static function add($userId, $offreId)
     {
+        if (self::exists($userId, $offreId)) {
+            return false;
+        }
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, offre_id) VALUES (?, ?)");
         $stmt->execute([$userId, $offreId]);
         return $stmt->rowCount() > 0;
     }
 
-
     /**
      * Supprime une entrée de la wishlist par son ID (clé primaire).
+     *
+     * @param int $wishlistId
+     * @return bool
      */
     public static function remove($wishlistId)
     {

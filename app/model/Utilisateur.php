@@ -134,4 +134,16 @@ class Utilisateur extends BaseModel {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    /**
+ * Récupère tous les utilisateurs dont le rôle est 'Étudiant'.
+ */
+public static function findAllEtudiants()
+{
+    $pdo = \Database::getInstance();
+    $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role = 'Étudiant'");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
 }
