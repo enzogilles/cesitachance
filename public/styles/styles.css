@@ -878,7 +878,9 @@ a.btn-register:hover {
 }
 
 .cv-link {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   padding: 8px 16px;
   background-color: rgb(73, 73, 254);
   color: white;
@@ -887,14 +889,12 @@ a.btn-register:hover {
   font-weight: bold;
   transition: background-color 0.3s ease;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
 }
 
 .cv-link:hover {
   background-color: rgb(39, 39, 255);
 }
-
-
-
 
 /* ================================
    DASHBOARD

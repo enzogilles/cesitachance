@@ -46,43 +46,43 @@ class CandidatureController extends BaseController {
             if (!isset($_SESSION['user']['id'])) {
                 die("Erreur : utilisateur non connecté.");
             }
-    
+        
             $userId = $_SESSION['user']['id'];
             $offreId = $_POST['offre_id'];
             $dateCandidature = date('Y-m-d');
-    
+        
             // Vérification et création du dossier d'upload si nécessaire
-            $uploadDir = __DIR__ . '/../../uploads/';
+            $uploadDir = __DIR__ . '/../../public/uploads/';
             if (!is_dir($uploadDir)) {
                 mkdir($uploadDir, 0777, true);
             }
-    
+        
             // Upload du CV
             if (isset($_FILES['cv']) && $_FILES['cv']['error'] === 0) {
                 $cvTmpPath = $_FILES['cv']['tmp_name'];
                 $cvName = basename($_FILES['cv']['name']);
-                $cvDestination = $uploadDir . time() . "_" . $cvName;
-    
+                $timestamp = time(); // Stocker le timestamp pour une cohérence
+                $cvDestination = $uploadDir . $timestamp . "_" . $cvName;
+        
                 if (!move_uploaded_file($cvTmpPath, $cvDestination)) {
                     die("Erreur lors du téléchargement du fichier.");
                 }
             } else {
                 die("Erreur : veuillez fournir un CV au format PDF.");
             }
-    
+        
             $lettreMotivation = isset($_POST['lettre_motivation']) ? trim($_POST['lettre_motivation']) : '';
-
-            // On utilise maintenant le Model pour créer / sauvegarder la candidature
+        
+            // Création et sauvegarde de la candidature
             $candidature = new Candidature();
             $candidature->user_id = $userId;
             $candidature->offre_id = $offreId;
-            $candidature->cv = 'uploads/' . time() . "_" . $cvName;
+            $candidature->cv = 'public/uploads/' . $timestamp . "_" . $cvName;
             $candidature->lettre = $lettreMotivation;
             $candidature->date_soumission = $dateCandidature;
-            // On peut définir un statut par défaut
             $candidature->statut = 'en attente';
             $candidature->save();
-
+        
             // Redirection
             header("Location: " . BASE_URL . "index.php?controller=offre&action=detail&id=$offreId&success=1");
             exit();
