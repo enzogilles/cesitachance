@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', function() {
       e.preventDefault();
       const offreId = this.dataset.id;
 
-      showCustomConfirm("Voulez-vous vraiment supprimer cette offre ?", () => {
+      showCustomConfirm("Voulez-vous vraiment supprimer ?", () => {
         fetch(`${BASE_URL}api/gerer-offres.php?action=delete&id=${offreId}`, {
           method: "DELETE"
         })
