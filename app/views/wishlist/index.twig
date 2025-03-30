@@ -2,28 +2,72 @@
 {% block title %}Ma Wishlist{% endblock %}
 {% block content %}
 <main class="content">
+
+  {# Cas 1 : un étudiant connecté voit SA wishlist #}
+  {% if user.role|lower == 'étudiant' and wishlist is defined %}
     <h2>Ma Wishlist</h2>
     {% if wishlist is not empty %}
-        <ul class="wishlist-list">
-  {% for item in wishlist %}
-    <li class="wishlist-item">
-      <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
-      <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
-        <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
-        <button type="submit" class="btn-delete">Supprimer</button>
-      </form>
-    </li>
-  {% endfor %}
-</ul>
-
+      <ul class="wishlist-list">
+        {% for item in wishlist %}
+          <li class="wishlist-item">
+            <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+            <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
+              <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+              <button type="submit" class="btn-supprimer">Supprimer</button>
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
     {% else %}
-        <p>Votre wishlist est vide.</p>
+      <p>Votre wishlist est vide.</p>
     {% endif %}
+  
+  {# Cas 2 : un Admin/pilote regarde la liste des étudiants #}
+  {% elseif user.role in ['Admin', 'pilote'] and students is defined %}
+    <h3>Liste des étudiants</h3>
+    {% if students is not empty %}
+      <ul class="students-list">
+        {% for student in students %}
+          <li class="student-item">
+            <span>{{ student.nom|e }} {{ student.prenom|e }}</span>
+              <a class="btn-view"
+   href="{{ BASE_URL }}index.php?controller=wishlist&action=view&student_id={{ student.id }}">
+  Voir la wishlist
+</a>
+   
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Aucun étudiant trouvé.</p>
+    {% endif %}
+  
+  {# Cas 3 : un Admin/pilote affiche la wishlist d'un étudiant précis #}
+  {% elseif user.role in ['Admin', 'pilote'] and student is defined and wishlist is defined %}
+    <h3>Wishlist de {{ student.nom|e }} {{ student.prenom|e }}</h3>
+    {% if wishlist is not empty %}
+      <ul class="wishlist-list">
+        {% for item in wishlist %}
+          <li class="wishlist-item">
+            <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+            <form action="{{ BASE_URL }}index.php?controller=wishlist&action=remove" method="POST">
+              <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+                {% if user.role == 'Admin' %}
+                <button type="submit" class="btn-supprimer">Supprimer</button>
+                {% endif %}
+            </form>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>Cette wishlist est vide.</p>
+    {% endif %}
+
+    <div class="back-button-container">
+  <a href="{{ BASE_URL }}index.php?controller=wishlist&action=index" class="btn btn-back">⬅ Retour aux Wishlists</a>
+  </div>
+  {% endif %}
+
+  
 </main>
-
-<script>
-  const BASE_URL = "{{ BASE_URL }}";
-</script>
-
-<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
 {% endblock %}

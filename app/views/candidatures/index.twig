@@ -4,7 +4,7 @@
 <section class="content">
     {% if userRole in ['Admin', 'pilote'] %}
         <h3>Candidatures des Étudiants</h3>
-    {% elseif userRole == 'etudiant' %}
+    {% elseif userRole|lower matches '/^(etudiant|étudiant)$/' %}
         <h3>Mes Candidatures</h3>
     {% endif %}
     <table class="styled-table">
@@ -12,9 +12,10 @@
             <tr>
                 <th>Entreprise</th>
                 <th>Offre</th>
-                <th>Élève</th>
+                {% if userRole in ['Admin', 'pilote'] %}
+                    <th>Élève</th>
+                {% endif %}
                 <th>Date</th>
-                <th>CV</th>
                 <th>Statut</th>
             </tr>
         </thead>
@@ -34,29 +35,21 @@
                     <tr data-id="{{ candidature.id }}">
                         <td>{{ candidature.entreprise|e }}</td>
                         <td>{{ candidature.titre|e }}</td>
-                        <td>{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
+                        {% if userRole in ['Admin', 'pilote'] %}
+                            <td>{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
+                        {% endif %}
                         <td>{{ candidature.date_soumission|e }}</td>
-                        <td>
-                            {% if candidature.cv is defined and candidature.cv != '' %}
-                                <a href="{{ BASE_URL }}{{ candidature.cv }}" target="_blank" class="cv-link">
-                                    {% if userRole == 'etudiant' %}
-                                        Voir mon CV
-                                    {% else %}
-                                        Voir le CV
-                                    {% endif %}
-                                </a>
-                            {% else %}
-                                Non fourni
-                            {% endif %}
-                        </td>
                         <td class="status {{ statut_class }}">
                             {{ statut_label }}
                         </td>
                     </tr>
                 {% endfor %}
             {% else %}
+                {% set colSpanValue = (userRole in ['Admin', 'pilote']) ? 5 : 4 %}
                 <tr>
-                    <td colspan="6" style="text-align:center;">Aucune candidature en cours</td>
+                    <td colspan="{{ colSpanValue }}" style="text-align:center;">
+                        Aucune candidature en cours
+                    </td>
                 </tr>
             {% endif %}
         </tbody>

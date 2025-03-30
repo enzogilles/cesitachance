@@ -1,35 +1,79 @@
 <?php
 // app/controller/WishlistController.php
 
-namespace app\controller;
+namespace App\Controller;
 
-use app\controller\BaseController;
+use app\Controller\BaseController;
 use App\Model\Wishlist;
+use App\Model\Utilisateur;
 use App\Model\Offre;
 
-class WishlistController extends BaseController {
-
-    /**
-     * Affiche la wishlist de l'utilisateur connecté -> réservé aux Étudiants ou Admin.
-     */
-    public function index() {
+class WishlistController extends BaseController
+{
+    public function index()
+    {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
 
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin', 'pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
         }
 
-        $user_id = $_SESSION['user']['id'];
-        $wishlist = Wishlist::findByUserIdWithRelations($user_id);
-        
-        $this->render('wishlist/index.twig', ['wishlist' => $wishlist]);
+        $role = $_SESSION['user']['role'];
+
+        if ($role === 'Étudiant') {
+            $user_id = $_SESSION['user']['id'];
+            $wishlist = Wishlist::findByUserIdWithRelations($user_id);
+            $this->render('wishlist/index.twig', [
+                'wishlist' => $wishlist,
+                'userRole' => $role,
+                'user'     => $_SESSION['user']
+            ]);
+        } elseif (in_array($role, ['Admin', 'pilote'])) {
+            $students = Utilisateur::findAllEtudiants();
+            $this->render('wishlist/index.twig', [
+                'students' => $students,
+                'userRole' => $role,
+                'user'     => $_SESSION['user']
+            ]);
+        } else {
+            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
+            exit;
+        }
+    }
+
+    public function view()
+    {
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
+            exit;
+        }
+
+        if (!isset($_GET['student_id'])) {
+            header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
+            exit;
+        }
+
+        $student_id = (int) $_GET['student_id'];
+
+        $wishlist = Wishlist::findByUserIdWithRelations($student_id);
+        $student  = Utilisateur::findById($student_id);
+
+        $this->render('wishlist/index.twig', [
+            'wishlist' => $wishlist,
+            'user'     => $_SESSION['user'],
+            'student'  => $student,
+        ]);
     }
 
     /**
-     * Ajouter une offre à la wishlist -> réservé aux Étudiants ou Admin.
+     * Ajoute une offre à la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function add() {
         if (session_status() === PHP_SESSION_NONE) {
@@ -43,7 +87,6 @@ class WishlistController extends BaseController {
                 echo json_encode(['success' => false, 'message' => 'Non autorisé']);
                 exit;
             }
-    
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
         }
@@ -67,7 +110,6 @@ class WishlistController extends BaseController {
             } else {
                 $success = Wishlist::add($user_id, $offre_id);
                 if ($success) {
-                    // On peut aussi récupérer l'ID inséré si nécessaire
                     $pdo = \Database::getInstance();
                     $wishlist_id = $pdo->lastInsertId();
                     echo json_encode(['success' => true, 'wishlist_id' => $wishlist_id]);
@@ -78,15 +120,13 @@ class WishlistController extends BaseController {
             exit;
         }
     
-        // Fallback pour requêtes non conformes
         header('Content-Type: application/json');
         echo json_encode(['success' => false, 'message' => 'Requête invalide']);
         exit;
     }
     
-
     /**
-     * Retirer une offre de la wishlist -> réservé aux Étudiants ou Admin.
+     * Retire une offre de la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function remove() {
         if (session_status() === PHP_SESSION_NONE) {
@@ -94,14 +134,11 @@ class WishlistController extends BaseController {
         }
     
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
-            // Si c’est une requête AJAX
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'Non autorisé']);
                 exit;
             }
-    
-            // Sinon, redirection classique
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
         }
@@ -110,7 +147,6 @@ class WishlistController extends BaseController {
             $data = file_get_contents("php://input");
             $json = json_decode($data, true);
     
-            // Si AJAX (fetch)
             if ($json && isset($json['wishlist_id'])) {
                 $wishlist_id = $json['wishlist_id'];
                 $success = Wishlist::remove($wishlist_id);
@@ -120,7 +156,6 @@ class WishlistController extends BaseController {
                 exit;
             }
     
-            // Sinon, formulaire classique (non-AJAX)
             if (isset($_POST['wishlist_id'])) {
                 $wishlist_id = $_POST['wishlist_id'];
                 Wishlist::remove($wishlist_id);
@@ -130,7 +165,6 @@ class WishlistController extends BaseController {
             }
         }
     
-        // Si aucune condition n'est remplie
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }
@@ -138,7 +172,6 @@ class WishlistController extends BaseController {
         exit;
     }
     
-
     /**
      * Recherche d'offres dans la wishlist (exemple).
      */
@@ -146,22 +179,18 @@ class WishlistController extends BaseController {
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
-
-        // Ici, c'est plus une recherche globale d'offres
-        // Vous pourriez limiter la recherche uniquement à celles déjà en wishlist
-        // ou bien réutiliser la recherche existante d'OffreController.
-
+    
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
-
+    
         if (!empty($motcle)) {
             $result = Offre::search($motcle, '', $limit, $offset);
             $offres = $result['offres'];
             $total = $result['total'];
             $totalPages = ceil($total / $limit);
-
+    
             $this->render('offres/index.twig', [
                 'offres' => $offres,
                 'motcle' => $motcle,

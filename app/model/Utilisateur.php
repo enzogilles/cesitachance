@@ -5,7 +5,8 @@ namespace App\Model;
 
 use PDO;
 
-class Utilisateur extends BaseModel {
+class Utilisateur extends BaseModel
+{
     public $id;
     public $nom;
     public $prenom;
@@ -13,14 +14,16 @@ class Utilisateur extends BaseModel {
     public $role;
     public $password; // ou password_hash suivant votre table
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
     /**
      * Récupère un utilisateur par son email (pour login).
      */
-    public static function findByEmail($email) {
+    public static function findByEmail($email)
+    {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role, password FROM user WHERE email = ?");
         $stmt->execute([$email]);
@@ -60,6 +63,25 @@ class Utilisateur extends BaseModel {
         return $row['total'] ?? 0;
     }
 
+    /**
+     * Finds a user by their ID.
+     *
+     * @param int $id The ID of the user.
+     * @return array|null The user data or null if not found.
+     */
+    public static function findById(int $id)
+    {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("
+            SELECT id, nom, prenom, email, role
+            FROM user
+            WHERE id = :id
+        ");
+        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+    }
+    
     /**
      * Récupère tous les utilisateurs (avec pagination).
      */
@@ -134,4 +156,16 @@ class Utilisateur extends BaseModel {
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+    /**
+     * Récupère tous les utilisateurs dont le rôle est 'Étudiant'.
+     */
+    public static function findAllEtudiants()
+    {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role = 'Étudiant'");
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
 }

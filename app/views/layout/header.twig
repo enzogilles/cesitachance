@@ -14,8 +14,10 @@
         {% if user %}
             <a href="{{ BASE_URL }}index.php?controller=candidature&action=index">Candidatures</a>
         {% endif %}
-        {% if user is defined and (user.role == 'Étudiant' or user.role == 'Admin') %}
+        {% if user is defined and user.role|lower == 'étudiant' %}
             <a href="{{ BASE_URL }}index.php?controller=wishlist&action=index">Ma Wishlist</a>
+        {% elseif user is defined and user.role == 'Admin' %}
+            <a href="{{ BASE_URL }}index.php?controller=wishlist&action=index">Wishlists</a>
         {% endif %}
         <a href="{{ BASE_URL }}index.php?controller=contact&action=index">Contact</a>
         {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}

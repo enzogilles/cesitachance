@@ -111,6 +111,19 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
         }
         // line 31
         yield "</section>
+
+
+<script>
+    const BASE_URL = \"";
+        // line 35
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "\";
+  </script>
+  
+  <script src=\"";
+        // line 38
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/entreprises.js\"></script>
 ";
         return; yield '';
     }
@@ -136,7 +149,7 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  113 => 31,  109 => 29,  103 => 25,  94 => 22,  90 => 21,  86 => 20,  83 => 19,  79 => 18,  68 => 9,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  125 => 38,  119 => 35,  113 => 31,  109 => 29,  103 => 25,  94 => 22,  90 => 21,  86 => 20,  83 => 19,  79 => 18,  68 => 9,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -172,6 +185,13 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
         <p>Aucune entreprise trouvée.</p>
     {% endif %}
 </section>
+
+
+<script>
+    const BASE_URL = \"{{ BASE_URL }}\";
+  </script>
+  
+  <script src=\"{{ BASE_URL }}public/js/entreprises.js\"></script>
 {% endblock %}
 ", "entreprises/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\entreprises\\index.twig");
     }
