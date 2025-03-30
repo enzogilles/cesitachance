@@ -62,7 +62,12 @@
     {% else %}
       <p>Cette wishlist est vide.</p>
     {% endif %}
+
+    <div class="back-button-container">
+  <a href="{{ BASE_URL }}index.php?controller=wishlist&action=index" class="btn btn-back">⬅ Retour aux Wishlists</a>
+  </div>
   {% endif %}
+
   
 </main>
 {% endblock %}

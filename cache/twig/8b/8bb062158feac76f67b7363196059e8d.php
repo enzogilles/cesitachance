@@ -219,10 +219,18 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
     ";
             }
             // line 65
-            yield "  ";
+            yield "
+    <div class=\"back-button-container\">
+  <a href=\"";
+            // line 67
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=wishlist&action=index\" class=\"btn btn-back\">⬅ Retour aux Wishlists</a>
+  </div>
+  ";
         }
-        // line 66
-        yield "  
+        // line 70
+        yield "
+  
 </main>
 ";
         return; yield '';
@@ -249,7 +257,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  225 => 66,  222 => 65,  218 => 63,  214 => 61,  206 => 58,  202 => 56,  200 => 55,  196 => 54,  192 => 53,  186 => 52,  183 => 51,  179 => 50,  176 => 49,  174 => 48,  167 => 47,  164 => 46,  161 => 44,  157 => 42,  153 => 40,  139 => 34,  132 => 32,  129 => 31,  125 => 30,  122 => 29,  120 => 28,  117 => 27,  114 => 26,  111 => 24,  107 => 22,  103 => 20,  92 => 15,  88 => 14,  82 => 13,  79 => 12,  75 => 11,  72 => 10,  70 => 9,  67 => 8,  64 => 7,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  232 => 70,  226 => 67,  222 => 65,  218 => 63,  214 => 61,  206 => 58,  202 => 56,  200 => 55,  196 => 54,  192 => 53,  186 => 52,  183 => 51,  179 => 50,  176 => 49,  174 => 48,  167 => 47,  164 => 46,  161 => 44,  157 => 42,  153 => 40,  139 => 34,  132 => 32,  129 => 31,  125 => 30,  122 => 29,  120 => 28,  117 => 27,  114 => 26,  111 => 24,  107 => 22,  103 => 20,  92 => 15,  88 => 14,  82 => 13,  79 => 12,  75 => 11,  72 => 10,  70 => 9,  67 => 8,  64 => 7,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -318,7 +326,12 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
     {% else %}
       <p>Cette wishlist est vide.</p>
     {% endif %}
+
+    <div class=\"back-button-container\">
+  <a href=\"{{ BASE_URL }}index.php?controller=wishlist&action=index\" class=\"btn btn-back\">⬅ Retour aux Wishlists</a>
+  </div>
   {% endif %}
+
   
 </main>
 {% endblock %}
