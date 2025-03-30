@@ -44,7 +44,7 @@ class EntrepriseController extends BaseController
                 $modifyLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn-modifier">Modifier</a>';
                 $deleteLink = ' <form action="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer" method="POST" style="display:inline;">
                                     <input type="hidden" name="id" value="' . $entreprise['id'] . '">
-                                    <button type="submit" class="btn-supprimer" onclick="return confirm(\'Voulez-vous vraiment supprimer cette entreprise ?\');">Supprimer</button>
+                                    <button type="submit" class="btn-supprimer");">Supprimer</button>
                                 </form>';
                 $entreprise['actions'] = $detailLink . $modifyLink . $deleteLink;
             } else {
