@@ -91,7 +91,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
                     // line 15
                     yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["item"], "wishlist_id", [], "any", false, false, false, 15), "html", null, true);
                     yield "\">
-              <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
+              <button type=\"submit\" class=\"btn-supprimer\">Supprimer</button>
             </form>
           </li>
         ";
@@ -199,7 +199,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
                     // line 55
                     if ((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 55) == "Admin")) {
                         // line 56
-                        yield "                <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
+                        yield "                <button type=\"submit\" class=\"btn-supprimer\">Supprimer</button>
                 ";
                     }
                     // line 58
@@ -277,7 +277,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
             <span>{{ item.titre|e }} - {{ item.entreprise|e }}</span>
             <form action=\"{{ BASE_URL }}index.php?controller=wishlist&action=remove\" method=\"POST\">
               <input type=\"hidden\" name=\"wishlist_id\" value=\"{{ item.wishlist_id }}\">
-              <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
+              <button type=\"submit\" class=\"btn-supprimer\">Supprimer</button>
             </form>
           </li>
         {% endfor %}
@@ -317,7 +317,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
             <form action=\"{{ BASE_URL }}index.php?controller=wishlist&action=remove\" method=\"POST\">
               <input type=\"hidden\" name=\"wishlist_id\" value=\"{{ item.wishlist_id }}\">
                 {% if user.role == 'Admin' %}
-                <button type=\"submit\" class=\"btn-delete\">Supprimer</button>
+                <button type=\"submit\" class=\"btn-supprimer\">Supprimer</button>
                 {% endif %}
             </form>
           </li>
