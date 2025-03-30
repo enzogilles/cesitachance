@@ -2,11 +2,11 @@
 {% block title %}Vos Candidatures{% endblock %}
 {% block content %}
 <section class="content">
-    {% if userRole in ['Admin', 'pilote'] %}
-        <h3>Candidatures des Étudiants</h3>
-    {% elseif userRole == 'etudiant' %}
-        <h3>Mes Candidatures</h3>
-    {% endif %}
+{% if userRole in ['Admin', 'pilote'] %}
+<h3>Candidatures des Étudiants</h3>
+{% elseif userRole|lower matches '/^(etudiant|étudiant)$/' %}
+<h3>Mes Candidatures</h3>
+{% endif %}
     <table class="styled-table">
         <thead>
             <tr>
@@ -39,7 +39,7 @@
                         <td>
                             {% if candidature.cv is defined and candidature.cv != '' %}
                                 <a href="{{ BASE_URL }}{{ candidature.cv }}" target="_blank" class="cv-link">
-                                    {% if userRole == 'etudiant' %}
+                                    {% if userRole|lower matches '/^(etudiant|étudiant)$/' %}
                                         Voir mon CV
                                     {% else %}
                                         Voir le CV

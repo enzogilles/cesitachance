@@ -58,17 +58,17 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
         $macros = $this->macros;
         // line 4
         yield "<section class=\"content\">
-    ";
+";
         // line 5
         if (CoreExtension::inFilter(($context["userRole"] ?? null), ["Admin", "pilote"])) {
             // line 6
-            yield "        <h3>Candidatures des Étudiants</h3>
-    ";
-        } elseif ((        // line 7
-($context["userRole"] ?? null) == "etudiant")) {
+            yield "<h3>Candidatures des Étudiants</h3>
+";
+        } elseif (CoreExtension::matches("/^(etudiant|étudiant)\$/", Twig\Extension\CoreExtension::lower($this->env->getCharset(),         // line 7
+($context["userRole"] ?? null)))) {
             // line 8
-            yield "        <h3>Mes Candidatures</h3>
-    ";
+            yield "<h3>Mes Candidatures</h3>
+";
         }
         // line 10
         yield "    <table class=\"styled-table\">
@@ -152,7 +152,7 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
                     yield "\" target=\"_blank\" class=\"cv-link\">
                                     ";
                     // line 42
-                    if ((($context["userRole"] ?? null) == "etudiant")) {
+                    if (CoreExtension::matches("/^(etudiant|étudiant)\$/", Twig\Extension\CoreExtension::lower($this->env->getCharset(), ($context["userRole"] ?? null)))) {
                         // line 43
                         yield "                                        Voir mon CV
                                     ";
@@ -257,11 +257,11 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
 {% block title %}Vos Candidatures{% endblock %}
 {% block content %}
 <section class=\"content\">
-    {% if userRole in ['Admin', 'pilote'] %}
-        <h3>Candidatures des Étudiants</h3>
-    {% elseif userRole == 'etudiant' %}
-        <h3>Mes Candidatures</h3>
-    {% endif %}
+{% if userRole in ['Admin', 'pilote'] %}
+<h3>Candidatures des Étudiants</h3>
+{% elseif userRole|lower matches '/^(etudiant|étudiant)\$/' %}
+<h3>Mes Candidatures</h3>
+{% endif %}
     <table class=\"styled-table\">
         <thead>
             <tr>
@@ -294,7 +294,7 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
                         <td>
                             {% if candidature.cv is defined and candidature.cv != '' %}
                                 <a href=\"{{ BASE_URL }}{{ candidature.cv }}\" target=\"_blank\" class=\"cv-link\">
-                                    {% if userRole == 'etudiant' %}
+                                    {% if userRole|lower matches '/^(etudiant|étudiant)\$/' %}
                                         Voir mon CV
                                     {% else %}
                                         Voir le CV
