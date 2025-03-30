@@ -1,10 +1,14 @@
 document.addEventListener("DOMContentLoaded", function () {
   const wishlistList = document.querySelector(".wishlist-list");
 
-  // === SUPPRESSION D'UNE OFFRE DANS LA WISHLIST ===
+  // === SUPPRESSION D'UNE OFFRE ===
   if (wishlistList) {
     wishlistList.addEventListener("click", function (e) {
-      if (e.target.matches("button.btn-supprimer") && e.target.closest("form")) {
+      if (
+        e.target.tagName === "BUTTON" &&
+        e.target.closest("form") &&
+        e.target.textContent.trim().toLowerCase().includes("supprimer")
+      ) {
         e.preventDefault();
 
         const form = e.target.closest("form");
@@ -18,26 +22,25 @@ document.addEventListener("DOMContentLoaded", function () {
 
         fetch("index.php?controller=wishlist&action=remove", {
           method: "POST",
-          body: new FormData(form),       // On envoie les données du form tel quel
-          headers: { 
-            "X-Requested-With": "XMLHttpRequest" // Pour signaler au contrôleur qu'on est en AJAX
-          }
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ wishlist_id: wishlistId }),
         })
-        .then(response => response.json())
-        .then(data => {
-          console.log("Réponse de l'API suppression :", data);
-          if (data.success) {
-            form.closest("li")?.remove();
-            showNotification("ℹ️ Offre retirée de la wishlist.", "info");
-          } else {
-            showNotification("Erreur : " + data.message, "error");
-          }
-        })
-        .catch(error => {
-          console.error("Erreur lors de la suppression :", error);
-          showNotification("Erreur lors de la suppression", "error");
-        });
-      }  
+        
+          .then(response => response.json())
+          .then(data => {
+            console.log("Réponse de l'API suppression :", data);
+            if (data.success) {
+              form.closest("li")?.remove();
+              showNotification("ℹ️ Offre retirée de la wishlist.", "info");
+            } else {
+              showNotification("Erreur : " + data.message, "error");
+            }
+          })
+          .catch(error => {
+            console.error("Erreur lors de la suppression :", error);
+            showNotification("Erreur lors de la suppression", "error");
+          });
+      }
     });
   }
 
@@ -52,7 +55,6 @@ function addToWishlist(offreId, offerTitle) {
     .then(data => {
       if (data.success) {
         showNotification("Ajouté à la wishlist !", "success");
-
 
         if (wishlistList) {
           const li = document.createElement("li");
