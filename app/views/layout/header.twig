@@ -1,12 +1,14 @@
 {# On suppose que la variable "user" et "controller" sont passées par le contrôleur #}
 <header>
     <div class="header-logo">
-        {% if controller is defined and controller == 'home' %}
-            <h1>CESI Ta Chance</h1>
-        {% else %}
+    {% if controller is defined and controller == 'home' %}
+        <h1>CESI Ta Chance</h1>
+    {% else %}
+        <a href="{{ BASE_URL }}index.php?controller=home&action=index">
             <img src="{{ BASE_URL }}public/images/logo.png" alt="Logo">
-        {% endif %}
-    </div>
+        </a>
+    {% endif %}
+</div>
     
     <div class="header-controls">
         <div id="user-menu">
