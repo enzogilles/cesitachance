@@ -58,31 +58,20 @@ class __TwigTemplate_20f374381e7b7d98ceb8b8887fa5a250 extends Template
         $macros = $this->macros;
         // line 4
         yield "<section class=\"content\">
-    <h3>Réinitialiser votre mot de passe</h3>
-    ";
-        // line 6
-        if (array_key_exists("error", $context)) {
-            // line 7
-            yield "        <p style=\"color: red; text-align: center;\">";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["error"] ?? null));
-            yield "</p>
-    ";
-        } elseif (        // line 8
-array_key_exists("message", $context)) {
-            // line 9
-            yield "        <p style=\"color: green; text-align: center;\">";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["message"] ?? null));
-            yield "</p>
-    ";
-        }
-        // line 11
-        yield "    <form id=\"reset-password-form\" action=\"";
+    <section id=\"contact\" class=\"resetPassword\">
+<h3 class=\"contact-title\">Réinitialiser votre mot de passe</h3>
+<div class=\"contact-form\">
+  <a href=\"mailto:contact@cesitachance.com\" target=\"_blank\" class=\"contact-button\">
+    Envoyer un email à l'administrateur
+  </a>
+</div>
+</section>
+<div class=\"back-button-container\">
+<a href=\"";
+        // line 14
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=sendResetLink\" method=\"POST\">
-        <label for=\"email\">Entrez votre email :</label>
-        <input type=\"email\" id=\"email\" name=\"email\" required>
-        <button type=\"submit\" class=\"btn\">Envoyer le lien</button>
-    </form>
+        yield "index.php?controller=utilisateur&action=connexion\" class=\"btn btn-back\">⬅ Retour à la page page de connexion</a>
+</div>
 </section>
 ";
         return; yield '';
@@ -109,7 +98,7 @@ array_key_exists("message", $context)) {
      */
     public function getDebugInfo()
     {
-        return array (  79 => 11,  73 => 9,  71 => 8,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  72 => 14,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -118,17 +107,17 @@ array_key_exists("message", $context)) {
 {% block title %}Réinitialiser le mot de passe{% endblock %}
 {% block content %}
 <section class=\"content\">
-    <h3>Réinitialiser votre mot de passe</h3>
-    {% if error is defined %}
-        <p style=\"color: red; text-align: center;\">{{ error|e }}</p>
-    {% elseif message is defined %}
-        <p style=\"color: green; text-align: center;\">{{ message|e }}</p>
-    {% endif %}
-    <form id=\"reset-password-form\" action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=sendResetLink\" method=\"POST\">
-        <label for=\"email\">Entrez votre email :</label>
-        <input type=\"email\" id=\"email\" name=\"email\" required>
-        <button type=\"submit\" class=\"btn\">Envoyer le lien</button>
-    </form>
+    <section id=\"contact\" class=\"resetPassword\">
+<h3 class=\"contact-title\">Réinitialiser votre mot de passe</h3>
+<div class=\"contact-form\">
+  <a href=\"mailto:contact@cesitachance.com\" target=\"_blank\" class=\"contact-button\">
+    Envoyer un email à l'administrateur
+  </a>
+</div>
+</section>
+<div class=\"back-button-container\">
+<a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=connexion\" class=\"btn btn-back\">⬅ Retour à la page page de connexion</a>
+</div>
 </section>
 {% endblock %}
 ", "utilisateurs/resetPassword.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\resetPassword.twig");
