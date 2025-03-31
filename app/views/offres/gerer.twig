@@ -32,8 +32,7 @@
               <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" 
                  class="btn-modifier">Modifier</a>
               <a href="{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}" 
-                 class="btn-supprimer" 
-                 onclick="return confirm('Voulez-vous vraiment supprimer cette offre ?');">Supprimer</a>
+                 class="btn-supprimer">Supprimer</a>
             </div>
           </td>
         </tr>
@@ -41,4 +40,9 @@
     </tbody>
   </table>
 </section>
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+<script src="{{ BASE_URL }}public/js/gerer-offres.js"></script>
 {% endblock %}

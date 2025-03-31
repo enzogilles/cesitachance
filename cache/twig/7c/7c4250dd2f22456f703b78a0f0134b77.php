@@ -193,6 +193,6 @@ class __TwigTemplate_78b069c0dccb11a3a1d6dd65d2014233 extends Template
   
   <script src=\"{{ BASE_URL }}public/js/entreprises.js\"></script>
 {% endblock %}
-", "entreprises/index.twig", "C:\\www\\cesitachance-3\\app\\views\\entreprises\\index.twig");
+", "entreprises/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\entreprises\\index.twig");
     }
 }
