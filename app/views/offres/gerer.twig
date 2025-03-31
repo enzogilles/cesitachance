@@ -29,19 +29,18 @@
           <td>{{ offre.date_fin|e }}</td>
           <td>
             <div class="offer-buttons">
-  <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" 
-     class="btn-modifier"
-     data-id="{{ offre.id }}">
-     Modifier
-  </a>
+              <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" 
+                 class="btn-modifier"
+                 data-id="{{ offre.id }}">
+                 Modifier
+              </a>
 
-  <a href="#" 
-     class="btn-supprimer"
-     data-id="{{ offre.id }}">
-     Supprimer
-  </a>
-</div>
-
+              <a href="{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}" 
+                 class="btn-supprimer"
+                 data-id="{{ offre.id }}">
+                 Supprimer
+              </a>
+            </div>
           </td>
         </tr>
       {% endfor %}
