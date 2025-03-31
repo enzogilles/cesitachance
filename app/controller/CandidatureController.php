@@ -19,7 +19,7 @@ class CandidatureController extends BaseController {
         $userId   = $_SESSION['user']['id'];
         $userRole = $_SESSION['user']['role'];
 
-        if ($userRole === 'Admin') {
+        if ($userRole === 'Admin' || $userRole === 'pilote') {
             // L'admin voit toutes les candidatures
             $candidatures = Candidature::findAllWithRelations();
         } else {

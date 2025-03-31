@@ -17,7 +17,7 @@ class WishlistController extends BaseController
     public function index()
     {
         // Rôles autorisés : Étudiant, Admin, pilote
-        $this->checkAuth(['Etudiant','Admin','pilote']);
+        $this->checkAuth(['étudiant','Admin','pilote']);
 
         $role = $_SESSION['user']['role'];
 
