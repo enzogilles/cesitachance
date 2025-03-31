@@ -282,11 +282,7 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
 <script src=\"";
         // line 126
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "public/js/gerer-offres.js\"></script>
-<script src=\"";
-        // line 127
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "public/js/offres.js\"></script>
+        yield "public/js/gestion-etudiant.js\"></script>
 ";
         return; yield '';
     }
@@ -312,7 +308,7 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
      */
     public function getDebugInfo()
     {
-        return array (  288 => 127,  284 => 126,  279 => 124,  274 => 121,  268 => 118,  264 => 117,  260 => 116,  256 => 115,  252 => 113,  225 => 88,  221 => 86,  218 => 84,  212 => 80,  210 => 79,  203 => 75,  199 => 74,  188 => 68,  182 => 67,  176 => 66,  169 => 62,  163 => 59,  157 => 56,  152 => 54,  148 => 53,  142 => 50,  138 => 49,  134 => 48,  130 => 47,  126 => 45,  123 => 44,  116 => 38,  108 => 32,  104 => 30,  93 => 20,  89 => 18,  86 => 17,  83 => 15,  77 => 13,  74 => 12,  68 => 10,  65 => 9,  60 => 5,  56 => 4,  48 => 2,  37 => 1,);
+        return array (  284 => 126,  279 => 124,  274 => 121,  268 => 118,  264 => 117,  260 => 116,  256 => 115,  252 => 113,  225 => 88,  221 => 86,  218 => 84,  212 => 80,  210 => 79,  203 => 75,  199 => 74,  188 => 68,  182 => 67,  176 => 66,  169 => 62,  163 => 59,  157 => 56,  152 => 54,  148 => 53,  142 => 50,  138 => 49,  134 => 48,  130 => 47,  126 => 45,  123 => 44,  116 => 38,  108 => 32,  104 => 30,  93 => 20,  89 => 18,  86 => 17,  83 => 15,  77 => 13,  74 => 12,  68 => 10,  65 => 9,  60 => 5,  56 => 4,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -442,8 +438,7 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
 <script>
     const BASE_URL = \"{{ BASE_URL }}\";
 </script>
-<script src=\"{{ BASE_URL }}public/js/gerer-offres.js\"></script>
-<script src=\"{{ BASE_URL }}public/js/offres.js\"></script>
+<script src=\"{{ BASE_URL }}public/js/gestion-etudiant.js\"></script>
 {% endblock %}
 ", "gestion_utilisateurs/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\gestion_utilisateurs\\index.twig");
     }

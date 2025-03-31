@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.textContent = message;
     notification.style.position = "fixed";
     notification.style.top = "130px";
-    notification.style.left = "50%";
+    notification.style.left = "37%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
 
@@ -24,7 +24,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }, duration);
   }
 
-  // Gère le bouton de réinitialisation si présent
   if (resetButton) {
     resetButton.addEventListener("click", function (e) {
       e.preventDefault();
@@ -33,10 +32,13 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   // Afficher la notification si l'URL contient ?notif=1
-  const urlParams = new URLSearchParams(window.location.search);
-  const notif = urlParams.get("notif");
+  const currentUrl = new URL(window.location.href);
+  const notif = currentUrl.searchParams.get("notif");
 
   if (notif === "1") {
     showNotification("🔍 Résultat de la recherche affiché", "info", 5000);
+
+    currentUrl.searchParams.delete("notif")
+    window.history.replaceState({}, "", currentUrl.toString());
   }
 });
