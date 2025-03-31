@@ -12,7 +12,7 @@ class Utilisateur extends BaseModel
     public $prenom;
     public $email;
     public $role;
-    public $password; // ou password_hash suivant votre table
+    public $password;
 
     public function __construct()
     {
@@ -24,10 +24,14 @@ class Utilisateur extends BaseModel
      */
     public static function findByEmail($email)
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role, password FROM user WHERE email = ?");
-        $stmt->execute([$email]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role, password FROM user WHERE email = ?");
+            $stmt->execute([$email]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de l'utilisateur par email : " . $e->getMessage());
+        }
     }
 
     /**
@@ -35,10 +39,14 @@ class Utilisateur extends BaseModel
      */
     public static function createUser($nom, $prenom, $email, $role, $hashedPassword)
     {
-        $pdo = \Database::getInstance();
-        $sql = "INSERT INTO user (nom, prenom, email, role, password) VALUES (?, ?, ?, ?, ?)";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$nom, $prenom, $email, $role, $hashedPassword]);
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "INSERT INTO user (nom, prenom, email, role, password) VALUES (?, ?, ?, ?, ?)";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([$nom, $prenom, $email, $role, $hashedPassword]);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la création d'un utilisateur : " . $e->getMessage());
+        }
     }
 
     /**
@@ -46,10 +54,14 @@ class Utilisateur extends BaseModel
      */
     public static function emailExists($email)
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("SELECT id FROM user WHERE email = ?");
-        $stmt->execute([$email]);
-        return $stmt->fetch() !== false;
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT id FROM user WHERE email = ?");
+            $stmt->execute([$email]);
+            return $stmt->fetch() !== false;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la vérification de l'existence de l'email : " . $e->getMessage());
+        }
     }
 
     /**
@@ -57,43 +69,54 @@ class Utilisateur extends BaseModel
      */
     public static function countAll()
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->query("SELECT COUNT(*) as total FROM user");
-        $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $row['total'] ?? 0;
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user");
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['total'] ?? 0;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors du comptage des utilisateurs : " . $e->getMessage());
+        }
     }
 
     /**
      * Finds a user by their ID.
-     *
-     * @param int $id The ID of the user.
-     * @return array|null The user data or null if not found.
      */
     public static function findById(int $id)
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("
-            SELECT id, nom, prenom, email, role
-            FROM user
-            WHERE id = :id
-        ");
-        $stmt->bindValue(':id', $id, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("
+                SELECT id, nom, prenom, email, role
+                FROM user
+                WHERE id = :id
+            ");
+            $stmt->bindValue(':id', $id, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de l'utilisateur par ID : " . $e->getMessage());
+        }
     }
+
 
     /**
      * Récupère tous les utilisateurs (avec pagination).
      */
     public static function findAll($limit, $offset)
     {
-        $pdo = \Database::getInstance();
-        $sql = "SELECT id, nom, prenom, email, role FROM user ORDER BY id DESC LIMIT ? OFFSET ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(1, $limit, PDO::PARAM_INT);
-        $stmt->bindValue(2, $offset, PDO::PARAM_INT);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "SELECT id, nom, prenom, email, role FROM user ORDER BY id DESC LIMIT ? OFFSET ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+            $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de tous les utilisateurs : " . $e->getMessage());
+        }
     }
 
     /**
@@ -101,16 +124,21 @@ class Utilisateur extends BaseModel
      */
     public static function getStats()
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->query("
-            SELECT 
-                COUNT(*) AS total_users,
-                SUM(CASE WHEN role = 'etudiant' THEN 1 ELSE 0 END) AS total_etudiants,
-                SUM(CASE WHEN role = 'pilote' THEN 1 ELSE 0 END) AS total_pilotes,
-                SUM(CASE WHEN role = 'admin' THEN 1 ELSE 0 END) AS total_admins
-            FROM user
-        ");
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("
+                SELECT 
+                    COUNT(*) AS total_users,
+                    SUM(CASE WHEN role = 'etudiant' THEN 1 ELSE 0 END) AS total_etudiants,
+                    SUM(CASE WHEN role = 'pilote' THEN 1 ELSE 0 END) AS total_pilotes,
+                    SUM(CASE WHEN role = 'admin' THEN 1 ELSE 0 END) AS total_admins
+                FROM user
+            ");
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des stats utilisateurs : " . $e->getMessage());
+        }
     }
 
     /**
@@ -118,10 +146,14 @@ class Utilisateur extends BaseModel
      */
     public static function updateUser($id, $nom, $prenom, $email, $role)
     {
-        $pdo = \Database::getInstance();
-        $sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, role = ? WHERE id = ?";
-        $stmt = $pdo->prepare($sql);
-        return $stmt->execute([$nom, $prenom, $email, $role, $id]);
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "UPDATE user SET nom = ?, prenom = ?, email = ?, role = ? WHERE id = ?";
+            $stmt = $pdo->prepare($sql);
+            return $stmt->execute([$nom, $prenom, $email, $role, $id]);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la mise à jour de l'utilisateur : " . $e->getMessage());
+        }
     }
 
     /**
@@ -129,9 +161,13 @@ class Utilisateur extends BaseModel
      */
     public static function deleteUser($id)
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("DELETE FROM user WHERE id = ?");
-        return $stmt->execute([$id]);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("DELETE FROM user WHERE id = ?");
+            return $stmt->execute([$id]);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la suppression de l'utilisateur : " . $e->getMessage());
+        }
     }
 
     /**
@@ -157,10 +193,14 @@ class Utilisateur extends BaseModel
      */
     public static function isEtudiant($id)
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("SELECT * FROM user WHERE id = ? AND role = 'etudiant'");
-        $stmt->execute([$id]);
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT * FROM user WHERE id = ? AND role = 'etudiant'");
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la vérification du rôle étudiant : " . $e->getMessage());
+        }
     }
 
     /**
@@ -168,10 +208,13 @@ class Utilisateur extends BaseModel
      */
     public static function findAllEtudiants()
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role = 'Étudiant'");
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role = 'Étudiant'");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de la liste des étudiants : " . $e->getMessage());
+        }
     }
-
 }
