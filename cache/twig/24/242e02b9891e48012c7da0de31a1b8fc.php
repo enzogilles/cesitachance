@@ -59,6 +59,14 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
         // line 4
         yield "<section class=\"content\">
   <h2>Gérer les Offres</h2>
+
+  <div class=\"create-offer-button\">
+    <a href=\"";
+        // line 8
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "index.php?controller=offre&action=create\" class=\"btn btn-create\">➕ Créer une Offre</a>
+  </div>
+
   <table class=\"styled-table\">
     <thead>
       <tr>
@@ -72,52 +80,49 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
     </thead>
     <tbody>
       ";
-        // line 18
+        // line 23
         $context['_parent'] = $context;
         $context['_seq'] = CoreExtension::ensureTraversable(($context["offres"] ?? null));
         foreach ($context['_seq'] as $context["_key"] => $context["offre"]) {
-            // line 19
+            // line 24
             yield "        <tr>
           <td>";
-            // line 20
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "titre", [], "any", false, false, false, 20));
+            // line 25
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "titre", [], "any", false, false, false, 25));
             yield "</td>
           <td>";
-            // line 21
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "entreprise", [], "any", false, false, false, 21));
+            // line 26
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "entreprise", [], "any", false, false, false, 26));
             yield "</td>
           <td>";
-            // line 22
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "remuneration", [], "any", false, false, false, 22));
+            // line 27
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "remuneration", [], "any", false, false, false, 27));
             yield "€</td>
           <td>";
-            // line 23
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "date_debut", [], "any", false, false, false, 23));
+            // line 28
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "date_debut", [], "any", false, false, false, 28));
             yield "</td>
           <td>";
-            // line 24
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "date_fin", [], "any", false, false, false, 24));
+            // line 29
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "date_fin", [], "any", false, false, false, 29));
             yield "</td>
           <td>
             <div class=\"offer-buttons\">
               <a href=\"";
-            // line 27
+            // line 32
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=offre&action=modifier&id=";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 27), "html", null, true);
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 32), "html", null, true);
             yield "\" 
-                 class=\"btn-modifier\" 
-                 data-id=\"";
-            // line 29
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 29), "html", null, true);
-            yield "\">Modifier</a>
-              
-              <a href=\"#\" 
+                 class=\"btn-modifier\">Modifier</a>
+              <a href=\"";
+            // line 34
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=offre&action=supprimer&id=";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 34), "html", null, true);
+            yield "\" 
                  class=\"btn-supprimer\" 
-                 data-id=\"";
-            // line 33
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 33), "html", null, true);
-            yield "\">Supprimer</a>
+                 onclick=\"return confirm('Voulez-vous vraiment supprimer cette offre ?');\">Supprimer</a>
             </div>
           </td>
         </tr>
@@ -126,22 +131,10 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['offre'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 38
+        // line 41
         yield "    </tbody>
   </table>
 </section>
-
-<script>
-  const BASE_URL = \"";
-        // line 43
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "\";
-</script>
-
-<script src=\"";
-        // line 46
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "public/js/gerer-offres.js\"></script>
 ";
         return; yield '';
     }
@@ -167,7 +160,7 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  143 => 46,  137 => 43,  130 => 38,  119 => 33,  112 => 29,  105 => 27,  99 => 24,  95 => 23,  91 => 22,  87 => 21,  83 => 20,  80 => 19,  76 => 18,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  135 => 41,  120 => 34,  113 => 32,  107 => 29,  103 => 28,  99 => 27,  95 => 26,  91 => 25,  88 => 24,  84 => 23,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -177,6 +170,11 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
 {% block content %}
 <section class=\"content\">
   <h2>Gérer les Offres</h2>
+
+  <div class=\"create-offer-button\">
+    <a href=\"{{ BASE_URL }}index.php?controller=offre&action=create\" class=\"btn btn-create\">➕ Créer une Offre</a>
+  </div>
+
   <table class=\"styled-table\">
     <thead>
       <tr>
@@ -199,12 +197,10 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
           <td>
             <div class=\"offer-buttons\">
               <a href=\"{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}\" 
-                 class=\"btn-modifier\" 
-                 data-id=\"{{ offre.id }}\">Modifier</a>
-              
-              <a href=\"#\" 
+                 class=\"btn-modifier\">Modifier</a>
+              <a href=\"{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}\" 
                  class=\"btn-supprimer\" 
-                 data-id=\"{{ offre.id }}\">Supprimer</a>
+                 onclick=\"return confirm('Voulez-vous vraiment supprimer cette offre ?');\">Supprimer</a>
             </div>
           </td>
         </tr>
@@ -212,13 +208,6 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
     </tbody>
   </table>
 </section>
-
-<script>
-  const BASE_URL = \"{{ BASE_URL }}\";
-</script>
-
-<script src=\"{{ BASE_URL }}public/js/gerer-offres.js\"></script>
-{% endblock %}
-", "offres/gerer.twig", "C:\\www\\cesitachance-3\\app\\views\\offres\\gerer.twig");
+{% endblock %}", "offres/gerer.twig", "C:\\www\\cesitachance-3\\app\\views\\offres\\gerer.twig");
     }
 }

@@ -3,6 +3,11 @@
 {% block content %}
 <section class="content">
   <h2>Gérer les Offres</h2>
+
+  <div class="create-offer-button">
+    <a href="{{ BASE_URL }}index.php?controller=offre&action=create" class="btn btn-create">➕ Créer une Offre</a>
+  </div>
+
   <table class="styled-table">
     <thead>
       <tr>
@@ -25,12 +30,10 @@
           <td>
             <div class="offer-buttons">
               <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" 
-                 class="btn-modifier" 
-                 data-id="{{ offre.id }}">Modifier</a>
-              
-              <a href="#" 
+                 class="btn-modifier">Modifier</a>
+              <a href="{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}" 
                  class="btn-supprimer" 
-                 data-id="{{ offre.id }}">Supprimer</a>
+                 onclick="return confirm('Voulez-vous vraiment supprimer cette offre ?');">Supprimer</a>
             </div>
           </td>
         </tr>
@@ -38,10 +41,4 @@
     </tbody>
   </table>
 </section>
-
-<script>
-  const BASE_URL = "{{ BASE_URL }}";
-</script>
-
-<script src="{{ BASE_URL }}public/js/gerer-offres.js"></script>
 {% endblock %}
