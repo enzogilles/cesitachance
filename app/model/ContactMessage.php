@@ -47,3 +47,4 @@ class ContactMessage extends BaseModel
         }
     }
 }
+?>

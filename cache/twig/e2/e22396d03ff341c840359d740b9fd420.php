@@ -37,121 +37,129 @@ class __TwigTemplate_a6e83b4be68573b3a1e2e369ab67c7a3 extends Template
         // line 2
         yield "<header>
     <div class=\"header-logo\">
-        ";
+    ";
         // line 4
         if ((array_key_exists("controller", $context) && (($context["controller"] ?? null) == "home"))) {
             // line 5
-            yield "            <h1>CESI Ta Chance</h1>
-        ";
+            yield "        <h1>CESI Ta Chance</h1>
+    ";
         } else {
             // line 7
-            yield "            <img src=\"";
+            yield "        <a href=\"";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=home&action=index\">
+            <img src=\"";
+            // line 8
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "public/images/logo.png\" alt=\"Logo\">
-        ";
+        </a>
+    ";
         }
-        // line 9
-        yield "    </div>
+        // line 11
+        yield "</div>
+    
+    <div class=\"header-controls\">
+        <div id=\"user-menu\">
+            ";
+        // line 15
+        if (($context["user"] ?? null)) {
+            // line 16
+            yield "                <div id=\"user-icon\" class=\"dropdown\">
+                    <img src=\"";
+            // line 17
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "public/images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
+                    <div class=\"dropdown-menu\">
+                        <p>Bienvenue, <strong>";
+            // line 19
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "prenom", [], "any", false, false, false, 19));
+            yield "</strong></p>
+                        <form action=\"";
+            // line 20
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=utilisateur&action=logout\" method=\"POST\">
+                            <button type=\"submit\">Déconnexion</button>
+                        </form>
+                    </div>
+                </div>
+            ";
+        } else {
+            // line 26
+            yield "                <a href=\"";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
+            ";
+        }
+        // line 28
+        yield "        </div>
+        
+        <div class=\"burger-menu\">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
     <nav>
         <a href=\"";
-        // line 11
+        // line 38
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=home&action=index\">Accueil</a>
         <a href=\"";
-        // line 12
+        // line 39
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=offre&action=index\">Offres</a>
         <a href=\"";
-        // line 13
+        // line 40
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=entreprise&action=index\">Entreprises</a>
         ";
-        // line 14
+        // line 41
         if (($context["user"] ?? null)) {
-            // line 15
+            // line 42
             yield "            <a href=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=candidature&action=index\">Candidatures</a>
         ";
         }
-        // line 17
+        // line 44
         yield "        ";
-        if ((array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 17) == "Étudiant"))) {
-            // line 18
-            yield "    <a href=\"";
+        if ((array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 44) == "Étudiant"))) {
+            // line 45
+            yield "            <a href=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=wishlist&action=index\">Ma Wishlist</a>
-";
-        } elseif ((        // line 19
-array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 19) == "Admin"))) {
-            // line 20
-            yield "    <a href=\"";
+        ";
+        } elseif ((        // line 46
+array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 46) == "Admin"))) {
+            // line 47
+            yield "            <a href=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=wishlist&action=index\">Wishlists</a>
-";
+        ";
         }
-        // line 22
+        // line 49
         yield "
         <a href=\"";
-        // line 23
+        // line 50
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=contact&action=index\">Contact</a>
         ";
-        // line 24
-        if ((array_key_exists("user", $context) && ((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 24) == "Admin") || (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 24) == "pilote")))) {
-            // line 25
+        // line 51
+        if ((array_key_exists("user", $context) && ((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 51) == "Admin") || (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 51) == "pilote")))) {
+            // line 52
             yield "            <a href=\"";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=dashboard&action=index\">Dashboard</a>
         ";
         }
-        // line 27
+        // line 54
         yield "    </nav>
-    <div id=\"user-menu\">
-    ";
-        // line 29
-        if (($context["user"] ?? null)) {
-            // line 30
-            yield "        <div id=\"user-icon\" class=\"dropdown\">
-            <img src=\"";
-            // line 31
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-            yield "public/images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
-            <div class=\"dropdown-menu\">
-                <p>Bienvenue, <strong>";
-            // line 33
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "prenom", [], "any", false, false, false, 33));
-            yield "</strong></p>
-                <form action=\"";
-            // line 34
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-            yield "index.php?controller=utilisateur&action=logout\" method=\"POST\">
-                    <button type=\"submit\">Déconnexion</button>
-                </form>
-            </div>
-        </div>
-    ";
-        } else {
-            // line 40
-            yield "        <a href=\"";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-            yield "index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
-    ";
-        }
-        // line 42
-        yield "</div>
 
-    <script>
-    document.addEventListener(\"DOMContentLoaded\", function() {
-        let userIcon = document.getElementById(\"user-icon\");
-        let dropdownMenu = document.querySelector(\".dropdown-menu\");
-        if (userIcon && dropdownMenu) {
-            userIcon.addEventListener(\"click\", function() {
-                dropdownMenu.classList.toggle(\"show\");
-            });
-        }
-    });
-    </script>
+    <script src=\"";
+        // line 56
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/burger-menu.js\"></script>
 </header>
 ";
         return; yield '';
@@ -178,7 +186,7 @@ array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $
      */
     public function getDebugInfo()
     {
-        return array (  142 => 42,  136 => 40,  127 => 34,  123 => 33,  118 => 31,  115 => 30,  113 => 29,  109 => 27,  103 => 25,  101 => 24,  97 => 23,  94 => 22,  88 => 20,  86 => 19,  81 => 18,  78 => 17,  72 => 15,  70 => 14,  66 => 13,  62 => 12,  58 => 11,  54 => 9,  48 => 7,  44 => 5,  42 => 4,  38 => 2,);
+        return array (  161 => 56,  157 => 54,  151 => 52,  149 => 51,  145 => 50,  142 => 49,  136 => 47,  134 => 46,  129 => 45,  126 => 44,  120 => 42,  118 => 41,  114 => 40,  110 => 39,  106 => 38,  94 => 28,  88 => 26,  79 => 20,  75 => 19,  70 => 17,  67 => 16,  65 => 15,  59 => 11,  53 => 8,  48 => 7,  44 => 5,  42 => 4,  38 => 2,);
     }
 
     public function getSourceContext()
@@ -186,12 +194,39 @@ array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $
         return new Source("{# On suppose que la variable \"user\" et \"controller\" sont passées par le contrôleur #}
 <header>
     <div class=\"header-logo\">
-        {% if controller is defined and controller == 'home' %}
-            <h1>CESI Ta Chance</h1>
-        {% else %}
+    {% if controller is defined and controller == 'home' %}
+        <h1>CESI Ta Chance</h1>
+    {% else %}
+        <a href=\"{{ BASE_URL }}index.php?controller=home&action=index\">
             <img src=\"{{ BASE_URL }}public/images/logo.png\" alt=\"Logo\">
-        {% endif %}
+        </a>
+    {% endif %}
+</div>
+    
+    <div class=\"header-controls\">
+        <div id=\"user-menu\">
+            {% if user %}
+                <div id=\"user-icon\" class=\"dropdown\">
+                    <img src=\"{{ BASE_URL }}public/images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
+                    <div class=\"dropdown-menu\">
+                        <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
+                        <form action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=logout\" method=\"POST\">
+                            <button type=\"submit\">Déconnexion</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
+            {% endif %}
+        </div>
+        
+        <div class=\"burger-menu\">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
     </div>
+
     <nav>
         <a href=\"{{ BASE_URL }}index.php?controller=home&action=index\">Accueil</a>
         <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\">Offres</a>
@@ -200,43 +235,18 @@ array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $
             <a href=\"{{ BASE_URL }}index.php?controller=candidature&action=index\">Candidatures</a>
         {% endif %}
         {% if user is defined and user.role == 'Étudiant' %}
-    <a href=\"{{ BASE_URL }}index.php?controller=wishlist&action=index\">Ma Wishlist</a>
-{% elseif user is defined and user.role == 'Admin' %}
-    <a href=\"{{ BASE_URL }}index.php?controller=wishlist&action=index\">Wishlists</a>
-{% endif %}
+            <a href=\"{{ BASE_URL }}index.php?controller=wishlist&action=index\">Ma Wishlist</a>
+        {% elseif user is defined and user.role == 'Admin' %}
+            <a href=\"{{ BASE_URL }}index.php?controller=wishlist&action=index\">Wishlists</a>
+        {% endif %}
 
         <a href=\"{{ BASE_URL }}index.php?controller=contact&action=index\">Contact</a>
         {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
             <a href=\"{{ BASE_URL }}index.php?controller=dashboard&action=index\">Dashboard</a>
         {% endif %}
     </nav>
-    <div id=\"user-menu\">
-    {% if user %}
-        <div id=\"user-icon\" class=\"dropdown\">
-            <img src=\"{{ BASE_URL }}public/images/logo_deco.png\" alt=\"Déconnexion\" class=\"user-logo\">
-            <div class=\"dropdown-menu\">
-                <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
-                <form action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=logout\" method=\"POST\">
-                    <button type=\"submit\">Déconnexion</button>
-                </form>
-            </div>
-        </div>
-    {% else %}
-        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=connexion\" id=\"login-btn\" class=\"btn-login\">Connexion</a>
-    {% endif %}
-</div>
 
-    <script>
-    document.addEventListener(\"DOMContentLoaded\", function() {
-        let userIcon = document.getElementById(\"user-icon\");
-        let dropdownMenu = document.querySelector(\".dropdown-menu\");
-        if (userIcon && dropdownMenu) {
-            userIcon.addEventListener(\"click\", function() {
-                dropdownMenu.classList.toggle(\"show\");
-            });
-        }
-    });
-    </script>
+    <script src=\"{{ BASE_URL }}public/js/burger-menu.js\"></script>
 </header>
 ", "layout/header.twig", "C:\\www\\cesitachance-3\\app\\views\\layout\\header.twig");
     }

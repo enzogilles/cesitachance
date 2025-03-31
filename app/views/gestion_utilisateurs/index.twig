@@ -4,15 +4,6 @@
 {% block content %}
 <main class="content">
     <h2>Gestion des Utilisateurs</h2>
-
-    {# Affichage des messages de succès/erreur stockés en session #}
-    {% if session.message %}
-        <div class="alert-success">{{ session.message }}</div>
-    {% endif %}
-    {% if session.error %}
-        <div class="alert-error">{{ session.error }}</div>
-    {% endif %}
-
     {# Vérification du rôle #}
     {% if user is not defined or user.role != 'Admin' %}
         <p>Accès refusé</p>
@@ -74,7 +65,7 @@
             <h3>Supprimer cet utilisateur</h3>
             <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete" method="POST">
                 <input type="hidden" name="id" value="{{ search_result.id }}">
-                <button type="submit" class="btn-supprimer">Supprimer</button>
+                <button type="submit" class="btn-supprimer" style="display: block;text-align: left; align-items:center; justify-content:center;">Supprimer</button>
             </form>
         </div>
         {% elseif search_result is defined and search_result is empty %}
