@@ -118,25 +118,21 @@ class GestionUtilisateursController extends BaseController
     
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $searchQuery = trim($_POST["search_query"]);
-            $search_result = null;
-
-            if (!empty($searchQuery)) {
-                // exemple : on ne gère qu'un seul résultat ou un tableau...
-                $results = Utilisateur::search($searchQuery);
-                $search_result = (!empty($results)) ? $results[0] : [];
-            }
-
-            // Récupération des statistiques
-            $stats = Utilisateur::getStats();
-
-            $this->render('gestion_utilisateurs/index.twig', [
-                'search_result' => $search_result,
-                'stats' => $stats
-            ]);
+            $search_result = (!empty($searchQuery)) 
+                ? Utilisateur::search($searchQuery) 
+                : [];
+    
+            // On stocke le résultat de la recherche en session
+            $_SESSION['search_result'] = $search_result;
+            
+            // Redirection vers index avec notif=1 pour déclencher la popup
+            header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index&notif=1");
+            exit;
         } else {
             echo "Veuillez utiliser le formulaire pour effectuer une recherche.";
         }
     }
+    
     
 
     /**
