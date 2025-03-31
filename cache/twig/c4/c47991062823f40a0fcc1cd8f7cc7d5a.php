@@ -177,11 +177,10 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
         ";
             }
             // line 60
-            yield "        <hr>
-        <div id=\"creer\" style=\"margin-top: 40px;\">
+            yield "        <div id=\"creer\" style=\"margin-top: 40px;\">
             <h3>Créer un Utilisateur</h3>
             <form action=\"";
-            // line 63
+            // line 62
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
                 <label for=\"nom-create-user\">Nom :</label>
@@ -201,28 +200,88 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
                 <button type=\"submit\" class=\"btn\">Créer</button>
             </form>
         </div>
+        <div id=\"modifier\" style=\"margin-top: 40px;\">
+            <h3>Modifier un Utilisateur</h3>
+            <form action=\"";
+            // line 82
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
+                <label for=\"nom-user\">Nom de départ:</label>
+                <input type=\"text\" id=\"nom-user\" name=\"nom\" required>
+                <label for=\"nom-update-user\">Nom modifié:</label>
+                <input type=\"text\" id=\"nom-update-user\" name=\"nom\" required>
+                <label for=\"prenom-user\">Prénom de départ:</label>
+                <input type=\"text\" id=\"prenom-user\" name=\"prenom\" required>
+                <label for=\"prenom-update-user\">Prénom modifié :</label>
+                <input type=\"text\" id=\"prenom-update-user\" name=\"prenom\" required>
+                <label for=\"email-user\">Email de départ:</label>
+                <input type=\"text\" id=\"email-user\" name=\"prenom\" required>
+                <label for=\"email-update-user\">Email modifié:</label>
+                <input type=\"email\" id=\"email-update-user\" name=\"email\" required>
+            <label for=\"role-user\">Rôle de départ:</label>
+            <select id=\"role-user\" name=\"role\" required>
+                <option value=\"Etudiant\">Étudiant</option>
+                <option value=\"pilote\">Pilote</option>
+                <option value=\"Admin\">Administrateur</option>
+            </select>
+                <label for=\"role-update-user\">Rôle modifié :</label>
+                <select id=\"role-update-user\" name=\"role\" required>
+                    <option value=\"Etudiant\">Étudiant</option>
+                    <option value=\"pilote\">Pilote</option>
+                    <option value=\"Admin\">Administrateur</option>
+                </select>
+            <label for=\"password-user\">Mot de passe de départ :</label>
+            <input type=\"password\" id=\"password-user\" name=\"password\" required>
+                <label for=\"password-update-user\">Mot de passe modifié :</label>
+                <input type=\"password\" id=\"password-update-user\" name=\"password\" required>
+                <button type=\"submit\" class=\"btn\">Créer</button>
+            </form>
+        </div>
+        <div id=\"supprimer\" style=\"margin-top: 40px;\">
+            <h3>Supprimer un Utilisateur</h3>
+            <form action=\"";
+            // line 116
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
+                <label for=\"nom-update-user\">Nom :</label>
+                <input type=\"text\" id=\"nom-delete-user\" name=\"nom\" required>
+                <label for=\"prenom-delete-user\">Prénom :</label>
+                <input type=\"text\" id=\"prenom-delete-user\" name=\"prenom\" required>
+                <label for=\"email-delete-user\">Email :</label>
+                <input type=\"email\" id=\"email-delete-user\" name=\"email\" required>
+                <label for=\"role-delete-user\">Rôle :</label>
+                <select id=\"role-delete-user\" name=\"role\" required>
+                    <option value=\"Etudiant\">Étudiant</option>
+                    <option value=\"pilote\">Pilote</option>
+                    <option value=\"Admin\">Administrateur</option>
+                </select>
+                <label for=\"password-delete-user\">Mot de passe :</label>
+                <input type=\"password\" id=\"password-delete-user\" name=\"password\" required>
+                <button type=\"submit\" class=\"btn\">Créer</button>
+            </form>
+        </div>
         <div id=\"statistiques\" style=\"margin-top: 40px;\">
             <h3>Statistiques</h3>
             <p>Nombre total d'utilisateurs : ";
-            // line 83
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", true, true, false, 83)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", false, false, false, 83), "N/A")) : ("N/A")), "html", null, true);
+            // line 136
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", true, true, false, 136)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", false, false, false, 136), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
             <p>Nombre d'étudiants : ";
-            // line 84
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", true, true, false, 84)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", false, false, false, 84), "N/A")) : ("N/A")), "html", null, true);
+            // line 137
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", true, true, false, 137)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", false, false, false, 137), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
             <p>Nombre de pilotes : ";
-            // line 85
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", true, true, false, 85)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", false, false, false, 85), "N/A")) : ("N/A")), "html", null, true);
+            // line 138
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", true, true, false, 138)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", false, false, false, 138), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
             <p>Nombre d'administrateurs : ";
-            // line 86
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", true, true, false, 86)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", false, false, false, 86), "N/A")) : ("N/A")), "html", null, true);
+            // line 139
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", true, true, false, 139)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", false, false, false, 139), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
         </div>
     ";
         }
-        // line 89
+        // line 142
         yield "</main>
 ";
         return; yield '';
@@ -249,7 +308,7 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
      */
     public function getDebugInfo()
     {
-        return array (  226 => 89,  220 => 86,  216 => 85,  212 => 84,  208 => 83,  185 => 63,  180 => 60,  176 => 58,  174 => 57,  167 => 53,  163 => 52,  153 => 47,  147 => 46,  141 => 45,  135 => 42,  130 => 40,  125 => 38,  120 => 36,  116 => 35,  111 => 33,  107 => 32,  103 => 31,  99 => 30,  95 => 28,  93 => 27,  83 => 20,  70 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  285 => 142,  279 => 139,  275 => 138,  271 => 137,  267 => 136,  244 => 116,  207 => 82,  184 => 62,  180 => 60,  176 => 58,  174 => 57,  167 => 53,  163 => 52,  153 => 47,  147 => 46,  141 => 45,  135 => 42,  130 => 40,  125 => 38,  120 => 36,  116 => 35,  111 => 33,  107 => 32,  103 => 31,  99 => 30,  95 => 28,  93 => 27,  83 => 20,  70 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -313,7 +372,6 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
         {% elseif search_result is defined and search_result is empty %}
             <p>Aucun utilisateur trouvé.</p>
         {% endif %}
-        <hr>
         <div id=\"creer\" style=\"margin-top: 40px;\">
             <h3>Créer un Utilisateur</h3>
             <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
@@ -331,6 +389,60 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
                 </select>
                 <label for=\"password-create-user\">Mot de passe :</label>
                 <input type=\"password\" id=\"password-create-user\" name=\"password\" required>
+                <button type=\"submit\" class=\"btn\">Créer</button>
+            </form>
+        </div>
+        <div id=\"modifier\" style=\"margin-top: 40px;\">
+            <h3>Modifier un Utilisateur</h3>
+            <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
+                <label for=\"nom-user\">Nom de départ:</label>
+                <input type=\"text\" id=\"nom-user\" name=\"nom\" required>
+                <label for=\"nom-update-user\">Nom modifié:</label>
+                <input type=\"text\" id=\"nom-update-user\" name=\"nom\" required>
+                <label for=\"prenom-user\">Prénom de départ:</label>
+                <input type=\"text\" id=\"prenom-user\" name=\"prenom\" required>
+                <label for=\"prenom-update-user\">Prénom modifié :</label>
+                <input type=\"text\" id=\"prenom-update-user\" name=\"prenom\" required>
+                <label for=\"email-user\">Email de départ:</label>
+                <input type=\"text\" id=\"email-user\" name=\"prenom\" required>
+                <label for=\"email-update-user\">Email modifié:</label>
+                <input type=\"email\" id=\"email-update-user\" name=\"email\" required>
+            <label for=\"role-user\">Rôle de départ:</label>
+            <select id=\"role-user\" name=\"role\" required>
+                <option value=\"Etudiant\">Étudiant</option>
+                <option value=\"pilote\">Pilote</option>
+                <option value=\"Admin\">Administrateur</option>
+            </select>
+                <label for=\"role-update-user\">Rôle modifié :</label>
+                <select id=\"role-update-user\" name=\"role\" required>
+                    <option value=\"Etudiant\">Étudiant</option>
+                    <option value=\"pilote\">Pilote</option>
+                    <option value=\"Admin\">Administrateur</option>
+                </select>
+            <label for=\"password-user\">Mot de passe de départ :</label>
+            <input type=\"password\" id=\"password-user\" name=\"password\" required>
+                <label for=\"password-update-user\">Mot de passe modifié :</label>
+                <input type=\"password\" id=\"password-update-user\" name=\"password\" required>
+                <button type=\"submit\" class=\"btn\">Créer</button>
+            </form>
+        </div>
+        <div id=\"supprimer\" style=\"margin-top: 40px;\">
+            <h3>Supprimer un Utilisateur</h3>
+            <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
+                <label for=\"nom-update-user\">Nom :</label>
+                <input type=\"text\" id=\"nom-delete-user\" name=\"nom\" required>
+                <label for=\"prenom-delete-user\">Prénom :</label>
+                <input type=\"text\" id=\"prenom-delete-user\" name=\"prenom\" required>
+                <label for=\"email-delete-user\">Email :</label>
+                <input type=\"email\" id=\"email-delete-user\" name=\"email\" required>
+                <label for=\"role-delete-user\">Rôle :</label>
+                <select id=\"role-delete-user\" name=\"role\" required>
+                    <option value=\"Etudiant\">Étudiant</option>
+                    <option value=\"pilote\">Pilote</option>
+                    <option value=\"Admin\">Administrateur</option>
+                </select>
+                <label for=\"password-delete-user\">Mot de passe :</label>
+                <input type=\"password\" id=\"password-delete-user\" name=\"password\" required>
                 <button type=\"submit\" class=\"btn\">Créer</button>
             </form>
         </div>

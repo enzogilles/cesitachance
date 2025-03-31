@@ -57,7 +57,6 @@
         {% elseif search_result is defined and search_result is empty %}
             <p>Aucun utilisateur trouvé.</p>
         {% endif %}
-        <hr>
         <div id="creer" style="margin-top: 40px;">
             <h3>Créer un Utilisateur</h3>
             <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create" method="POST">
@@ -75,6 +74,60 @@
                 </select>
                 <label for="password-create-user">Mot de passe :</label>
                 <input type="password" id="password-create-user" name="password" required>
+                <button type="submit" class="btn">Créer</button>
+            </form>
+        </div>
+        <div id="modifier" style="margin-top: 40px;">
+            <h3>Modifier un Utilisateur</h3>
+            <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create" method="POST">
+                <label for="nom-user">Nom de départ:</label>
+                <input type="text" id="nom-user" name="nom" required>
+                <label for="nom-update-user">Nom modifié:</label>
+                <input type="text" id="nom-update-user" name="nom" required>
+                <label for="prenom-user">Prénom de départ:</label>
+                <input type="text" id="prenom-user" name="prenom" required>
+                <label for="prenom-update-user">Prénom modifié :</label>
+                <input type="text" id="prenom-update-user" name="prenom" required>
+                <label for="email-user">Email de départ:</label>
+                <input type="text" id="email-user" name="prenom" required>
+                <label for="email-update-user">Email modifié:</label>
+                <input type="email" id="email-update-user" name="email" required>
+            <label for="role-user">Rôle de départ:</label>
+            <select id="role-user" name="role" required>
+                <option value="Etudiant">Étudiant</option>
+                <option value="pilote">Pilote</option>
+                <option value="Admin">Administrateur</option>
+            </select>
+                <label for="role-update-user">Rôle modifié :</label>
+                <select id="role-update-user" name="role" required>
+                    <option value="Etudiant">Étudiant</option>
+                    <option value="pilote">Pilote</option>
+                    <option value="Admin">Administrateur</option>
+                </select>
+            <label for="password-user">Mot de passe de départ :</label>
+            <input type="password" id="password-user" name="password" required>
+                <label for="password-update-user">Mot de passe modifié :</label>
+                <input type="password" id="password-update-user" name="password" required>
+                <button type="submit" class="btn">Créer</button>
+            </form>
+        </div>
+        <div id="supprimer" style="margin-top: 40px;">
+            <h3>Supprimer un Utilisateur</h3>
+            <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create" method="POST">
+                <label for="nom-update-user">Nom :</label>
+                <input type="text" id="nom-delete-user" name="nom" required>
+                <label for="prenom-delete-user">Prénom :</label>
+                <input type="text" id="prenom-delete-user" name="prenom" required>
+                <label for="email-delete-user">Email :</label>
+                <input type="email" id="email-delete-user" name="email" required>
+                <label for="role-delete-user">Rôle :</label>
+                <select id="role-delete-user" name="role" required>
+                    <option value="Etudiant">Étudiant</option>
+                    <option value="pilote">Pilote</option>
+                    <option value="Admin">Administrateur</option>
+                </select>
+                <label for="password-delete-user">Mot de passe :</label>
+                <input type="password" id="password-delete-user" name="password" required>
                 <button type="submit" class="btn">Créer</button>
             </form>
         </div>
