@@ -111,7 +111,7 @@ class WishlistController extends BaseController
      * Retire une offre de la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function remove() {
-        $this->checkAuth(['Etudiant','Admin']);
+        $this->checkAuth(['Étudiant','Admin']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = file_get_contents("php://input");
