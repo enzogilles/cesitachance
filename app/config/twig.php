@@ -14,3 +14,4 @@ $twig = new \Twig\Environment($loader, [
 
 // Ajout de l’extension debug (dump dans Twig)
 $twig->addExtension(new \Twig\Extension\DebugExtension());
+?>
