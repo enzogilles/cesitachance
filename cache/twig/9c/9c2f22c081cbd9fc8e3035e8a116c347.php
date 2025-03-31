@@ -84,7 +84,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         </div>
         
         <button type=\"submit\" class=\"btn\">Se connecter</button>
-    <button type=\"rester\" class=\"bouton-reset\">Réinitialiser</button>
+    <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"";
         // line 24
@@ -154,7 +154,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         </div>
         
         <button type=\"submit\" class=\"btn\">Se connecter</button>
-    <button type=\"rester\" class=\"bouton-reset\">Réinitialiser</button>
+    <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
