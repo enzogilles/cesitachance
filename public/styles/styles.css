@@ -58,24 +58,60 @@ header {
   display: block;
 }
 
+/* ================================
+   NAVIGATION - SUR UNE SEULE LIGNE
+   ================================ */
+/* Modification de la navigation pour rester sur une seule ligne */
 nav {
   display: flex;
-  gap: 15px;
-  flex-wrap: wrap;
-  margin: 10px 0;
+  justify-content: center;
+  align-items: center;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  justify-content: center;
+  margin: 10px 0;
+  width: auto;
+  max-width: 65%;
+  overflow-x: auto; /* Permet le défilement horizontal si nécessaire */
+  scrollbar-width: none; /* Cache la barre de défilement sur Firefox */
+  -ms-overflow-style: none; /* Cache la barre de défilement sur IE/Edge */
+}
+
+/* Cache la barre de défilement sur Chrome/Safari */
+nav::-webkit-scrollbar {
+  display: none;
+}
+
+nav ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  flex-wrap: nowrap; /* Empêche les éléments de passer à la ligne */
+}
+
+nav ul li {
+  margin: 0 5px; /* Réduit l'espacement pour gagner de la place */
+}
+
+nav ul li a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 10px 12px; /* Réduit légèrement le padding */
+  white-space: nowrap; /* Empêche les liens de se couper */
+  font-size: 0.95rem; /* Réduit légèrement la taille des textes */
 }
 
 nav a {
   text-decoration: none;
   color: #333;
   font-weight: 500;
-  padding: 8px 12px;
+  padding: 8px 10px; /* Réduit légèrement le padding */
   border-radius: 8px;
   transition: background-color 0.3s;
+  white-space: nowrap; /* Empêche le retour à la ligne du texte */
+  flex-shrink: 0; /* Empêche la compression des liens */
+  margin: 0 3px; /* Espacement minimal entre les liens */
 }
 
 nav a:hover {
@@ -1488,6 +1524,57 @@ footer {
 /* ================================
    RESPONSIVE
    ================================ */
+@media (max-width: 992px) {
+  /* Activate burger menu sooner to prevent wrapping */
+  .burger-menu {
+    display: flex;
+    order: 2;
+    margin-left: 15px;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    transform: none;
+    background-color: #FFCC00;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 100;
+    padding: 10px 0;
+    overflow-x: visible; /* Restore normal overflow */
+  }
+
+  nav.active {
+    display: flex;
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  nav ul li {
+    margin: 0;
+    width: 100%;
+  }
+
+  nav ul li a {
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+
+  .header-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+  }
+}
+
 @media (max-width: 768px) {
   header {
     padding: 15px;
@@ -1580,6 +1667,42 @@ footer {
   background-color: #333;
   border-radius: 3px;
   transition: all 0.3s ease;
+}
+
+@media (max-width: 1100px) {
+  /* Activate burger menu sooner to prevent wrapping */
+  .burger-menu {
+    display: flex;
+    order: 2;
+    margin-left: 15px;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: none;
+    background-color: #FFCC00;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 100;
+    padding: 10px 0;
+    overflow-x: visible;
+  }
+
+  nav.active {
+    display: flex;
+  }
+
+  nav a {
+    padding: 12px 15px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
 }
 
 @media (max-width: 768px) {
