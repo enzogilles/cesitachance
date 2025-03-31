@@ -1,18 +1,66 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+  // === Notification si l'URL contient ?notif=deleted ===
+  const url = new URL(window.location.href);
+  const notif = url.searchParams.get("notif");
 
-  function showNotification(message) {
-    const notif = document.createElement('div');
-    notif.classList.add('custom-notification');
-    notif.textContent = message;
-    document.body.appendChild(notif);
-
-    setTimeout(() => {
-      if (notif.parentNode) {
-        notif.parentNode.removeChild(notif);
-      }
-    }, 3000);
+  if (notif === "deleted") {
+    showNotification("✅ Entreprise supprimée avec succès", "success", 4000);
+    url.searchParams.delete("notif");
+    window.history.replaceState({}, "", url.toString());
   }
 
+  // === Confirmation avant suppression via formulaire ===
+  const deleteForm = document.querySelector('#delete-entreprise-form');
+  if (deleteForm) {
+    const submitButton = deleteForm.querySelector('button[type="submit"]');
+    submitButton.addEventListener('click', function (e) {
+      e.preventDefault(); // Empêche la soumission automatique
+
+      showCustomConfirm("Voulez-vous vraiment supprimer cette entreprise ?", () => {
+        deleteForm.submit(); // Soumet le formulaire après confirmation
+      });
+    });
+  }
+
+  // === Fonction d'affichage de notification ===
+  function showNotification(message, type = "info", duration = 3000) {
+    document.querySelectorAll(".notification").forEach(n => n.remove());
+
+    const notification = document.createElement("div");
+    notification.className = "notification " + type;
+    notification.textContent = message;
+    notification.style.position = "fixed";
+    notification.style.top = "120px";
+    notification.style.left = "50%";
+    notification.style.transform = "translateX(-50%)";
+    notification.style.zIndex = "1000";
+    notification.style.padding = "12px 24px";
+    notification.style.borderRadius = "8px";
+    notification.style.fontWeight = "600";
+
+    switch (type) {
+      case "success":
+        notification.style.backgroundColor = "#d1fae5";
+        notification.style.color = "#065f46";
+        break;
+      case "error":
+        notification.style.backgroundColor = "#fee2e2";
+        notification.style.color = "#991b1b";
+        break;
+      default:
+        notification.style.backgroundColor = "#dbeafe";
+        notification.style.color = "#1e3a8a";
+        break;
+    }
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, duration);
+  }
+
+  // === Fonction de confirmation personnalisée ===
   function showCustomConfirm(message, onConfirm) {
     const overlay = document.createElement('div');
     overlay.classList.add('custom-confirm-overlay');
@@ -37,12 +85,12 @@ document.addEventListener('DOMContentLoaded', function() {
     btnCancel.classList.add('btn-cancel');
 
     btnOk.addEventListener('click', () => {
-      onConfirm();               k
-      document.body.removeChild(overlay);
+      overlay.remove();
+      onConfirm();
     });
 
     btnCancel.addEventListener('click', () => {
-      document.body.removeChild(overlay);
+      overlay.remove();
     });
 
     btnContainer.appendChild(btnOk);
@@ -52,24 +100,4 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
   }
-
-  document.querySelectorAll('.btn-supprimer').forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const offreId = this.dataset.id;
-
-      showCustomConfirm("Voulez-vous vraiment supprimer cette entreprise ?", () => {
-        fetch(`${BASE_URL}api/gerer-offres.php?action=delete&id=${offreId}`, {
-          method: "DELETE"
-        })
-        .then(response => response.json())
-        .then(data => {
-          showNotification(data.message);
-          location.reload();
-        })
-        .catch(error => console.error("Erreur de suppression :", error));
-      });
-    });
-  });
-
 });

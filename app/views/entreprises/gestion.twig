@@ -14,7 +14,7 @@
     </div>
     <div id="creer" style="margin-top: 40px;">
         <h3>Créer une Entreprise</h3>
-        <form id="create-entreprise-form" action="{{ BASE_URL }}entreprises/gestion.php?action=create" method="POST">
+        <form id="create-entreprise-form" action="{{ BASE_URL }}index.php?controller=entreprise&action=creer" method="POST">
             <label for="nom-creation">Nom :</label>
             <input type="text" id="nom-creation" name="nom" required>
             <label for="secteur">Secteur :</label>
@@ -28,9 +28,8 @@
     </div>
     <div id="modifier" style="margin-top: 40px;">
         <h3>Modifier une Entreprise</h3>
-        <form id="update-entreprise-form" action="{{ BASE_URL }}entreprises/gestion.php?action=update" method="POST">
+        <form id="update-entreprise-form" action="{{ BASE_URL }}index.php?controller=entreprise&action=modifier" method="POST">
             <label for="id-modif">ID de l’entreprise :</label>
-            <input type="number" id="id-modif" name="id" required>
             <label for="nom-modif">Nouveau nom :</label>
             <input type="text" id="nom-modif" name="nom">
             <label for="secteur-modif">Nouveau secteur :</label>
@@ -44,7 +43,7 @@
     </div>
     <div id="supprimer" style="margin-top: 40px;">
         <h3>Supprimer une Entreprise</h3>
-        <form id="delete-entreprise-form" action="{{ BASE_URL }}entreprises/gestion.php?action=delete" method="POST">
+        <form id="delete-entreprise-form" action="{{ BASE_URL }}index.php?controller=entreprise&action=supprimer" method="POST">
             <label for="id-suppr">ID de l’entreprise :</label>
             <input type="number" id="id-suppr" name="id" required>
             <button type="submit" class="btn">Supprimer</button>
