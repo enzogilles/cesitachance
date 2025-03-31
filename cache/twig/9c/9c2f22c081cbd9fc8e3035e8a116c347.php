@@ -92,16 +92,6 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         yield "index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
     </form>
-    
-    <hr class=\"separator\">
-    
-    <div class=\"account-link\">
-        <p>Pas encore de compte ?</p>
-        <a href=\"";
-        // line 32
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
-    </div>
 </section>
 ";
         return; yield '';
@@ -128,7 +118,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  102 => 32,  91 => 24,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  91 => 24,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -159,13 +149,6 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
             <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
     </form>
-    
-    <hr class=\"separator\">
-    
-    <div class=\"account-link\">
-        <p>Pas encore de compte ?</p>
-        <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
-    </div>
 </section>
 {% endblock %}
 ", "utilisateurs/connexion.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
