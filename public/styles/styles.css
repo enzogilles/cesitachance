@@ -1642,7 +1642,7 @@ footer {
 
 /* ================================
    BOUTONS - RESPONSIVE
-   ================================ */
+   ================================ */ 
 @media (max-width: 768px) {
   /* Boutons standards */
   button.btn,
