@@ -12,11 +12,6 @@ class Entreprise extends BaseModel {
     public $ville;
     public $taille;
 
-    // CHAMPS SUPPLÉMENTAIRES :
-    public $description;
-    public $email;
-    public $telephone;
-
     public function __construct() {
         parent::__construct();
     }
@@ -114,6 +109,15 @@ class Entreprise extends BaseModel {
         }
     }
 
+        /**
+     * Retrieve all entreprises from the database.
+     */
+    public static function findAll() {
+        $db = \Database::getInstance(); 
+        $query = $db->query("SELECT * FROM entreprises");
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Supprime une entreprise par son ID.
      */
@@ -150,9 +154,6 @@ class Entreprise extends BaseModel {
                     $this->secteur,
                     $this->ville,
                     $this->taille,
-                    $this->description,
-                    $this->email,
-                    $this->telephone,
                     $this->id
                 ]);
             } else {
@@ -166,9 +167,6 @@ class Entreprise extends BaseModel {
                     $this->secteur,
                     $this->ville,
                     $this->taille,
-                    $this->description,
-                    $this->email,
-                    $this->telephone
                 ]);
                 if ($result) {
                     $this->id = $this->pdo->lastInsertId();
@@ -180,3 +178,4 @@ class Entreprise extends BaseModel {
         }
     }
 }
+?>

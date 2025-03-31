@@ -89,3 +89,4 @@ class Wishlist extends BaseModel
         }
     }
 }
+?>

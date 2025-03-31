@@ -74,26 +74,46 @@ class __TwigTemplate_24507574416453846e142da7bd176147 extends Template
         yield "index.php?controller=offre&action=create\">
         <label for=\"titre\">Titre :</label>
         <input type=\"text\" id=\"titre\" name=\"titre\" required>
+
         <label for=\"description\">Description :</label>
         <textarea id=\"description\" name=\"description\" required></textarea>
-        <label for=\"entreprise_id\">ID de l'Entreprise :</label>
-        <input type=\"number\" id=\"entreprise_id\" name=\"entreprise_id\" required>
+
+        <label for=\"entreprise_id\">Entreprise :</label>
+        <select id=\"entreprise_id\" name=\"entreprise_id\" required>
+            <option value=\"\">-- Sélectionnez une entreprise --</option>
+            ";
+        // line 19
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(($context["entreprises"] ?? null));
+        foreach ($context['_seq'] as $context["_key"] => $context["entreprise"]) {
+            // line 20
+            yield "                <option value=\"";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "id", [], "any", false, false, false, 20), "html", null, true);
+            yield "\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["entreprise"], "nom", [], "any", false, false, false, 20), "html", null, true);
+            yield "</option>
+            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_iterated'], $context['_key'], $context['entreprise'], $context['_parent'], $context['loop']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 22
+        yield "        </select>
+
         <label for=\"remuneration\">Rémunération :</label>
         <input type=\"text\" id=\"remuneration\" name=\"remuneration\" required>
+
         <label for=\"date_debut\">Date de début :</label>
         <input type=\"date\" id=\"date_debut\" name=\"date_debut\" required>
+
         <label for=\"date_fin\">Date de fin :</label>
         <input type=\"date\" id=\"date_fin\" name=\"date_fin\" required>
-        <label for=\"competences\">Compétences (séparées par des virgules par ex.) :</label>
+
+        <label for=\"competences\">Compétences :</label>
         <textarea id=\"competences\" name=\"competences\"></textarea>
+
         <button type=\"submit\" class=\"btn\">Créer l'offre</button>
     </form>
-    <div class=\"back-button-container\">
-        <a href=\"";
-        // line 27
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-        yield "index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux Offres</a>
-    </div>
 </section>
 ";
         return; yield '';
@@ -120,7 +140,7 @@ class __TwigTemplate_24507574416453846e142da7bd176147 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  94 => 27,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  101 => 22,  90 => 20,  86 => 19,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -136,25 +156,33 @@ class __TwigTemplate_24507574416453846e142da7bd176147 extends Template
     <form method=\"POST\" action=\"{{ BASE_URL }}index.php?controller=offre&action=create\">
         <label for=\"titre\">Titre :</label>
         <input type=\"text\" id=\"titre\" name=\"titre\" required>
+
         <label for=\"description\">Description :</label>
         <textarea id=\"description\" name=\"description\" required></textarea>
-        <label for=\"entreprise_id\">ID de l'Entreprise :</label>
-        <input type=\"number\" id=\"entreprise_id\" name=\"entreprise_id\" required>
+
+        <label for=\"entreprise_id\">Entreprise :</label>
+        <select id=\"entreprise_id\" name=\"entreprise_id\" required>
+            <option value=\"\">-- Sélectionnez une entreprise --</option>
+            {% for entreprise in entreprises %}
+                <option value=\"{{ entreprise.id }}\">{{ entreprise.nom }}</option>
+            {% endfor %}
+        </select>
+
         <label for=\"remuneration\">Rémunération :</label>
         <input type=\"text\" id=\"remuneration\" name=\"remuneration\" required>
+
         <label for=\"date_debut\">Date de début :</label>
         <input type=\"date\" id=\"date_debut\" name=\"date_debut\" required>
+
         <label for=\"date_fin\">Date de fin :</label>
         <input type=\"date\" id=\"date_fin\" name=\"date_fin\" required>
-        <label for=\"competences\">Compétences (séparées par des virgules par ex.) :</label>
+
+        <label for=\"competences\">Compétences :</label>
         <textarea id=\"competences\" name=\"competences\"></textarea>
+
         <button type=\"submit\" class=\"btn\">Créer l'offre</button>
     </form>
-    <div class=\"back-button-container\">
-        <a href=\"{{ BASE_URL }}index.php?controller=offre&action=index\" class=\"btn btn-back\">⬅ Retour aux Offres</a>
-    </div>
 </section>
-{% endblock %}
-", "offres/create.twig", "C:\\www\\cesitachance-3\\app\\views\\offres\\create.twig");
+{% endblock %}", "offres/create.twig", "C:\\www\\cesitachance-3\\app\\views\\offres\\create.twig");
     }
 }

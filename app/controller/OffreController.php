@@ -5,6 +5,7 @@ namespace app\controller;
 
 use app\controller\BaseController;
 use App\Model\Offre;
+use App\Model\Entreprise;
 
 class OffreController extends BaseController {
     private $offreModel;
@@ -72,8 +73,8 @@ class OffreController extends BaseController {
      * Créer une nouvelle offre -> réservé Admin/Pilote.
      */
     public function create() {
-        $this->checkAuth(['Admin','pilote']);
-
+        $this->checkAuth(['Admin', 'pilote']);
+    
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titre = trim($_POST['titre']);
             $description = trim($_POST['description']);
@@ -82,7 +83,7 @@ class OffreController extends BaseController {
             $date_debut = $_POST['date_debut'];
             $date_fin = $_POST['date_fin'];
             $competences = trim($_POST['competences'] ?? '');
-
+    
             if (!empty($titre) && !empty($description) && $entreprise_id > 0) {
                 $offre = new Offre();
                 $offre->titre = $titre;
@@ -92,7 +93,7 @@ class OffreController extends BaseController {
                 $offre->date_debut = $date_debut;
                 $offre->date_fin = $date_fin;
                 $offre->competences = $competences;
-
+    
                 if ($offre->save()) {
                     header("Location: " . BASE_URL . "index.php?controller=offre&action=index");
                     exit;
@@ -103,7 +104,12 @@ class OffreController extends BaseController {
                 $_SESSION['error'] = "Veuillez remplir tous les champs obligatoires.";
             }
         }
-        $this->render('offres/create.twig');
+    
+        // Récupérer la liste des entreprises
+        $entreprises = Entreprise::findAll();
+    
+        // Passer les entreprises à la vue
+        $this->render('offres/create.twig', ['entreprises' => $entreprises]);
     }
 
     /**

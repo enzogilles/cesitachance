@@ -198,6 +198,10 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
     {% endif %}
 </body>
 </html>
+<<<<<<< HEAD
 ", "layout/base.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\layout\\base.twig");
+=======
+", "layout/base.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\layout\\base.twig");
+>>>>>>> 8f038a8c3828e08621e0b3be728c4af7d841f106
     }
 }

@@ -115,15 +115,20 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 32), "html", null, true);
             yield "\" 
                  class=\"btn-modifier\">Modifier</a>
-              <a href=\"";
+                 <a href=\"";
             // line 34
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-            yield "index.php?controller=offre&action=supprimer&id=";
+            yield "index.php?controller=offre&action=gererOffres&id=";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 34), "html", null, true);
             yield "\" 
                  class=\"btn-supprimer\" 
-                 onclick=\"return confirm('Voulez-vous vraiment supprimer cette offre ?');\">Supprimer</a>
-            </div>
+                 data-id=\"";
+            // line 36
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["offre"], "id", [], "any", false, false, false, 36), "html", null, true);
+            yield "\">
+                 Supprimer
+              </a>
+              
           </td>
         </tr>
       ";
@@ -131,10 +136,21 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
         $_parent = $context['_parent'];
         unset($context['_seq'], $context['_iterated'], $context['_key'], $context['offre'], $context['_parent'], $context['loop']);
         $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 41
+        // line 43
         yield "    </tbody>
   </table>
 </section>
+<script>
+  const BASE_URL = \"";
+        // line 47
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "\";
+</script>
+
+<script src=\"";
+        // line 50
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/gerer-offres.js\"></script>
 ";
         return; yield '';
     }
@@ -160,7 +176,7 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  135 => 41,  120 => 34,  113 => 32,  107 => 29,  103 => 28,  99 => 27,  95 => 26,  91 => 25,  88 => 24,  84 => 23,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  152 => 50,  146 => 47,  140 => 43,  127 => 36,  120 => 34,  113 => 32,  107 => 29,  103 => 28,  99 => 27,  95 => 26,  91 => 25,  88 => 24,  84 => 23,  66 => 8,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -198,16 +214,23 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
             <div class=\"offer-buttons\">
               <a href=\"{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}\" 
                  class=\"btn-modifier\">Modifier</a>
-              <a href=\"{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}\" 
+                 <a href=\"{{ BASE_URL }}index.php?controller=offre&action=gererOffres&id={{ offre.id }}\" 
                  class=\"btn-supprimer\" 
-                 onclick=\"return confirm('Voulez-vous vraiment supprimer cette offre ?');\">Supprimer</a>
-            </div>
+                 data-id=\"{{ offre.id }}\">
+                 Supprimer
+              </a>
+              
           </td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
 </section>
+<script>
+  const BASE_URL = \"{{ BASE_URL }}\";
+</script>
+
+<script src=\"{{ BASE_URL }}public/js/gerer-offres.js\"></script>
 {% endblock %}", "offres/gerer.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\gerer.twig");
     }
 }

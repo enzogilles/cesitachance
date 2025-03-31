@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Sélectionne le formulaire et le bouton reset
   const searchForm = document.querySelector(".search-form");
   const resetButton = document.querySelector(".search-form .bouton-reset");
 
-  // Fonction utilitaire pour afficher une notification
   function showNotification(message, type = "info", duration = 3000) {
-    // On supprime d’abord d’éventuelles notifications existantes
     document.querySelectorAll(".notification").forEach(n => n.remove());
 
     const notification = document.createElement("div");
@@ -31,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Afficher la notification si l'URL contient ?notif=1
   const currentUrl = new URL(window.location.href);
   const notif = currentUrl.searchParams.get("notif");
 
@@ -44,9 +40,16 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // === GESTION CONFIRMATION SUPPRESSION UTILISATEUR PAR FORMULAIRE ===
+  const url = new URL(window.location.href);
+  const notif = url.searchParams.get("notif");
 
-  // Crée une popup de confirmation
+  if (notif === "deleted") {
+    showNotification("✅ Utilisateur supprimé avec succès", "success", 5000);
+    url.searchParams.delete("notif");
+    window.history.replaceState({}, "", url.toString());
+  }
+
+  // === POPUP DE CONFIRMATION ===
   function showCustomConfirm(message, onConfirm) {
     const overlay = document.createElement('div');
     overlay.classList.add('custom-confirm-overlay');
@@ -87,17 +90,54 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(overlay);
   }
 
-  // Sélectionne les boutons "Supprimer" dans les formulaires
+  // === CIBLE LES FORMULAIRES DE SUPPRESSION ===
   document.querySelectorAll('form[action*="gestionutilisateurs"][method="POST"] .btn-supprimer').forEach(button => {
-    button.addEventListener('click', function(e) {
+    button.addEventListener('click', function (e) {
       e.preventDefault();
       const form = this.closest('form');
 
       showCustomConfirm("Voulez-vous vraiment supprimer cet utilisateur ?", () => {
-        form.submit(); // Envoie le formulaire classique
+        form.submit(); 
       });
     });
   });
-});
 
+  function showNotification(message, type = "info", duration = 3000) {
+    document.querySelectorAll(".notification").forEach(n => n.remove());
+
+    const notification = document.createElement("div");
+    notification.className = "notification " + type;
+    notification.textContent = message;
+    notification.style.position = "fixed";
+    notification.style.top = "130px";
+    notification.style.left = "37%";
+    notification.style.transform = "translateX(-50%)";
+    notification.style.zIndex = "1000";
+    notification.style.padding = "12px 24px";
+    notification.style.borderRadius = "8px";
+    notification.style.fontWeight = "600";
+
+    switch (type) {
+      case "success":
+        notification.style.backgroundColor = "#d1fae5";
+        notification.style.color = "#065f46";
+        break;
+      case "error":
+        notification.style.backgroundColor = "#fee2e2";
+        notification.style.color = "#991b1b";
+        break;
+      case "info":
+      default:
+        notification.style.backgroundColor = "#dbeafe";
+        notification.style.color = "#1e3a8a";
+        break;
+    }
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, duration);
+  }
+});
 

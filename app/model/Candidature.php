@@ -166,3 +166,4 @@ class Candidature extends BaseModel
         return false;
     }
 }
+?>

@@ -149,6 +149,10 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     </form>
 </section>
 {% endblock %}
+<<<<<<< HEAD
 ", "utilisateurs/connexion.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+=======
+", "utilisateurs/connexion.twig", "C:\\www\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+>>>>>>> 8f038a8c3828e08621e0b3be728c4af7d841f106
     }
 }

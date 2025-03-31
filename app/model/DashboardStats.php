@@ -53,3 +53,4 @@ class DashboardStats extends BaseModel
         }
     }
 }
+?>

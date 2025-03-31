@@ -9,22 +9,31 @@
     <form method="POST" action="{{ BASE_URL }}index.php?controller=offre&action=create">
         <label for="titre">Titre :</label>
         <input type="text" id="titre" name="titre" required>
+
         <label for="description">Description :</label>
         <textarea id="description" name="description" required></textarea>
-        <label for="entreprise_id">ID de l'Entreprise :</label>
-        <input type="number" id="entreprise_id" name="entreprise_id" required>
+
+        <label for="entreprise_id">Entreprise :</label>
+        <select id="entreprise_id" name="entreprise_id" required>
+            <option value="">-- Sélectionnez une entreprise --</option>
+            {% for entreprise in entreprises %}
+                <option value="{{ entreprise.id }}">{{ entreprise.nom }}</option>
+            {% endfor %}
+        </select>
+
         <label for="remuneration">Rémunération :</label>
         <input type="text" id="remuneration" name="remuneration" required>
+
         <label for="date_debut">Date de début :</label>
         <input type="date" id="date_debut" name="date_debut" required>
+
         <label for="date_fin">Date de fin :</label>
         <input type="date" id="date_fin" name="date_fin" required>
-        <label for="competences">Compétences (séparées par des virgules par ex.) :</label>
+
+        <label for="competences">Compétences :</label>
         <textarea id="competences" name="competences"></textarea>
+
         <button type="submit" class="btn">Créer l'offre</button>
     </form>
-    <div class="back-button-container">
-        <a href="{{ BASE_URL }}index.php?controller=offre&action=index" class="btn btn-back">⬅ Retour aux Offres</a>
-    </div>
 </section>
 {% endblock %}
