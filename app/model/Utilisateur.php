@@ -81,7 +81,7 @@ class Utilisateur extends BaseModel
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC) ?: null;
     }
-    
+
     /**
      * Récupère tous les utilisateurs (avec pagination).
      */
@@ -140,11 +140,17 @@ class Utilisateur extends BaseModel
     public static function search($searchQuery)
     {
         $pdo = \Database::getInstance();
-        $sql = "SELECT * FROM user WHERE nom LIKE ? OR prenom LIKE ? OR email LIKE ?";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute(["%$searchQuery%", "%$searchQuery%", "%$searchQuery%"]);
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $pdo->prepare("SELECT * FROM user 
+                           WHERE nom LIKE :q 
+                              OR prenom LIKE :q 
+                              OR email LIKE :q
+                           LIMIT 1");
+        $stmt->bindValue(':q', '%' . $searchQuery . '%');
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
+
+
 
     /**
      * Vérifie qu'un utilisateur (id) est un étudiant (pour stats).

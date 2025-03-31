@@ -12,41 +12,49 @@ class GestionUtilisateursController extends BaseController
     /**
      * Affichage de la gestion des utilisateurs -> réservé à l'Admin.
      */
-    public function index() {
+    public function index()
+    {
         $this->checkAuth(['Admin']);
 
+        // On récupère, s'il existe, le résultat d'une recherche stocké en session
+        $search_result = $_SESSION['search_result'] ?? null;
+        unset($_SESSION['search_result']);  // On le supprime de la session après l'avoir récupéré
+
         // Pagination
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $page  = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
-        // Récupération des utilisateurs via Model
+        // Récupération des utilisateurs (paginer)
         $total = Utilisateur::countAll();
         $users = Utilisateur::findAll($limit, $offset);
 
         // Statistiques globales
         $stats = Utilisateur::getStats();
 
+        // Rendu de la vue Twig
         $this->render('gestion_utilisateurs/index.twig', [
-            'users' => $users,
-            'stats' => $stats,
-            'page' => $page,
-            'limit' => $limit,
-            'total' => $total
+            'users'         => $users,
+            'stats'         => $stats,
+            'page'          => $page,
+            'limit'         => $limit,
+            'total'         => $total,
+            'search_result' => $search_result,
         ]);
     }
 
     /**
      * Création d'un utilisateur -> réservé à l'Admin.
      */
-    public function create() {
+    public function create()
+    {
         $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $nom = trim($_POST["nom"]);
-            $prenom = trim($_POST["prenom"]);
-            $email = trim($_POST["email"]);
-            $role = trim($_POST["role"]);
+            $nom      = trim($_POST["nom"]);
+            $prenom   = trim($_POST["prenom"]);
+            $email    = trim($_POST["email"]);
+            $role     = trim($_POST["role"]);
             $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
 
             if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($role) && !empty($password)) {
@@ -64,19 +72,21 @@ class GestionUtilisateursController extends BaseController
     /**
      * Modification d'un utilisateur -> réservé à l'Admin.
      */
-    public function update() {
+    public function update()
+    {
         $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $id = $_POST["id"];
-            $nom = trim($_POST["nom"]) ?? null;
+            $id     = $_POST["id"];
+            $nom    = trim($_POST["nom"]) ?? null;
             $prenom = trim($_POST["prenom"]) ?? null;
-            $email = trim($_POST["email"]) ?? null;
-            $role = trim($_POST["role"]) ?? null;
+            $email  = trim($_POST["email"]) ?? null;
+            $role   = trim($_POST["role"]) ?? null;
 
             Utilisateur::updateUser($id, $nom, $prenom, $email, $role);
 
             $_SESSION["message"] = "Utilisateur modifié avec succès.";
+
             header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index");
             exit;
         }
@@ -85,7 +95,8 @@ class GestionUtilisateursController extends BaseController
     /**
      * Suppression d'un utilisateur -> réservé à l'Admin.
      */
-    public function delete() {
+    public function delete()
+    {
         $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -101,37 +112,33 @@ class GestionUtilisateursController extends BaseController
     /**
      * Recherche d'un utilisateur -> réservé à l'Admin.
      */
-    public function search() {
+    public function search()
+    {
         $this->checkAuth(['Admin']);
-
+    
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $searchQuery = trim($_POST["search_query"]);
-
-            $search_result = null;
-            if (!empty($searchQuery)) {
-                // Peut retourner plusieurs résultats. Ici, l'exemple montrait 1.
-                // On conserve la logique existante (adaptable si besoin).
-                $results = Utilisateur::search($searchQuery);
-                // On va en prendre par ex. le premier si on veut
-                $search_result = (!empty($results)) ? $results[0] : [];
-            }
-
-            // Récupération des statistiques
-            $stats = Utilisateur::getStats();
-
-            $this->render('gestion_utilisateurs/index.twig', [
-                'search_result' => $search_result,
-                'stats' => $stats
-            ]);
+            $search_result = (!empty($searchQuery)) 
+                ? Utilisateur::search($searchQuery) 
+                : [];
+    
+            // On stocke le résultat de la recherche en session
+            $_SESSION['search_result'] = $search_result;
+            
+            // Redirection vers index avec notif=1 pour déclencher la popup
+            header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index&notif=1");
+            exit;
         } else {
             echo "Veuillez utiliser le formulaire pour effectuer une recherche.";
         }
     }
+    
 
     /**
      * Consulter les stats d’un étudiant -> réservé à Admin/Pilote.
      */
-    public function statsEtudiant($id) {
+    public function statsEtudiant($id)
+    {
         $this->checkAuth(['Admin','pilote']);
 
         // Vérifier que l'utilisateur est un étudiant
@@ -156,9 +163,18 @@ class GestionUtilisateursController extends BaseController
         $nbWishlist = $rowWish['nb_wishlist'];
 
         $this->render('gestion_utilisateurs/statsEtudiant.twig', [
-            'etudiant' => $etudiant,
+            'etudiant'       => $etudiant,
             'nbCandidatures' => $nbCandidatures,
-            'nbWishlist' => $nbWishlist
+            'nbWishlist'     => $nbWishlist
         ]);
+    }
+    
+    /**
+     * Vérifie que l’utilisateur est connecté et a l’un des rôles autorisés.
+     * (Cette méthode s'appuie sur le BaseController::checkAuth())
+     */
+    protected function checkAuth(array $allowedRoles = [])
+    {
+        parent::checkAuth($allowedRoles);
     }
 }
