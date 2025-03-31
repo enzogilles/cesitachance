@@ -1,8 +1,29 @@
 <?php
-// index.php (à la racine du projet)
+// public/index.php
 
+// --- Configurer la durée du cookie de session ---
+// Cette configuration doit se faire AVANT session_start()
+
+// Vérifier si la requête est une tentative de connexion
+if ($_SERVER['REQUEST_METHOD'] === 'POST' 
+    && isset($_POST['controller'], $_POST['action'])
+    && $_POST['controller'] === 'utilisateur' 
+    && $_POST['action'] === 'login') {
+    
+    // Si la case "Rester connecté" est cochée, on définit un cookie de session persistant (30 jours)
+    if (isset($_POST['remember']) && $_POST['remember'] === 'on') {
+        session_set_cookie_params(30 * 24 * 3600);
+    } else {
+        // Sinon, le cookie de session est éphémère (se termine à la fermeture du navigateur)
+        session_set_cookie_params(0);
+    }
+} else {
+    // Pour toutes les autres requêtes, on opte pour un cookie éphémère
+    session_set_cookie_params(0);
+}
+
+// Démarrer la session
 session_start();
-// Démarre la session pour accéder aux données de session
 
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
@@ -25,7 +46,7 @@ spl_autoload_register(function ($class) {
     }
 });
 
-// Récupérer le contrôleur et l'action demandés
+// Récupérer le contrôleur et l'action demandés via $_REQUEST
 $controllerName = $_REQUEST['controller'] ?? 'home';
 $actionName = $_REQUEST['action'] ?? 'index';
 
@@ -36,10 +57,9 @@ if (class_exists($controllerClass)) {
     if (method_exists($controller, $actionName)) {
         // Vérifier si l'action attend un paramètre (ex: id)
         $reflection = new ReflectionMethod($controller, $actionName);
-        
         if ($reflection->getNumberOfRequiredParameters() > 0) {
             if (isset($_GET['id'])) {
-                $controller->$actionName($_GET['id']); //  On passe l'ID ici
+                $controller->$actionName($_GET['id']); // On passe l'ID ici
             } else {
                 die("Erreur : Paramètre 'id' manquant pour l'action '$actionName'.");
             }
