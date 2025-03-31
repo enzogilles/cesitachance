@@ -114,7 +114,7 @@ class Entreprise extends BaseModel {
      */
     public static function findAll() {
         $db = \Database::getInstance(); 
-        $query = $db->query("SELECT * FROM entreprises");
+        $query = $db->query("SELECT * FROM entreprise");
         return $query->fetchAll(PDO::FETCH_ASSOC);
     }
 

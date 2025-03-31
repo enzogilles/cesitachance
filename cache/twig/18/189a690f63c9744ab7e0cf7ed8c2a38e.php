@@ -106,7 +106,13 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
     ";
         }
         // line 46
-        yield "</body>
+        yield "    
+    ";
+        // line 48
+        yield "    <script src=\"";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/back-to-top.js\"></script>
+</body>
 </html>
 ";
         return; yield '';
@@ -148,7 +154,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  124 => 12,  116 => 5,  109 => 46,  101 => 41,  82 => 25,  72 => 17,  69 => 16,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
+        return array (  130 => 12,  122 => 5,  112 => 48,  109 => 46,  101 => 41,  82 => 25,  72 => 17,  69 => 16,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
     }
 
     public function getSourceContext()
@@ -198,6 +204,9 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
         });
     </script>
     {% endif %}
+    
+    {# Script pour le bouton \"Retour en haut\" #}
+    <script src=\"{{ BASE_URL }}public/js/back-to-top.js\"></script>
 </body>
 </html>
 ", "layout/base.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\layout\\base.twig");

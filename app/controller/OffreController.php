@@ -142,8 +142,15 @@ class OffreController extends BaseController {
         if (!$offre) {
             die("Erreur : Offre introuvable.");
         }
+        
+        $entreprises = Entreprise::findAll();
+        
+        $this->render('offres/modifier.twig', [
+            'offre' => $offre,
+            'entreprises' => $entreprises
+        ]);
+        
 
-        $this->render('offres/modifier.twig', ['offre' => $offre]);
     }
 
     public function supprimer() {
