@@ -84,10 +84,9 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         </div>
         
         <button type=\"submit\" class=\"btn\">Se connecter</button>
-    <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"";
-        // line 24
+        // line 23
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
@@ -118,7 +117,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  91 => 24,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  90 => 23,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -144,13 +143,12 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         </div>
         
         <button type=\"submit\" class=\"btn\">Se connecter</button>
-    <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
     </form>
 </section>
 {% endblock %}
-", "utilisateurs/connexion.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+", "utilisateurs/connexion.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
     }
 }

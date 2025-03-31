@@ -216,6 +216,6 @@ class __TwigTemplate_8bca214f210d1ea1b29db6baa097e689 extends Template
     </div>
 </section>
 {% endblock %}
-", "entreprises/details.twig", "C:\\www\\cesitachance-3\\app\\views\\entreprises\\details.twig");
+", "entreprises/details.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\entreprises\\details.twig");
     }
 }
