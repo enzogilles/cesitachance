@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function () {
-  // === Notification si l'URL contient ?notif=deleted ===
   const url = new URL(window.location.href);
   const notif = url.searchParams.get("notif");
 
@@ -9,20 +8,47 @@ document.addEventListener('DOMContentLoaded', function () {
     window.history.replaceState({}, "", url.toString());
   }
 
-  // === Confirmation avant suppression via formulaire ===
-  const deleteForm = document.querySelector('#delete-entreprise-form');
-  if (deleteForm) {
-    const submitButton = deleteForm.querySelector('button[type="submit"]');
-    submitButton.addEventListener('click', function (e) {
-      e.preventDefault(); // Empêche la soumission automatique
+  // Affiche une pop-up de confirmation
+  function showCustomConfirm(message, onConfirm) {
+    const overlay = document.createElement('div');
+    overlay.classList.add('custom-confirm-overlay');
 
-      showCustomConfirm("Voulez-vous vraiment supprimer cette entreprise ?", () => {
-        deleteForm.submit(); // Soumet le formulaire après confirmation
-      });
+    const modal = document.createElement('div');
+    modal.classList.add('custom-confirm-modal');
+
+    const text = document.createElement('p');
+    text.textContent = message;
+
+    const btnContainer = document.createElement('div');
+    btnContainer.style.display = "flex";
+    btnContainer.style.justifyContent = "space-around";
+    btnContainer.style.marginTop = "20px";
+
+    const btnOk = document.createElement('button');
+    btnOk.textContent = "OK";
+    btnOk.classList.add('btn-ok');
+
+    const btnCancel = document.createElement('button');
+    btnCancel.textContent = "Annuler";
+    btnCancel.classList.add('btn-cancel');
+
+    btnOk.addEventListener('click', () => {
+      onConfirm();
+      document.body.removeChild(overlay);
     });
+
+    btnCancel.addEventListener('click', () => {
+      document.body.removeChild(overlay);
+    });
+
+    btnContainer.appendChild(btnOk);
+    btnContainer.appendChild(btnCancel);
+    modal.appendChild(text);
+    modal.appendChild(btnContainer);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
   }
 
-  // === Fonction d'affichage de notification ===
   function showNotification(message, type = "info", duration = 3000) {
     document.querySelectorAll(".notification").forEach(n => n.remove());
 
@@ -31,7 +57,7 @@ document.addEventListener('DOMContentLoaded', function () {
     notification.textContent = message;
     notification.style.position = "fixed";
     notification.style.top = "120px";
-    notification.style.left = "50%";
+    notification.style.left = "37%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
     notification.style.padding = "12px 24px";
@@ -60,44 +86,15 @@ document.addEventListener('DOMContentLoaded', function () {
     }, duration);
   }
 
-  // === Fonction de confirmation personnalisée ===
-  function showCustomConfirm(message, onConfirm) {
-    const overlay = document.createElement('div');
-    overlay.classList.add('custom-confirm-overlay');
+  // Confirmation avant suppression
+  document.querySelectorAll('.btn-supprimer').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      const href = this.getAttribute("href");
 
-    const modal = document.createElement('div');
-    modal.classList.add('custom-confirm-modal');
-
-    const text = document.createElement('p');
-    text.textContent = message;
-
-    const btnContainer = document.createElement('div');
-    btnContainer.style.display = "flex";
-    btnContainer.style.justifyContent = "space-around";
-    btnContainer.style.marginTop = "20px";
-
-    const btnOk = document.createElement('button');
-    btnOk.textContent = "OK";
-    btnOk.classList.add('btn-ok');
-
-    const btnCancel = document.createElement('button');
-    btnCancel.textContent = "Annuler";
-    btnCancel.classList.add('btn-cancel');
-
-    btnOk.addEventListener('click', () => {
-      overlay.remove();
-      onConfirm();
+      showCustomConfirm("Voulez-vous vraiment supprimer cette entreprise ?", () => {
+        window.location.href = href;
+      });
     });
-
-    btnCancel.addEventListener('click', () => {
-      overlay.remove();
-    });
-
-    btnContainer.appendChild(btnOk);
-    btnContainer.appendChild(btnCancel);
-    modal.appendChild(text);
-    modal.appendChild(btnContainer);
-    overlay.appendChild(modal);
-    document.body.appendChild(overlay);
-  }
+  });
 });

@@ -33,10 +33,7 @@ class EntrepriseController extends BaseController
 
             if (!empty($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
                 $modifyLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn-modifier">Modifier</a>';
-                $deleteLink = ' <form action="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer" method="POST" style="display:inline;">
-                                    <input type="hidden" name="id" value="' . $entreprise['id'] . '">
-                                    <button type="submit" class="btn-supprimer">Supprimer</button>
-                                </form>';
+                $deleteLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer&id=' . $entreprise['id'] . '" class="btn-supprimer" data-id="' . $entreprise['id'] . '">Supprimer</a>';
                 $entreprise['actions'] = $detailLink . $modifyLink . $deleteLink;
             } else {
                 $entreprise['actions'] = $detailLink;
@@ -100,13 +97,15 @@ class EntrepriseController extends BaseController
 
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST" && !empty($_POST["id"])) {
-            Entreprise::delete($_POST["id"]);
+    
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            Entreprise::delete($id);
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index&notif=deleted");
             exit;
         }
     }
+    
 
     public function evaluer($id) {
         $this->checkAuth(['Etudiant']);

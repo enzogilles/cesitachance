@@ -12,11 +12,6 @@ class Entreprise extends BaseModel {
     public $ville;
     public $taille;
 
-    // CHAMPS SUPPLÉMENTAIRES :
-    public $description;
-    public $email;
-    public $telephone;
-
     public function __construct() {
         parent::__construct();
     }
