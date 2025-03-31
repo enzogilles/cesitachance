@@ -403,6 +403,6 @@ class __TwigTemplate_c5d89848b52644750aa5f9126509e988 extends Template
 <script src=\"{{ BASE_URL }}public/js/wishlist.js\"></script>
 
 {% endblock %}
-", "offres/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\index.twig");
+", "offres/index.twig", "C:\\www\\cesitachance-3\\app\\views\\offres\\index.twig");
     }
 }
