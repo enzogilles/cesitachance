@@ -159,6 +159,6 @@ class __TwigTemplate_afc3163ed4b749d718a15fa2f0122de7 extends Template
   </div>
 </section>
 {% endblock %}
-", "home/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\home\\index.twig");
+", "home/index.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\home\\index.twig");
     }
 }

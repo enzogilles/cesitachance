@@ -248,6 +248,6 @@ array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $
 
     <script src=\"{{ BASE_URL }}public/js/burger-menu.js\"></script>
 </header>
-", "layout/header.twig", "C:\\www\\cesitachance-3\\app\\views\\layout\\header.twig");
+", "layout/header.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\layout\\header.twig");
     }
 }

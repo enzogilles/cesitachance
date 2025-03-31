@@ -76,10 +76,11 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
         // Lorsqu'un lien interne est cliqué, on désactive le logout
         document.querySelectorAll('a').forEach(function(link) {
             link.addEventListener('click', function() {
+                // Utiliser == au lieu de === pour éviter les problèmes de parsing avec Twig
                 if (link.href.indexOf('";
-            // line 24
+            // line 25
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
-            yield "') === 0) {
+            yield "') == 0) {
                     preventLogout = true;
                 }
             });
@@ -96,7 +97,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
             // Si aucune navigation interne n'est détectée, on envoie la requête de logout
             if (!preventLogout) {
                 navigator.sendBeacon('";
-            // line 40
+            // line 41
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=utilisateur&action=logout');
             }
@@ -104,7 +105,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
     </script>
     ";
         }
-        // line 45
+        // line 46
         yield "</body>
 </html>
 ";
@@ -147,7 +148,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  123 => 12,  115 => 5,  108 => 45,  100 => 40,  81 => 24,  72 => 17,  69 => 16,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
+        return array (  124 => 12,  116 => 5,  109 => 46,  101 => 41,  82 => 25,  72 => 17,  69 => 16,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
     }
 
     public function getSourceContext()
@@ -175,7 +176,8 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
         // Lorsqu'un lien interne est cliqué, on désactive le logout
         document.querySelectorAll('a').forEach(function(link) {
             link.addEventListener('click', function() {
-                if (link.href.indexOf('{{ BASE_URL }}') === 0) {
+                // Utiliser == au lieu de === pour éviter les problèmes de parsing avec Twig
+                if (link.href.indexOf('{{ BASE_URL }}') == 0) {
                     preventLogout = true;
                 }
             });
@@ -198,10 +200,6 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
     {% endif %}
 </body>
 </html>
-<<<<<<< HEAD
 ", "layout/base.twig", "C:\\wamp64\\www\\cesitachance-3\\app\\views\\layout\\base.twig");
-=======
-", "layout/base.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\layout\\base.twig");
->>>>>>> 8f038a8c3828e08621e0b3be728c4af7d841f106
     }
 }
