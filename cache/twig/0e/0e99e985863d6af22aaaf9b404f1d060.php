@@ -90,12 +90,13 @@ class __TwigTemplate_e0e0fa3e9bf2bb5aedfc62c45b7f5f03 extends Template
         <label for=\"confirm-password\">Confirmer le mot de passe :</label>
         <input type=\"password\" id=\"confirm-password\" name=\"confirm-password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
         <p id=\"password-error\" class=\"error-message\" style=\"color: red; display: none;\">Les mots de passe ne correspondent pas.</p>
-        <button type=\"submit\" class=\"btn-register\">S'inscrire</button>
+        <button type=\"submit\" class=\"btn\">S'inscrire</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
     <div class=\"account-link\">
         <p>Vous avez déjà un compte ?</p>
         <a href=\"";
-        // line 32
+        // line 33
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=utilisateur&action=connexion\" class=\"btn-login\">Se connecter</a>
     </div>
@@ -125,7 +126,7 @@ class __TwigTemplate_e0e0fa3e9bf2bb5aedfc62c45b7f5f03 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  99 => 32,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  100 => 33,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -157,7 +158,8 @@ class __TwigTemplate_e0e0fa3e9bf2bb5aedfc62c45b7f5f03 extends Template
         <label for=\"confirm-password\">Confirmer le mot de passe :</label>
         <input type=\"password\" id=\"confirm-password\" name=\"confirm-password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
         <p id=\"password-error\" class=\"error-message\" style=\"color: red; display: none;\">Les mots de passe ne correspondent pas.</p>
-        <button type=\"submit\" class=\"btn-register\">S'inscrire</button>
+        <button type=\"submit\" class=\"btn\">S'inscrire</button>
+        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
     </form>
     <div class=\"account-link\">
         <p>Vous avez déjà un compte ?</p>
