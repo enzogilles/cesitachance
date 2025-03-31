@@ -145,9 +145,6 @@ class Entreprise extends BaseModel {
                     $this->secteur,
                     $this->ville,
                     $this->taille,
-                    $this->description,
-                    $this->email,
-                    $this->telephone,
                     $this->id
                 ]);
             } else {
@@ -161,9 +158,6 @@ class Entreprise extends BaseModel {
                     $this->secteur,
                     $this->ville,
                     $this->taille,
-                    $this->description,
-                    $this->email,
-                    $this->telephone
                 ]);
                 if ($result) {
                     $this->id = $this->pdo->lastInsertId();
