@@ -1,12 +1,7 @@
 {% extends "layout/base.twig" %}
 {% block title %}Contactez-nous{% endblock %}
 {% block content %}
-{% if success is defined %}
-    <p class="success-message">{{ success }}</p>
-{% endif %}
-{% if error is defined %}
-    <p class="error-message">{{ error }}</p>
-{% endif %}
+
 <section class="content">
     <h3>Contactez-nous</h3>
     <form id="contact-form" action="{{ BASE_URL }}index.php?controller=contact&action=send" method="POST">
@@ -20,4 +15,10 @@
         <button type="reset" class="bouton-reset">Réinitialiser</button>
     </form>
 </section>
+
+<script>
+    const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+<script src="{{ BASE_URL }}public/js/contact.js"></script>
 {% endblock %}
