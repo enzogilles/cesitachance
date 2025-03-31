@@ -1,21 +1,20 @@
 <?php
-// Namespace pour organiser les classes dans l'application
+// app/controller/EntrepriseController.php
+
 namespace app\controller;
 
-// Import de la classe de base pour les contrôleurs
 use app\controller\BaseController;
-// Modèle représentant une entreprise
 use App\Model\Entreprise;
 
 class EntrepriseController extends BaseController
 {
     /**
-     * Affiche la liste des entreprises avec :
-     * - Recherche par nom, ville ou secteur
-     * - Pagination
-     * - Boutons conditionnels selon le rôle (Admin/Pilote)
+     * Affiche la liste des entreprises avec recherche/pagination (ouvert à tous).
      */
     public function index() {
+        // Pas de restriction de rôle, on n'appelle pas checkAuth()
+
+        // On peut démarrer la session juste si besoin de $_SESSION, ex. pour user role
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -36,7 +35,7 @@ class EntrepriseController extends BaseController
 
         $entreprises = Entreprise::search($nom, $ville, $secteur, $limit, $offset);
 
-        // Boutons d'action pour la vue
+        // Boutons d'action pour la vue (Admin/Pilote)
         foreach ($entreprises as &$entreprise) {
             $detailLink = '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn-voir">Détails</a>';
 
@@ -44,7 +43,7 @@ class EntrepriseController extends BaseController
                 $modifyLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn-modifier">Modifier</a>';
                 $deleteLink = ' <form action="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer" method="POST" style="display:inline;">
                                     <input type="hidden" name="id" value="' . $entreprise['id'] . '">
-                                    <button type="submit" class="btn-supprimer");">Supprimer</button>
+                                    <button type="submit" class="btn-supprimer">Supprimer</button>
                                 </form>';
                 $entreprise['actions'] = $detailLink . $modifyLink . $deleteLink;
             } else {
@@ -64,18 +63,10 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Formulaire de création d'une entreprise.
-     * Accessible uniquement aux Admins ou Pilotes.
+     * Formulaire de création d'une entreprise -> Admin/Pilote uniquement.
      */
     public function creer() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $nom = trim($_POST["nom"]);
@@ -106,21 +97,12 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Formulaire de modification d'une entreprise.
-     * Réservé à Admins/Pilotes.
+     * Formulaire de modification d'une entreprise -> Admin/Pilote uniquement.
      */
     public function modifier($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         $entrepriseData = Entreprise::findById($id);
-
         if (!$entrepriseData) {
             die("Entreprise introuvable.");
         }
@@ -155,17 +137,10 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Suppression d'une entreprise. Réservé aux Admins/Pilotes.
+     * Suppression d'une entreprise -> Admin/Pilote.
      */
     public function supprimer() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
@@ -177,18 +152,10 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Évaluation d'une entreprise par un étudiant.
-     * (Ici inchangé, vous pourriez aussi créer un model "EvaluationEntreprise")
+     * Évaluation d'une entreprise par un étudiant -> rôle "Etudiant".
      */
     public function evaluer($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Etudiant') {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Etudiant']);
 
         $entreprise = Entreprise::findById($id);
         if (!$entreprise) {
@@ -196,7 +163,7 @@ class EntrepriseController extends BaseController
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // On insère dans la table evaluation_entreprise
+            // On insère dans la table evaluation_entreprise (hypothétique)
             $_SESSION['message'] = "Évaluation enregistrée avec succès !";
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=details&id=" . $id);
             exit;
@@ -208,13 +175,10 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Affiche les détails d’une entreprise.
+     * Affiche les détails d’une entreprise (public).
      */
     public function details($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        // Pas de restriction ici
         $entrepriseData = Entreprise::findById($id);
         if (!$entrepriseData) {
             die("Entreprise introuvable.");

@@ -189,7 +189,7 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
     </table>
     ";
         // line 57
-        if (CoreExtension::inFilter(($context["userRole"] ?? null), ["Admin", "pilote"])) {
+        if ((($context["userRole"] ?? null) == "Admin")) {
             // line 58
             yield "        <p>Cliquez sur le statut pour modifier l'état de la candidature.</p>
     ";
@@ -298,7 +298,7 @@ class __TwigTemplate_803507a32979715324dfd45ac9890f7a extends Template
             {% endif %}
         </tbody>
     </table>
-    {% if userRole in ['Admin', 'pilote'] %}
+    {% if userRole == 'Admin' %}
         <p>Cliquez sur le statut pour modifier l'état de la candidature.</p>
     {% endif %}
 </section>

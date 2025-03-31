@@ -14,6 +14,7 @@ class UtilisateurController extends BaseController {
     public function connexion() {
         $this->render('utilisateurs/connexion.twig');
     }
+
     /**
      * Page d'inscription -> accessible à tous.
      */
@@ -25,13 +26,12 @@ class UtilisateurController extends BaseController {
      * Déconnecte l'utilisateur.
      */
     public function logout() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    
+        // Vérifie juste que l'utilisateur est connecté
+        $this->checkAuth();
+
         // Supprimer toutes les données de session
         $_SESSION = [];
-    
+
         // Supprimer le cookie de session
         if (ini_get("session.use_cookies")) {
             $params = session_get_cookie_params();
@@ -40,37 +40,38 @@ class UtilisateurController extends BaseController {
                 $params["secure"], $params["httponly"]
             );
         }
-    
+
         // Détruire la session côté serveur
         session_destroy();
-    
+
         // Repartir sur une nouvelle session propre
         session_start();
         session_regenerate_id(true);
-    
+
         // Redirection
         header("Location: " . BASE_URL . "index.php?controller=home&action=index");
         exit();
     }
 
     /**
-     * Traitement de la connexion.
+     * Traitement de la connexion (login).
      */
     public function login() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-        
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // On peut démarrer la session ici si pas démarrée
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $email = trim($_POST["email"]);
             $password = $_POST["password"];
-    
+
             if (empty($email) || empty($password)) {
                 $error = "Veuillez remplir tous les champs.";
                 $this->render('utilisateurs/connexion.twig', ['error' => $error]);
                 return;
             }
-    
+
             $user = Utilisateur::findByEmail($email);
             if (!$user || !password_verify($password, $user['password'])) {
                 // Email ou mot de passe incorrect
@@ -78,7 +79,7 @@ class UtilisateurController extends BaseController {
                 $this->render('utilisateurs/connexion.twig', ['error' => $error]);
                 return;
             }
-    
+
             // Si tout est OK, on connecte l'utilisateur
             $_SESSION["user"] = [
                 "id" => $user["id"],
@@ -87,7 +88,7 @@ class UtilisateurController extends BaseController {
                 "email" => $user["email"],
                 "role" => $user["role"]
             ];
-    
+
             // Redirection vers le dashboard
             header("Location: " . BASE_URL . "index.php?controller=dashboard&action=index");
             exit;
@@ -98,30 +99,30 @@ class UtilisateurController extends BaseController {
      * Traitement de l'inscription.
      */
     public function register() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $nom = trim($_POST["nom"]);
             $prenom = trim($_POST["prenom"]);
             $email = trim($_POST["email"]);
             $role = trim($_POST["role"]);
             $password = $_POST["password"];
             $confirmPassword = $_POST["confirm-password"];
-    
+
             if (empty($nom) || empty($prenom) || empty($email) || empty($role) || empty($password) || empty($confirmPassword)) {
                 $error = "Tous les champs sont requis.";
                 $this->render('utilisateurs/inscription.twig', ['error' => $error]);
                 return;
             }
-    
+
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $error = "Format d'email invalide.";
                 $this->render('utilisateurs/inscription.twig', ['error' => $error]);
                 return;
             }
-    
+
             if ($password !== $confirmPassword) {
                 $error = "Les mots de passe ne correspondent pas.";
                 $this->render('utilisateurs/inscription.twig', ['error' => $error]);
@@ -134,9 +135,9 @@ class UtilisateurController extends BaseController {
                 $this->render('utilisateurs/inscription.twig', ['error' => $error]);
                 return;
             }
-    
+
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-    
+
             $res = Utilisateur::createUser($nom, $prenom, $email, $role, $hashedPassword);
             if ($res) {
                 header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
@@ -159,11 +160,11 @@ class UtilisateurController extends BaseController {
      * Traite la demande de réinitialisation du mot de passe.
      */
     public function sendResetLink() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            if (session_status() === PHP_SESSION_NONE) {
+                session_start();
+            }
+
             $email = trim($_POST["email"]);
             if (empty($email)) {
                 $error = "Veuillez saisir votre email.";
@@ -171,7 +172,7 @@ class UtilisateurController extends BaseController {
                 return;
             }
 
-            // On pourrait vérifier si l'utilisateur existe :
+            // On pourrait vérifier si l'utilisateur existe
             $user = Utilisateur::findByEmail($email);
             if (!$user) {
                 $error = "Aucun compte associé à cet email.";
@@ -180,7 +181,6 @@ class UtilisateurController extends BaseController {
             }
 
             // Génération d'un token + insertion table password_resets...
-            // (À placer dans un model PasswordReset, par exemple.)
             $token = bin2hex(random_bytes(16));
             $expiration = date("Y-m-d H:i:s", strtotime("+1 hour"));
 

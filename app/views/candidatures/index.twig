@@ -54,7 +54,7 @@
             {% endif %}
         </tbody>
     </table>
-    {% if userRole in ['Admin', 'pilote'] %}
+    {% if userRole == 'Admin' %}
         <p>Cliquez sur le statut pour modifier l'état de la candidature.</p>
     {% endif %}
 </section>

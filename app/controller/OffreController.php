@@ -15,14 +15,11 @@ class OffreController extends BaseController {
     }
 
     /**
-     * Liste des offres avec pagination et recherche multi-critères.
+     * Liste des offres avec pagination et recherche multi-critères (ouvert à tous).
      */
     public function index() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        // Pas de restriction, tout visiteur peut voir les offres
 
-        // Filtres
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
         $filtreCompetences = isset($_GET['competences']) ? trim($_GET['competences']) : '';
 
@@ -50,27 +47,17 @@ class OffreController extends BaseController {
      * Page d'administration : gérer toutes les offres -> réservé Admin/Pilote.
      */
     public function gererOffres() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         $offres = Offre::findAll();
         $this->render('offres/gerer.twig', ['offres' => $offres]);
     }
 
     /**
-     * Détail d’une offre.
+     * Détail d’une offre (ouvert à tous).
      */
     public function detail($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        // Pas de restriction
         if (!$id) {
             die("Erreur : ID de l'offre manquant.");
         }
@@ -85,14 +72,7 @@ class OffreController extends BaseController {
      * Créer une nouvelle offre -> réservé Admin/Pilote.
      */
     public function create() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $titre = trim($_POST['titre']);
@@ -130,14 +110,7 @@ class OffreController extends BaseController {
      * Modifier une offre -> réservé Admin/Pilote.
      */
     public function modifier($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         if (!$id) {
             die("Erreur : ID manquant pour modifier une offre.");
@@ -186,14 +159,7 @@ class OffreController extends BaseController {
      * Supprimer une offre -> réservé Admin/Pilote.
      */
     public function supprimer($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         if (!$id) {
             die("Erreur : ID manquant pour supprimer une offre.");
@@ -210,10 +176,7 @@ class OffreController extends BaseController {
      * Recherche d'offres par mot-clé (alias de index).
      */
     public function search() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
+        // Pas de restriction
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;

@@ -52,178 +52,237 @@ class __TwigTemplate_6eabbc79ba036bae1db0ba978c0966ad extends Template
         return; yield '';
     }
 
-    // line 3
+    // line 4
     public function block_content($context, array $blocks = [])
     {
         $macros = $this->macros;
-        // line 4
+        // line 5
         yield "<main class=\"content\">
     <h2>Gestion des Utilisateurs</h2>
+
     ";
-        // line 6
-        if (( !array_key_exists("user", $context) || (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 6) != "Admin"))) {
-            // line 7
+        // line 9
+        yield "    ";
+        if (CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "message", [], "any", false, false, false, 9)) {
+            // line 10
+            yield "        <div class=\"alert-success\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "message", [], "any", false, false, false, 10), "html", null, true);
+            yield "</div>
+    ";
+        }
+        // line 12
+        yield "    ";
+        if (CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "error", [], "any", false, false, false, 12)) {
+            // line 13
+            yield "        <div class=\"alert-error\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "error", [], "any", false, false, false, 13), "html", null, true);
+            yield "</div>
+    ";
+        }
+        // line 15
+        yield "
+    ";
+        // line 17
+        yield "    ";
+        if (( !array_key_exists("user", $context) || (CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 17) != "Admin"))) {
+            // line 18
             yield "        <p>Accès refusé</p>
     ";
         } else {
-            // line 9
+            // line 20
             yield "        <div class=\"dashboard-actions\">
             <ul>
                 <li><a href=\"#recherche\" class=\"btn-login\">Rechercher un Utilisateur</a></li>
-                <li><a href=\"#creer\" class=\"btn-login\">Créer un Utilisateur</a></li>
-                <li><a href=\"#modifier\" class=\"btn-login\">Modifier un Utilisateur</a></li>
-                <li><a href=\"#supprimer\" class=\"btn-login\">Supprimer un Utilisateur</a></li>
+                <li><a href=\"#resultat\" class=\"btn-login\">Modifier un Utilisateur</a></li>
+                <li><a href=\"#resultat\" class=\"btn-login\">Supprimer un Utilisateur</a></li>
                 <li><a href=\"#statistiques\" class=\"btn-login\">Statistiques</a></li>
             </ul>
         </div>
-        <div id=\"recherche\" style=\"margin-top: 40px;\">
+
+        ";
+            // line 30
+            yield "        <div id=\"recherche\" style=\"margin-top: 40px;\">
             <h3>Rechercher un Utilisateur</h3>
-            <form action=\"";
-            // line 20
+            <form class=\"search-form\" action=\"";
+            // line 32
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=gestionutilisateurs&action=search\" method=\"POST\">
                 <label for=\"search-user\">Nom, Prénom ou Email :</label>
                 <input type=\"text\" id=\"search-user\" name=\"search_query\" required>
+
                 <button type=\"submit\" class=\"btn\">Rechercher</button>
+                ";
+            // line 38
+            yield "                <button type=\"button\" class=\"bouton-reset\">Réinitialiser</button>
             </form>
         </div>
         <hr>
+
         ";
-            // line 27
+            // line 44
+            yield "        ";
             if ((array_key_exists("search_result", $context) &&  !Twig\Extension\CoreExtension::testEmpty(($context["search_result"] ?? null)))) {
-                // line 28
-                yield "            <div id=\"resultat\">
-                <h3>Résultat de la recherche :</h3>
-                <p><strong>Nom :</strong> ";
-                // line 30
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "nom", [], "any", false, false, false, 30));
+                // line 45
+                yield "        <div id=\"resultat\">
+            <h3>Résultat de la recherche :</h3>
+            <p>Nom : ";
+                // line 47
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "nom", [], "any", false, false, false, 47), "html", null, true);
                 yield "</p>
-                <p><strong>Prénom :</strong> ";
-                // line 31
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "prenom", [], "any", false, false, false, 31));
+            <p>Prénom : ";
+                // line 48
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "prenom", [], "any", false, false, false, 48), "html", null, true);
                 yield "</p>
-                <p><strong>Email :</strong> ";
-                // line 32
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "email", [], "any", false, false, false, 32));
+            <p>Email : ";
+                // line 49
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "email", [], "any", false, false, false, 49), "html", null, true);
                 yield "</p>
-                <p><strong>Rôle :</strong> ";
-                // line 33
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 33));
+            <p>Rôle : ";
+                // line 50
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 50), "html", null, true);
                 yield "</p>
-                <h3>Modifier cet utilisateur</h3>
-                <form action=\"";
-                // line 35
+    
+            <h3>Modifier cet utilisateur</h3>
+            <form action=\"";
+                // line 53
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
                 yield "index.php?controller=gestionutilisateurs&action=update\" method=\"POST\">
-                    <input type=\"hidden\" name=\"id\" value=\"";
-                // line 36
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "id", [], "any", false, false, false, 36), "html", null, true);
+                <input type=\"hidden\" name=\"id\" value=\"";
+                // line 54
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "id", [], "any", false, false, false, 54), "html", null, true);
                 yield "\">
-                    <label>Nouveau Nom :</label>
-                    <input type=\"text\" name=\"nom\" value=\"";
-                // line 38
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "nom", [], "any", false, false, false, 38));
+                <label>Nouveau Nom :</label>
+                <input type=\"text\" name=\"nom\" value=\"";
+                // line 56
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "nom", [], "any", false, false, false, 56));
                 yield "\">
-                    <label>Nouveau Prénom :</label>
-                    <input type=\"text\" name=\"prenom\" value=\"";
-                // line 40
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "prenom", [], "any", false, false, false, 40));
+    
+                <label>Nouveau Prénom :</label>
+                <input type=\"text\" name=\"prenom\" value=\"";
+                // line 59
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "prenom", [], "any", false, false, false, 59));
                 yield "\">
-                    <label>Nouvel Email :</label>
-                    <input type=\"email\" name=\"email\" value=\"";
-                // line 42
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "email", [], "any", false, false, false, 42));
+    
+                <label>Nouvel Email :</label>
+                <input type=\"email\" name=\"email\" value=\"";
+                // line 62
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "email", [], "any", false, false, false, 62));
                 yield "\">
-                    <label>Nouveau Rôle :</label>
-                    <select name=\"role\">
-                        <option value=\"Etudiant\" ";
-                // line 45
-                if ((CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 45) == "Etudiant")) {
+    
+                <label>Nouveau Rôle :</label>
+                <select name=\"role\">
+                    <option value=\"Etudiant\" ";
+                // line 66
+                if ((CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 66) == "Etudiant")) {
                     yield "selected";
                 }
                 yield ">Étudiant</option>
-                        <option value=\"pilote\" ";
-                // line 46
-                if ((CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 46) == "pilote")) {
+                    <option value=\"pilote\" ";
+                // line 67
+                if ((CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 67) == "pilote")) {
                     yield "selected";
                 }
                 yield ">Pilote</option>
-                        <option value=\"Admin\" ";
-                // line 47
-                if ((CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 47) == "Admin")) {
+                    <option value=\"Admin\" ";
+                // line 68
+                if ((CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "role", [], "any", false, false, false, 68) == "Admin")) {
                     yield "selected";
                 }
                 yield ">Administrateur</option>
-                    </select>
-                    <button type=\"submit\" class=\"btn\">Modifier</button>
-                </form>
-                <h3>Supprimer cet utilisateur</h3>
-                <form action=\"";
-                // line 52
+                </select>
+                <button type=\"submit\" class=\"btn-login\">Modifier</button>
+            </form>
+    
+            <h3>Supprimer cet utilisateur</h3>
+            <form action=\"";
+                // line 74
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
                 yield "index.php?controller=gestionutilisateurs&action=delete\" method=\"POST\">
-                    <input type=\"hidden\" name=\"id\" value=\"";
-                // line 53
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "id", [], "any", false, false, false, 53), "html", null, true);
+                <input type=\"hidden\" name=\"id\" value=\"";
+                // line 75
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, ($context["search_result"] ?? null), "id", [], "any", false, false, false, 75), "html", null, true);
                 yield "\">
-                    <button type=\"submit\" class=\"btn\" onclick=\"return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')\">Supprimer</button>
-                </form>
-            </div>
+                <button type=\"submit\" class=\"btn-supprimer\">Supprimer</button>
+            </form>
+        </div>
         ";
-            } elseif ((            // line 57
+            } elseif ((            // line 79
 array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::testEmpty(($context["search_result"] ?? null)))) {
-                // line 58
-                yield "            <p>Aucun utilisateur trouvé.</p>
+                // line 80
+                yield "        <div id=\"resultat\">
+            <p>Aucun utilisateur trouvé.</p>
+        </div>
         ";
             }
-            // line 60
-            yield "        <hr>
-        <div id=\"creer\" style=\"margin-top: 40px;\">
+            // line 84
+            yield "    
+        ";
+            // line 86
+            yield "        <div id=\"creer\" style=\"margin-top: 40px;\">
             <h3>Créer un Utilisateur</h3>
             <form action=\"";
-            // line 63
+            // line 88
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
             yield "index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
                 <label for=\"nom-create-user\">Nom :</label>
                 <input type=\"text\" id=\"nom-create-user\" name=\"nom\" required>
+                
                 <label for=\"prenom-create-user\">Prénom :</label>
                 <input type=\"text\" id=\"prenom-create-user\" name=\"prenom\" required>
+                
                 <label for=\"email-create-user\">Email :</label>
                 <input type=\"email\" id=\"email-create-user\" name=\"email\" required>
+                
                 <label for=\"role-create-user\">Rôle :</label>
                 <select id=\"role-create-user\" name=\"role\" required>
                     <option value=\"Etudiant\">Étudiant</option>
                     <option value=\"pilote\">Pilote</option>
                     <option value=\"Admin\">Administrateur</option>
                 </select>
+                
                 <label for=\"password-create-user\">Mot de passe :</label>
                 <input type=\"password\" id=\"password-create-user\" name=\"password\" required>
-                <button type=\"submit\" class=\"btn\">Créer</button>
+                
+                <button type=\"submit\" class=\"btn-login\">Créer</button>
             </form>
         </div>
-        <div id=\"statistiques\" style=\"margin-top: 40px;\">
+
+        ";
+            // line 113
+            yield "        <div id=\"statistiques\" style=\"margin-top: 40px;\">
             <h3>Statistiques</h3>
             <p>Nombre total d'utilisateurs : ";
-            // line 83
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", true, true, false, 83)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", false, false, false, 83), "N/A")) : ("N/A")), "html", null, true);
+            // line 115
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", true, true, false, 115)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_users", [], "any", false, false, false, 115), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
             <p>Nombre d'étudiants : ";
-            // line 84
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", true, true, false, 84)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", false, false, false, 84), "N/A")) : ("N/A")), "html", null, true);
+            // line 116
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", true, true, false, 116)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_etudiants", [], "any", false, false, false, 116), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
             <p>Nombre de pilotes : ";
-            // line 85
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", true, true, false, 85)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", false, false, false, 85), "N/A")) : ("N/A")), "html", null, true);
+            // line 117
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", true, true, false, 117)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_pilotes", [], "any", false, false, false, 117), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
             <p>Nombre d'administrateurs : ";
-            // line 86
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", true, true, false, 86)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", false, false, false, 86), "N/A")) : ("N/A")), "html", null, true);
+            // line 118
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", true, true, false, 118)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, ($context["stats"] ?? null), "total_admins", [], "any", false, false, false, 118), "N/A")) : ("N/A")), "html", null, true);
             yield "</p>
         </div>
     ";
         }
-        // line 89
+        // line 121
         yield "</main>
+
+<script>
+    const BASE_URL = \"";
+        // line 124
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "\";
+</script>
+<script src=\"";
+        // line 126
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+        yield "public/js/gestion-etudiant.js\"></script>
 ";
         return; yield '';
     }
@@ -249,91 +308,123 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
      */
     public function getDebugInfo()
     {
-        return array (  226 => 89,  220 => 86,  216 => 85,  212 => 84,  208 => 83,  185 => 63,  180 => 60,  176 => 58,  174 => 57,  167 => 53,  163 => 52,  153 => 47,  147 => 46,  141 => 45,  135 => 42,  130 => 40,  125 => 38,  120 => 36,  116 => 35,  111 => 33,  107 => 32,  103 => 31,  99 => 30,  95 => 28,  93 => 27,  83 => 20,  70 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  284 => 126,  279 => 124,  274 => 121,  268 => 118,  264 => 117,  260 => 116,  256 => 115,  252 => 113,  225 => 88,  221 => 86,  218 => 84,  212 => 80,  210 => 79,  203 => 75,  199 => 74,  188 => 68,  182 => 67,  176 => 66,  169 => 62,  163 => 59,  157 => 56,  152 => 54,  148 => 53,  142 => 50,  138 => 49,  134 => 48,  130 => 47,  126 => 45,  123 => 44,  116 => 38,  108 => 32,  104 => 30,  93 => 20,  89 => 18,  86 => 17,  83 => 15,  77 => 13,  74 => 12,  68 => 10,  65 => 9,  60 => 5,  56 => 4,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
     {
         return new Source("{% extends \"layout/base.twig\" %}
 {% block title %}Gestion des Utilisateurs{% endblock %}
+
 {% block content %}
 <main class=\"content\">
     <h2>Gestion des Utilisateurs</h2>
+
+    {# Affichage des messages de succès/erreur stockés en session #}
+    {% if session.message %}
+        <div class=\"alert-success\">{{ session.message }}</div>
+    {% endif %}
+    {% if session.error %}
+        <div class=\"alert-error\">{{ session.error }}</div>
+    {% endif %}
+
+    {# Vérification du rôle #}
     {% if user is not defined or user.role != 'Admin' %}
         <p>Accès refusé</p>
     {% else %}
         <div class=\"dashboard-actions\">
             <ul>
                 <li><a href=\"#recherche\" class=\"btn-login\">Rechercher un Utilisateur</a></li>
-                <li><a href=\"#creer\" class=\"btn-login\">Créer un Utilisateur</a></li>
-                <li><a href=\"#modifier\" class=\"btn-login\">Modifier un Utilisateur</a></li>
-                <li><a href=\"#supprimer\" class=\"btn-login\">Supprimer un Utilisateur</a></li>
+                <li><a href=\"#resultat\" class=\"btn-login\">Modifier un Utilisateur</a></li>
+                <li><a href=\"#resultat\" class=\"btn-login\">Supprimer un Utilisateur</a></li>
                 <li><a href=\"#statistiques\" class=\"btn-login\">Statistiques</a></li>
             </ul>
         </div>
+
+        {# Formulaire de recherche #}
         <div id=\"recherche\" style=\"margin-top: 40px;\">
             <h3>Rechercher un Utilisateur</h3>
-            <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=search\" method=\"POST\">
+            <form class=\"search-form\" action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=search\" method=\"POST\">
                 <label for=\"search-user\">Nom, Prénom ou Email :</label>
                 <input type=\"text\" id=\"search-user\" name=\"search_query\" required>
+
                 <button type=\"submit\" class=\"btn\">Rechercher</button>
+                {# Bouton reset (pour ré-initialiser l'affichage) #}
+                <button type=\"button\" class=\"bouton-reset\">Réinitialiser</button>
             </form>
         </div>
         <hr>
+
+        {# Résultat de la recherche : si on a un utilisateur trouvé #}
         {% if search_result is defined and search_result is not empty %}
-            <div id=\"resultat\">
-                <h3>Résultat de la recherche :</h3>
-                <p><strong>Nom :</strong> {{ search_result.nom|e }}</p>
-                <p><strong>Prénom :</strong> {{ search_result.prenom|e }}</p>
-                <p><strong>Email :</strong> {{ search_result.email|e }}</p>
-                <p><strong>Rôle :</strong> {{ search_result.role|e }}</p>
-                <h3>Modifier cet utilisateur</h3>
-                <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=update\" method=\"POST\">
-                    <input type=\"hidden\" name=\"id\" value=\"{{ search_result.id }}\">
-                    <label>Nouveau Nom :</label>
-                    <input type=\"text\" name=\"nom\" value=\"{{ search_result.nom|e }}\">
-                    <label>Nouveau Prénom :</label>
-                    <input type=\"text\" name=\"prenom\" value=\"{{ search_result.prenom|e }}\">
-                    <label>Nouvel Email :</label>
-                    <input type=\"email\" name=\"email\" value=\"{{ search_result.email|e }}\">
-                    <label>Nouveau Rôle :</label>
-                    <select name=\"role\">
-                        <option value=\"Etudiant\" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
-                        <option value=\"pilote\" {% if search_result.role == 'pilote' %}selected{% endif %}>Pilote</option>
-                        <option value=\"Admin\" {% if search_result.role == 'Admin' %}selected{% endif %}>Administrateur</option>
-                    </select>
-                    <button type=\"submit\" class=\"btn\">Modifier</button>
-                </form>
-                <h3>Supprimer cet utilisateur</h3>
-                <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete\" method=\"POST\">
-                    <input type=\"hidden\" name=\"id\" value=\"{{ search_result.id }}\">
-                    <button type=\"submit\" class=\"btn\" onclick=\"return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')\">Supprimer</button>
-                </form>
-            </div>
+        <div id=\"resultat\">
+            <h3>Résultat de la recherche :</h3>
+            <p>Nom : {{ search_result.nom }}</p>
+            <p>Prénom : {{ search_result.prenom }}</p>
+            <p>Email : {{ search_result.email }}</p>
+            <p>Rôle : {{ search_result.role }}</p>
+    
+            <h3>Modifier cet utilisateur</h3>
+            <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=update\" method=\"POST\">
+                <input type=\"hidden\" name=\"id\" value=\"{{ search_result.id }}\">
+                <label>Nouveau Nom :</label>
+                <input type=\"text\" name=\"nom\" value=\"{{ search_result.nom|e }}\">
+    
+                <label>Nouveau Prénom :</label>
+                <input type=\"text\" name=\"prenom\" value=\"{{ search_result.prenom|e }}\">
+    
+                <label>Nouvel Email :</label>
+                <input type=\"email\" name=\"email\" value=\"{{ search_result.email|e }}\">
+    
+                <label>Nouveau Rôle :</label>
+                <select name=\"role\">
+                    <option value=\"Etudiant\" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
+                    <option value=\"pilote\" {% if search_result.role == 'pilote' %}selected{% endif %}>Pilote</option>
+                    <option value=\"Admin\" {% if search_result.role == 'Admin' %}selected{% endif %}>Administrateur</option>
+                </select>
+                <button type=\"submit\" class=\"btn-login\">Modifier</button>
+            </form>
+    
+            <h3>Supprimer cet utilisateur</h3>
+            <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete\" method=\"POST\">
+                <input type=\"hidden\" name=\"id\" value=\"{{ search_result.id }}\">
+                <button type=\"submit\" class=\"btn-supprimer\">Supprimer</button>
+            </form>
+        </div>
         {% elseif search_result is defined and search_result is empty %}
+        <div id=\"resultat\">
             <p>Aucun utilisateur trouvé.</p>
+        </div>
         {% endif %}
-        <hr>
+    
+        {# Formulaire de création d'un nouvel utilisateur #}
         <div id=\"creer\" style=\"margin-top: 40px;\">
             <h3>Créer un Utilisateur</h3>
             <form action=\"{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create\" method=\"POST\">
                 <label for=\"nom-create-user\">Nom :</label>
                 <input type=\"text\" id=\"nom-create-user\" name=\"nom\" required>
+                
                 <label for=\"prenom-create-user\">Prénom :</label>
                 <input type=\"text\" id=\"prenom-create-user\" name=\"prenom\" required>
+                
                 <label for=\"email-create-user\">Email :</label>
                 <input type=\"email\" id=\"email-create-user\" name=\"email\" required>
+                
                 <label for=\"role-create-user\">Rôle :</label>
                 <select id=\"role-create-user\" name=\"role\" required>
                     <option value=\"Etudiant\">Étudiant</option>
                     <option value=\"pilote\">Pilote</option>
                     <option value=\"Admin\">Administrateur</option>
                 </select>
+                
                 <label for=\"password-create-user\">Mot de passe :</label>
                 <input type=\"password\" id=\"password-create-user\" name=\"password\" required>
-                <button type=\"submit\" class=\"btn\">Créer</button>
+                
+                <button type=\"submit\" class=\"btn-login\">Créer</button>
             </form>
         </div>
+
+        {# Statistiques globales #}
         <div id=\"statistiques\" style=\"margin-top: 40px;\">
             <h3>Statistiques</h3>
             <p>Nombre total d'utilisateurs : {{ stats.total_users|default('N/A') }}</p>
@@ -343,6 +434,11 @@ array_key_exists("search_result", $context) && Twig\Extension\CoreExtension::tes
         </div>
     {% endif %}
 </main>
+
+<script>
+    const BASE_URL = \"{{ BASE_URL }}\";
+</script>
+<script src=\"{{ BASE_URL }}public/js/gestion-etudiant.js\"></script>
 {% endblock %}
 ", "gestion_utilisateurs/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\gestion_utilisateurs\\index.twig");
     }
