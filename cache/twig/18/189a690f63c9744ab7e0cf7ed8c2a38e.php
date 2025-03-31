@@ -63,6 +63,48 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
         yield "    ";
         yield from         $this->loadTemplate("layout/footer.twig", "layout/base.twig", 13)->unwrap()->yield($context);
         // line 14
+        yield "
+    ";
+        // line 16
+        yield "    ";
+        if (( !CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "remember", [], "any", true, true, false, 16) ||  !CoreExtension::getAttribute($this->env, $this->source, ($context["session"] ?? null), "remember", [], "any", false, false, false, 16))) {
+            // line 17
+            yield "    <script>
+        // Flag qui empêchera la déconnexion lors d'une navigation interne
+        let preventLogout = false;
+
+        // Lorsqu'un lien interne est cliqué, on désactive le logout
+        document.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (link.href.indexOf('";
+            // line 24
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "') === 0) {
+                    preventLogout = true;
+                }
+            });
+        });
+
+        // Pour les soumissions de formulaire (ex: recherche, navigation via un formulaire, etc.)
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function() {
+                preventLogout = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function() {
+            // Si aucune navigation interne n'est détectée, on envoie la requête de logout
+            if (!preventLogout) {
+                navigator.sendBeacon('";
+            // line 40
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
+            yield "index.php?controller=utilisateur&action=logout');
+            }
+        });
+    </script>
+    ";
+        }
+        // line 45
         yield "</body>
 </html>
 ";
@@ -105,7 +147,7 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  81 => 12,  73 => 5,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
+        return array (  123 => 12,  115 => 5,  108 => 45,  100 => 40,  81 => 24,  72 => 17,  69 => 16,  66 => 14,  63 => 13,  60 => 12,  58 => 11,  50 => 6,  46 => 5,  40 => 1,);
     }
 
     public function getSourceContext()
@@ -123,8 +165,39 @@ class __TwigTemplate_7a6727cb2c12d98ec39cc6ee8db87b80 extends Template
     {% include \"layout/header.twig\" %}
     {% block content %}{% endblock %}
     {% include \"layout/footer.twig\" %}
+
+    {# Script de déconnexion automatique si \"Rester connecté\" n'est pas activé #}
+    {% if session.remember is not defined or not session.remember %}
+    <script>
+        // Flag qui empêchera la déconnexion lors d'une navigation interne
+        let preventLogout = false;
+
+        // Lorsqu'un lien interne est cliqué, on désactive le logout
+        document.querySelectorAll('a').forEach(function(link) {
+            link.addEventListener('click', function() {
+                if (link.href.indexOf('{{ BASE_URL }}') === 0) {
+                    preventLogout = true;
+                }
+            });
+        });
+
+        // Pour les soumissions de formulaire (ex: recherche, navigation via un formulaire, etc.)
+        document.querySelectorAll('form').forEach(function(form) {
+            form.addEventListener('submit', function() {
+                preventLogout = true;
+            });
+        });
+
+        window.addEventListener('beforeunload', function() {
+            // Si aucune navigation interne n'est détectée, on envoie la requête de logout
+            if (!preventLogout) {
+                navigator.sendBeacon('{{ BASE_URL }}index.php?controller=utilisateur&action=logout');
+            }
+        });
+    </script>
+    {% endif %}
 </body>
 </html>
-", "layout/base.twig", "C:\\www\\cesitachance-3\\app\\views\\layout\\base.twig");
+", "layout/base.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\layout\\base.twig");
     }
 }

@@ -104,8 +104,9 @@ class GestionUtilisateursController extends BaseController
             Utilisateur::deleteUser($id);
 
             $_SESSION["message"] = "Utilisateur supprimé avec succès.";
-            header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index");
+            header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index&notif=deleted");
             exit;
+            
         }
     }
 
