@@ -23,9 +23,13 @@ class ContactMessage extends BaseModel
      */
     public static function create($nom, $email, $message)
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("INSERT INTO contact_messages (nom, email, message) VALUES (?, ?, ?)");
-        return $stmt->execute([$nom, $email, $message]);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("INSERT INTO contact_messages (nom, email, message) VALUES (?, ?, ?)");
+            return $stmt->execute([$nom, $email, $message]);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de l'insertion du message de contact : " . $e->getMessage());
+        }
     }
 
     /**
@@ -33,8 +37,13 @@ class ContactMessage extends BaseModel
      */
     public static function findAll()
     {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->query("SELECT * FROM contact_messages ORDER BY date_envoi DESC");
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT * FROM contact_messages ORDER BY date_envoi DESC");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des messages de contact : " . $e->getMessage());
+        }
     }
 }

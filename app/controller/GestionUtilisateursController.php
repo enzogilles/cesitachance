@@ -10,7 +10,7 @@ use PDO;
 class GestionUtilisateursController extends BaseController
 {
     /**
-     * Affichage de la gestion des utilisateurs -> réservé à l'Admin.
+     * Affichage de la gestion des utilisateurs, avec pagination -> Admin seulement
      */
     public function index() {
         $this->checkAuth(['Admin']);
@@ -106,13 +106,11 @@ class GestionUtilisateursController extends BaseController
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $searchQuery = trim($_POST["search_query"]);
-
             $search_result = null;
+
             if (!empty($searchQuery)) {
-                // Peut retourner plusieurs résultats. Ici, l'exemple montrait 1.
-                // On conserve la logique existante (adaptable si besoin).
+                // exemple : on ne gère qu'un seul résultat ou un tableau...
                 $results = Utilisateur::search($searchQuery);
-                // On va en prendre par ex. le premier si on veut
                 $search_result = (!empty($results)) ? $results[0] : [];
             }
 
@@ -129,7 +127,7 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * Consulter les stats d’un étudiant -> réservé à Admin/Pilote.
+     * Consulter les statistiques d’un compte Étudiant -> réservé à Admin/Pilote.
      */
     public function statsEtudiant($id) {
         $this->checkAuth(['Admin','pilote']);
@@ -140,20 +138,24 @@ class GestionUtilisateursController extends BaseController
             die("Cet utilisateur n'est pas un étudiant ou n'existe pas.");
         }
 
-        // On fait nos stats en direct (ou via un Model) :
-        $pdo = \Database::getInstance();
+        try {
+            $pdo = \Database::getInstance();
 
-        // Comptage des candidatures
-        $stmtCandid = $pdo->prepare("SELECT COUNT(*) AS nb_candidatures FROM candidature WHERE user_id = ?");
-        $stmtCandid->execute([$id]);
-        $rowCandid = $stmtCandid->fetch(\PDO::FETCH_ASSOC);
-        $nbCandidatures = $rowCandid['nb_candidatures'];
+            // Comptage des candidatures
+            $stmtCandid = $pdo->prepare("SELECT COUNT(*) AS nb_candidatures FROM candidature WHERE user_id = ?");
+            $stmtCandid->execute([$id]);
+            $rowCandid = $stmtCandid->fetch(\PDO::FETCH_ASSOC);
+            $nbCandidatures = $rowCandid['nb_candidatures'];
 
-        // Comptage de la wishlist
-        $stmtWish = $pdo->prepare("SELECT COUNT(*) AS nb_wishlist FROM wishlist WHERE user_id = ?");
-        $stmtWish->execute([$id]);
-        $rowWish = $stmtWish->fetch(\PDO::FETCH_ASSOC);
-        $nbWishlist = $rowWish['nb_wishlist'];
+            // Comptage de la wishlist
+            $stmtWish = $pdo->prepare("SELECT COUNT(*) AS nb_wishlist FROM wishlist WHERE user_id = ?");
+            $stmtWish->execute([$id]);
+            $rowWish = $stmtWish->fetch(\PDO::FETCH_ASSOC);
+            $nbWishlist = $rowWish['nb_wishlist'];
+
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des statistiques étudiant : " . $e->getMessage());
+        }
 
         $this->render('gestion_utilisateurs/statsEtudiant.twig', [
             'etudiant' => $etudiant,
