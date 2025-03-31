@@ -10,20 +10,18 @@ use App\Model\Offre;
 
 class WishlistController extends BaseController
 {
+    /**
+     * Affiche la wishlist de l'étudiant connecté
+     * ou la liste des étudiants si Admin/pilote.
+     */
     public function index()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin', 'pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
-            exit;
-        }
+        // Rôles autorisés : Étudiant, Admin, pilote
+        $this->checkAuth(['Etudiant','Admin','pilote']);
 
         $role = $_SESSION['user']['role'];
 
-        if ($role === 'Étudiant') {
+        if ($role === 'Etudiant') {
             $user_id = $_SESSION['user']['id'];
             $wishlist = Wishlist::findByUserIdWithRelations($user_id);
             $this->render('wishlist/index.twig', [
@@ -44,16 +42,12 @@ class WishlistController extends BaseController
         }
     }
 
+    /**
+     * Vue pour qu'un Admin/pilote voie la wishlist d'un étudiant précis.
+     */
     public function view()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         if (!isset($_GET['student_id'])) {
             header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
@@ -76,35 +70,22 @@ class WishlistController extends BaseController
      * Ajoute une offre à la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function add() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
-            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) &&
-                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Non autorisé']);
-                exit;
-            }
-            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
-            exit;
-        }
-    
+        $this->checkAuth(['Etudiant','Admin']);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
-            strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false) {
-    
+            strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false)
+        {
             $data = json_decode(file_get_contents("php://input"), true);
-    
+
             if (!isset($data['offre_id'])) {
                 header('Content-Type: application/json');
                 echo json_encode(['success' => false, 'message' => 'ID d\'offre manquant']);
                 exit;
             }
-    
+
             $user_id = $_SESSION['user']['id'];
             $offre_id = intval($data['offre_id']);
-    
+
             if (Wishlist::exists($user_id, $offre_id)) {
                 echo json_encode(['success' => false, 'message' => 'Offre déjà dans la wishlist']);
             } else {
@@ -119,78 +100,65 @@ class WishlistController extends BaseController
             }
             exit;
         }
-    
+
         header('Content-Type: application/json');
         echo json_encode(['success' => false, 'message' => 'Requête invalide']);
         exit;
     }
-    
+
     /**
      * Retire une offre de la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function remove() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
-            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Non autorisé']);
-                exit;
-            }
-            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
-            exit;
-        }
-    
+        $this->checkAuth(['Etudiant','Admin']);
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = file_get_contents("php://input");
             $json = json_decode($data, true);
-    
+
             if ($json && isset($json['wishlist_id'])) {
                 $wishlist_id = $json['wishlist_id'];
                 $success = Wishlist::remove($wishlist_id);
-    
+
                 header('Content-Type: application/json');
                 echo json_encode(['success' => $success]);
                 exit;
             }
-    
+
             if (isset($_POST['wishlist_id'])) {
                 $wishlist_id = $_POST['wishlist_id'];
                 Wishlist::remove($wishlist_id);
-    
+
                 header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
                 exit;
             }
         }
-    
+
         if (!headers_sent()) {
             header('Content-Type: application/json');
         }
         echo json_encode(['success' => false, 'message' => 'Requête invalide.']);
         exit;
     }
-    
+
     /**
      * Recherche d'offres dans la wishlist (exemple).
      */
     public function search() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-    
+        // On peut exiger d'être connecté, en pratique
+        $this->checkAuth();
+
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
-    
+
         if (!empty($motcle)) {
             $result = Offre::search($motcle, '', $limit, $offset);
             $offres = $result['offres'];
             $total = $result['total'];
             $totalPages = ceil($total / $limit);
-    
+
             $this->render('offres/index.twig', [
                 'offres' => $offres,
                 'motcle' => $motcle,

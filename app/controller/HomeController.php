@@ -8,7 +8,7 @@ use App\Model\Offre;
 
 class HomeController extends BaseController {
     /**
-     * Page d'accueil
+     * Page d'accueil (ouverte à tous)
      */
     public function index() {
         // On utilise le model Offre pour récupérer les 5 dernières

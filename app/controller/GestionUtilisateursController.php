@@ -10,17 +10,10 @@ use PDO;
 class GestionUtilisateursController extends BaseController
 {
     /**
-     * Affichage de la gestion des utilisateurs, avec pagination -> réservé à l'Admin.
+     * Affichage de la gestion des utilisateurs -> réservé à l'Admin.
      */
     public function index() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin']);
 
         // Pagination
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
@@ -47,14 +40,7 @@ class GestionUtilisateursController extends BaseController
      * Création d'un utilisateur -> réservé à l'Admin.
      */
     public function create() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $nom = trim($_POST["nom"]);
@@ -79,14 +65,7 @@ class GestionUtilisateursController extends BaseController
      * Modification d'un utilisateur -> réservé à l'Admin.
      */
     public function update() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
@@ -107,14 +86,7 @@ class GestionUtilisateursController extends BaseController
      * Suppression d'un utilisateur -> réservé à l'Admin.
      */
     public function delete() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
@@ -130,21 +102,18 @@ class GestionUtilisateursController extends BaseController
      * Recherche d'un utilisateur -> réservé à l'Admin.
      */
     public function search() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin']);
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $searchQuery = trim($_POST["search_query"]);
 
             $search_result = null;
             if (!empty($searchQuery)) {
-                $search_result = Utilisateur::search($searchQuery);
+                // Peut retourner plusieurs résultats. Ici, l'exemple montrait 1.
+                // On conserve la logique existante (adaptable si besoin).
+                $results = Utilisateur::search($searchQuery);
+                // On va en prendre par ex. le premier si on veut
+                $search_result = (!empty($results)) ? $results[0] : [];
             }
 
             // Récupération des statistiques
@@ -160,17 +129,10 @@ class GestionUtilisateursController extends BaseController
     }
 
     /**
-     * Consulter les statistiques d’un compte Étudiant -> réservé à Admin/Pilote.
+     * Consulter les stats d’un étudiant -> réservé à Admin/Pilote.
      */
     public function statsEtudiant($id) {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         // Vérifier que l'utilisateur est un étudiant
         $etudiant = Utilisateur::isEtudiant($id);

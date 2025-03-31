@@ -9,17 +9,10 @@ use App\Model\DashboardStats;
 class DashboardController extends BaseController {
 
     /**
-     * Dashboard principal réservé aux utilisateurs connectés (Admin ou Pilote).
+     * Dashboard principal -> réservé aux utilisateurs Admin ou Pilote.
      */
     public function index() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         $this->render('dashboard/index.twig', ['user' => $_SESSION['user']]);
     }
@@ -28,14 +21,7 @@ class DashboardController extends BaseController {
      * Statistiques sur les offres -> réservé à Admin/Pilote.
      */
     public function offerStats() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
-            header("Location: " . BASE_URL . "index.php?controller=home&action=index");
-            exit;
-        }
+        $this->checkAuth(['Admin','pilote']);
 
         // On récupère les stats via le Model
         $stats = DashboardStats::getOfferStats();
