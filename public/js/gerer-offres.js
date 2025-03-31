@@ -1,20 +1,24 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+  const url = new URL(window.location.href);
+  const notif = url.searchParams.get("notif");
+  
+  if (notif === "deleted") {
+    showNotification("✅ Offre supprimée avec succès", "success", 4000);
+    url.searchParams.delete("notif");
+    window.history.replaceState({}, "", url.toString());
+  }
 
-  // Fonction utilitaire : affiche une pop-up de confirmation
+  // Affiche une pop-up de confirmation
   function showCustomConfirm(message, onConfirm) {
-    // Créer l'overlay
     const overlay = document.createElement('div');
     overlay.classList.add('custom-confirm-overlay');
 
-    // Créer la fenêtre
     const modal = document.createElement('div');
     modal.classList.add('custom-confirm-modal');
 
-    // Message
     const text = document.createElement('p');
     text.textContent = message;
 
-    // Boutons
     const btnContainer = document.createElement('div');
     btnContainer.style.display = "flex";
     btnContainer.style.justifyContent = "space-around";
@@ -37,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function() {
       document.body.removeChild(overlay);
     });
 
-    // Composer la fenêtre
     btnContainer.appendChild(btnOk);
     btnContainer.appendChild(btnCancel);
     modal.appendChild(text);
@@ -46,33 +49,53 @@ document.addEventListener('DOMContentLoaded', function() {
     document.body.appendChild(overlay);
   }
 
-  // GESTION DU BOUTON MODIFIER (exemple)
-  document.querySelectorAll('.btn-modifier').forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const offreId = this.dataset.id;
-      window.location.href = `${BASE_URL}index.php?controller=offre&action=modifier&id=${offreId}`;
-    });
-  });
+  // Affichage notification simple
+  function showNotification(message, type = "info", duration = 3000) {
+    document.querySelectorAll(".notification").forEach(n => n.remove());
 
-  // GESTION DU BOUTON SUPPRIMER
-  document.querySelectorAll('.btn-supprimer').forEach(button => {
-    button.addEventListener('click', function(e) {
-      e.preventDefault();
-      const offreId = this.dataset.id;
+    const notification = document.createElement("div");
+    notification.className = "notification " + type;
+    notification.textContent = message;
+    notification.style.position = "fixed";
+    notification.style.top = "120px";
+    notification.style.left = "37%";
+    notification.style.transform = "translateX(-50%)";
+    notification.style.zIndex = "1000";
+    notification.style.padding = "12px 24px";
+    notification.style.borderRadius = "8px";
+    notification.style.fontWeight = "600";
 
-      showCustomConfirm("Voulez-vous vraiment supprimer cette offre ?", () => {
-        fetch(`${BASE_URL}api/gerer-offres.php?action=delete&id=${offreId}`, {
-          method: "DELETE"
-        })
-        .then(response => response.json())
-        .then(data => {
-          alert(data.message);
-          location.reload();
-        })
-        .catch(error => console.error("Erreur de suppression :", error));
+    switch (type) {
+      case "success":
+        notification.style.backgroundColor = "#d1fae5";
+        notification.style.color = "#065f46";
+        break;
+      case "error":
+        notification.style.backgroundColor = "#fee2e2";
+        notification.style.color = "#991b1b";
+        break;
+      default:
+        notification.style.backgroundColor = "#dbeafe";
+        notification.style.color = "#1e3a8a";
+        break;
+    }
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.remove();
+    }, duration);
+  } 
+
+    // Gestion des boutons supprimer
+    document.querySelectorAll('.btn-supprimer').forEach(button => {
+      button.addEventListener('click', function (e) {
+        e.preventDefault();
+        const href = this.getAttribute("href");
+  
+        showCustomConfirm("Voulez-vous vraiment supprimer cette offre ?", () => {
+          window.location.href = href;
+        });
       });
     });
-  });
-
 });
