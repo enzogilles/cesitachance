@@ -48,7 +48,7 @@ class UtilisateurController extends BaseController {
         session_start();
         session_regenerate_id(true);
 
-        // Redirection
+        // Redirection vers la page d'accueil (ou autre page souhaitée)
         header("Location: " . BASE_URL . "index.php?controller=home&action=index");
         exit();
     }
@@ -58,7 +58,7 @@ class UtilisateurController extends BaseController {
      */
     public function login() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            // On peut démarrer la session ici si pas démarrée
+            // Démarrage de la session si non démarrée
             if (session_status() === PHP_SESSION_NONE) {
                 session_start();
             }
@@ -88,6 +88,13 @@ class UtilisateurController extends BaseController {
                 "email" => $user["email"],
                 "role" => $user["role"]
             ];
+
+            // Gestion de l'option "Rester connecté"
+            if (isset($_POST["remember"]) && $_POST["remember"] === "on") {
+                $_SESSION["remember"] = true;
+            } else {
+                $_SESSION["remember"] = false;
+            }
 
             // Redirection vers le dashboard
             header("Location: " . BASE_URL . "index.php?controller=dashboard&action=index");
@@ -172,7 +179,7 @@ class UtilisateurController extends BaseController {
                 return;
             }
 
-            // On pourrait vérifier si l'utilisateur existe
+            // Vérifier si l'utilisateur existe
             $user = Utilisateur::findByEmail($email);
             if (!$user) {
                 $error = "Aucun compte associé à cet email.";
@@ -180,7 +187,7 @@ class UtilisateurController extends BaseController {
                 return;
             }
 
-            // Génération d'un token + insertion table password_resets...
+            // Génération d'un token et insertion dans la table password_resets
             $token = bin2hex(random_bytes(16));
             $expiration = date("Y-m-d H:i:s", strtotime("+1 hour"));
 
