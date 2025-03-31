@@ -27,6 +27,7 @@ header {
   flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
+  position: relative;
 }
 
 .logo {
@@ -44,6 +45,12 @@ header {
   margin-left: 15px;
 }
 
+.header-logo {
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
 .header-logo img {
   height: 60px;
   width: auto;
@@ -56,6 +63,10 @@ nav {
   gap: 15px;
   flex-wrap: wrap;
   margin: 10px 0;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  justify-content: center;
 }
 
 nav a {
@@ -1479,7 +1490,8 @@ footer {
    ================================ */
 @media (max-width: 768px) {
   header {
-    justify-content: center;
+    padding: 15px;
+    justify-content: space-between;
   }
 
   .logo {
@@ -1547,3 +1559,83 @@ footer {
   .create-offer-button .btn-create:hover {
     background-color: #45a049;
   }
+
+/* ================================
+   MENU BURGER
+   ================================ */
+.burger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 30px;
+  height: 20px;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.burger-menu span {
+  display: block;
+  height: 3px;
+  width: 100%;
+  background-color: #333;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 15px;
+    justify-content: space-between;
+  }
+
+  .header-controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-left: auto;
+  }
+  
+  .burger-menu {
+    display: flex;
+    order: 2;
+    margin-left: 15px;
+  }
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    transform: none;
+    background-color: #FFCC00;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    z-index: 100;
+    padding: 10px 0;
+  }
+
+  nav.active {
+    display: flex;
+  }
+
+  nav a {
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+  }
+}
+
+/* Animation du menu burger */
+.burger-menu.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.burger-menu.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger-menu.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
