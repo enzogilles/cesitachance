@@ -109,6 +109,15 @@ class Entreprise extends BaseModel {
         }
     }
 
+        /**
+     * Retrieve all entreprises from the database.
+     */
+    public static function findAll() {
+        $db = \Database::getInstance(); 
+        $query = $db->query("SELECT * FROM entreprises");
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     /**
      * Supprime une entreprise par son ID.
      */
