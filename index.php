@@ -1,26 +1,4 @@
 <?php
-// public/index.php
-
-// --- Configurer la durée du cookie de session ---
-// Cette configuration doit se faire AVANT session_start()
-
-// Vérifier si la requête est une tentative de connexion
-if ($_SERVER['REQUEST_METHOD'] === 'POST' 
-    && isset($_POST['controller'], $_POST['action'])
-    && $_POST['controller'] === 'utilisateur' 
-    && $_POST['action'] === 'login') {
-    
-    // Si la case "Rester connecté" est cochée, on définit un cookie de session persistant (30 jours)
-    if (isset($_POST['remember']) && $_POST['remember'] === 'on') {
-        session_set_cookie_params(30 * 24 * 3600);
-    } else {
-        // Sinon, le cookie de session est éphémère (se termine à la fermeture du navigateur)
-        session_set_cookie_params(0);
-    }
-} else {
-    // Pour toutes les autres requêtes, on opte pour un cookie éphémère
-    session_set_cookie_params(0);
-}
 
 // Démarrer la session
 session_start();
