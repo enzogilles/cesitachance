@@ -34,6 +34,25 @@ class Entreprise extends BaseModel {
             throw new \Exception("Erreur lors de la récupération de l'entreprise par ID : " . $e->getMessage());
         }
     }
+    
+    
+    /**
+     * /////////////////////////////////
+     * MENU DEROULANT POUR NOS ENTREPRISES (EN LIEN AVEC LA BDD LA TEAM )
+     * /////////////////////////////////
+     */
+
+    public static function findAll() {
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT id, nom FROM entreprise ORDER BY nom ASC");
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des entreprises : " . $e->getMessage());
+        }
+    }
+
 
     /**
      * Recherche d'entreprises avec filtres, pagination et tri.

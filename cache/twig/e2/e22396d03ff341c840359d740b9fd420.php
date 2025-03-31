@@ -238,6 +238,6 @@ array_key_exists("user", $context) && (CoreExtension::getAttribute($this->env, $
     });
     </script>
 </header>
-", "layout/header.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\layout\\header.twig");
+", "layout/header.twig", "C:\\www\\cesitachance-3\\app\\views\\layout\\header.twig");
     }
 }
