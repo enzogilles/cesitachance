@@ -49,10 +49,11 @@ class OffreController extends BaseController {
 
     public function gererOffres() {
         $this->checkAuth(['Admin','pilote']);
-
+    
         $offres = Offre::findAll();
         $this->render('offres/gerer.twig', ['offres' => $offres]);
     }
+    
 
     public function detail($id) {
         if (!$id) {
@@ -104,11 +105,11 @@ class OffreController extends BaseController {
 
     public function modifier($id) {
         $this->checkAuth(['Admin','pilote']);
-
+    
         if (!$id) {
             die("Erreur : ID manquant pour modifier une offre.");
         }
-
+    
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $titre = trim($_POST['titre']);
             $description = trim($_POST['description']);
@@ -116,13 +117,17 @@ class OffreController extends BaseController {
             $date_debut = $_POST['date_debut'];
             $date_fin = $_POST['date_fin'];
             $competences = trim($_POST['competences'] ?? '');
-
-            if (empty($titre) || empty($description) || empty($remuneration) || empty($date_debut) || empty($date_fin)) {
+            $entreprise_id = intval($_POST['entreprise_id']);
+    
+            if (
+                empty($titre) || empty($description) || empty($remuneration) ||
+                empty($date_debut) || empty($date_fin) || empty($entreprise_id)
+            ) {
                 $_SESSION["error"] = "Tous les champs sont requis.";
                 header("Location: " . BASE_URL . "index.php?controller=offre&action=modifier&id=" . $id);
                 exit;
             }
-
+    
             $offre = new Offre();
             $offre->id = $id;
             $offre->titre = $titre;
@@ -131,27 +136,26 @@ class OffreController extends BaseController {
             $offre->date_debut = $date_debut;
             $offre->date_fin = $date_fin;
             $offre->competences = $competences;
+            $offre->entreprise_id = $entreprise_id;
             $offre->save();
-
+    
             $_SESSION["success"] = "L'offre a été mise à jour avec succès.";
             header("Location: " . BASE_URL . "index.php?controller=offre&action=gererOffres&notif=updated");
             exit;
         }
-
+    
         $offre = Offre::findById($id);
         if (!$offre) {
             die("Erreur : Offre introuvable.");
         }
-        
+    
         $entreprises = Entreprise::findAll();
-        
         $this->render('offres/modifier.twig', [
             'offre' => $offre,
             'entreprises' => $entreprises
         ]);
-        
-
     }
+    
 
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);

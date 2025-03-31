@@ -15,8 +15,8 @@ document.addEventListener('DOMContentLoaded', function () {
     notification.className = `notification ${type}`;
     notification.textContent = message;
     notification.style.position = "fixed";
-    notification.style.top = "120px";
-    notification.style.left = "50%";
+    notification.style.top = "100px";
+    notification.style.left = "37%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
     notification.style.padding = "12px 24px";
