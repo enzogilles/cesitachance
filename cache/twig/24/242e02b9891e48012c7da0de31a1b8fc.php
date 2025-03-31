@@ -208,6 +208,6 @@ class __TwigTemplate_f3d1780a39aaf48eda984162ff29b658 extends Template
     </tbody>
   </table>
 </section>
-{% endblock %}", "offres/gerer.twig", "C:\\www\\cesitachance-3\\app\\views\\offres\\gerer.twig");
+{% endblock %}", "offres/gerer.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\offres\\gerer.twig");
     }
 }

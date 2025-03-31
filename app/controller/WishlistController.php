@@ -17,11 +17,12 @@ class WishlistController extends BaseController
     public function index()
     {
         // Rôles autorisés : Étudiant, Admin, pilote
-        $this->checkAuth(['étudiant','Admin','pilote']);
+        $this->checkAuth(['Étudiant','Admin','pilote']);
+
 
         $role = $_SESSION['user']['role'];
 
-        if ($role === 'Etudiant') {
+        if ($role === 'Étudiant') {
             $user_id = $_SESSION['user']['id'];
             $wishlist = Wishlist::findByUserIdWithRelations($user_id);
             $this->render('wishlist/index.twig', [
