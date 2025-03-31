@@ -1,11 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Sélectionne le formulaire et le bouton reset
   const searchForm = document.querySelector(".search-form");
   const resetButton = document.querySelector(".search-form .bouton-reset");
 
-  // Fonction utilitaire pour afficher une notification
   function showNotification(message, type = "info", duration = 3000) {
-    // On supprime d’abord d’éventuelles notifications existantes
     document.querySelectorAll(".notification").forEach(n => n.remove());
 
     const notification = document.createElement("div");
@@ -31,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // Afficher la notification si l'URL contient ?notif=1
   const currentUrl = new URL(window.location.href);
   const notif = currentUrl.searchParams.get("notif");
 
@@ -44,7 +40,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 document.addEventListener("DOMContentLoaded", function () {
-  // === NOTIFICATION AUTOMATIQUE SI REDIRECTION AVEC ?notif=deleted ===
   const url = new URL(window.location.href);
   const notif = url.searchParams.get("notif");
 
@@ -102,12 +97,11 @@ document.addEventListener("DOMContentLoaded", function () {
       const form = this.closest('form');
 
       showCustomConfirm("Voulez-vous vraiment supprimer cet utilisateur ?", () => {
-        form.submit(); // La notification sera affichée après redirection via le paramètre GET
+        form.submit(); 
       });
     });
   });
 
-  // === NOTIFICATION UTILITAIRE ===
   function showNotification(message, type = "info", duration = 3000) {
     document.querySelectorAll(".notification").forEach(n => n.remove());
 
