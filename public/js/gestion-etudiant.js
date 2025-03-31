@@ -42,3 +42,62 @@ document.addEventListener("DOMContentLoaded", function () {
     window.history.replaceState({}, "", currentUrl.toString());
   }
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+  // === GESTION CONFIRMATION SUPPRESSION UTILISATEUR PAR FORMULAIRE ===
+
+  // Crée une popup de confirmation
+  function showCustomConfirm(message, onConfirm) {
+    const overlay = document.createElement('div');
+    overlay.classList.add('custom-confirm-overlay');
+
+    const modal = document.createElement('div');
+    modal.classList.add('custom-confirm-modal');
+
+    const text = document.createElement('p');
+    text.textContent = message;
+
+    const btnContainer = document.createElement('div');
+    btnContainer.style.display = "flex";
+    btnContainer.style.justifyContent = "space-around";
+    btnContainer.style.marginTop = "20px";
+
+    const btnOk = document.createElement('button');
+    btnOk.textContent = "OK";
+    btnOk.classList.add('btn-ok');
+
+    const btnCancel = document.createElement('button');
+    btnCancel.textContent = "Annuler";
+    btnCancel.classList.add('btn-cancel');
+
+    btnOk.addEventListener('click', () => {
+      onConfirm();
+      overlay.remove();
+    });
+
+    btnCancel.addEventListener('click', () => {
+      overlay.remove();
+    });
+
+    btnContainer.appendChild(btnOk);
+    btnContainer.appendChild(btnCancel);
+    modal.appendChild(text);
+    modal.appendChild(btnContainer);
+    overlay.appendChild(modal);
+    document.body.appendChild(overlay);
+  }
+
+  // Sélectionne les boutons "Supprimer" dans les formulaires
+  document.querySelectorAll('form[action*="gestionutilisateurs"][method="POST"] .btn-supprimer').forEach(button => {
+    button.addEventListener('click', function(e) {
+      e.preventDefault();
+      const form = this.closest('form');
+
+      showCustomConfirm("Voulez-vous vraiment supprimer cet utilisateur ?", () => {
+        form.submit(); // Envoie le formulaire classique
+      });
+    });
+  });
+});
+
+
