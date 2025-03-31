@@ -71,7 +71,7 @@ class WishlistController extends BaseController
      * Ajoute une offre à la wishlist -> réservé aux Étudiants ou Admin.
      */
     public function add() {
-        $this->checkAuth(['Etudiant','Admin']);
+        $this->checkAuth(['Étudiant','Admin']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
             strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false)

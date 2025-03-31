@@ -62,7 +62,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
   ";
         // line 7
         yield "  ";
-        if (((Twig\Extension\CoreExtension::lower($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 7)) == "étudiant") && array_key_exists("wishlist", $context))) {
+        if (((CoreExtension::getAttribute($this->env, $this->source, ($context["user"] ?? null), "role", [], "any", false, false, false, 7) == "Étudiant") && array_key_exists("wishlist", $context))) {
             // line 8
             yield "    <h2>Ma Wishlist</h2>
     ";
@@ -279,7 +279,7 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
 <main class=\"content\">
 
   {# Cas 1 : un étudiant connecté voit SA wishlist #}
-  {% if user.role|lower == 'étudiant' and wishlist is defined %}
+  {% if user.role == 'Étudiant' and wishlist is defined %}
     <h2>Ma Wishlist</h2>
     {% if wishlist is not empty %}
       <ul class=\"wishlist-list\">
@@ -351,6 +351,6 @@ class __TwigTemplate_79e17c253dd3b7743ff30cfc98e885c4 extends Template
 
 <script src=\"{{ BASE_URL }}public/js/wishlist.js\"></script>
 {% endblock %}
-", "wishlist/index.twig", "C:\\www\\cesitachance-3\\app\\views\\wishlist\\index.twig");
+", "wishlist/index.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\wishlist\\index.twig");
     }
 }
