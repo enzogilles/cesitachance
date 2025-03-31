@@ -74,21 +74,31 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
         yield "index.php?controller=utilisateur&action=login\" method=\"POST\">
         <label for=\"email\">Email :</label>
         <input type=\"email\" id=\"email\" name=\"email\" required>
+        
         <label for=\"password\">Mot de passe :</label>
         <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
+        
+        <div class=\"remember-me\">
+            <input type=\"checkbox\" id=\"remember\" name=\"remember\">
+            <label for=\"remember\">Rester connecté</label>
+        </div>
+        
         <button type=\"submit\" class=\"btn\">Se connecter</button>
-        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
+    <button type=\"rester\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"";
-        // line 17
+        // line 24
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
     </form>
+    
+    <hr class=\"separator\">
+    
     <div class=\"account-link\">
         <p>Pas encore de compte ?</p>
         <a href=\"";
-        // line 22
+        // line 32
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(($context["BASE_URL"] ?? null), "html", null, true);
         yield "index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
     </div>
@@ -118,7 +128,7 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
      */
     public function getDebugInfo()
     {
-        return array (  92 => 22,  84 => 17,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
+        return array (  102 => 32,  91 => 24,  72 => 9,  66 => 7,  64 => 6,  60 => 4,  56 => 3,  48 => 2,  37 => 1,);
     }
 
     public function getSourceContext()
@@ -134,20 +144,30 @@ class __TwigTemplate_9dac4484c28d58799bba27ef1e708f17 extends Template
     <form id=\"login-form\" action=\"{{ BASE_URL }}index.php?controller=utilisateur&action=login\" method=\"POST\">
         <label for=\"email\">Email :</label>
         <input type=\"email\" id=\"email\" name=\"email\" required>
+        
         <label for=\"password\">Mot de passe :</label>
         <input type=\"password\" id=\"password\" name=\"password\" required pattern=\".{8,}\" title=\"Au moins 8 caractères\">
+        
+        <div class=\"remember-me\">
+            <input type=\"checkbox\" id=\"remember\" name=\"remember\">
+            <label for=\"remember\">Rester connecté</label>
+        </div>
+        
         <button type=\"submit\" class=\"btn\">Se connecter</button>
-        <button type=\"reset\" class=\"bouton-reset\">Réinitialiser</button>
+    <button type=\"rester\" class=\"bouton-reset\">Réinitialiser</button>
         <p class=\"forgot-password\">
             <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword\">Mot de passe oublié ?</a>
         </p>
     </form>
+    
+    <hr class=\"separator\">
+    
     <div class=\"account-link\">
         <p>Pas encore de compte ?</p>
         <a href=\"{{ BASE_URL }}index.php?controller=utilisateur&action=inscription\" class=\"btn-login\">Créer un compte</a>
     </div>
 </section>
 {% endblock %}
-", "utilisateurs/connexion.twig", "C:\\www\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
+", "utilisateurs/connexion.twig", "C:\\site_localhost\\cesitachance-3\\app\\views\\utilisateurs\\connexion.twig");
     }
 }

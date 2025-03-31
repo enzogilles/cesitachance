@@ -72,6 +72,12 @@ nav a:hover {
   color: white;
 }
 
+.separator {
+  margin: 20px 0; 
+  border: none; 
+  border-top: 1px solid #ccc;
+}
+
 /* ================================
    CONNEXION/DÉCONNEXION
    ================================ */
@@ -134,8 +140,6 @@ nav a:hover {
   font-weight: bold;
 }
 
-
-
 .hidden {
   display: none !important;
 }
@@ -186,6 +190,63 @@ nav a:hover {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+.remember-me {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto;
+  text-align: left;
+  line-height: 1;
+}
+
+.remember-me input[type="checkbox"] {
+  appearance: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 22px;
+  height: 22px;
+  border: 2px solid #FFA07A;
+  border-radius: 5px;
+  background-color: white;
+  position: relative;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.remember-me input[type="checkbox"]::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.remember-me input[type="checkbox"]:checked {
+  background-color: #FFA07A;
+  border-color: #FF6347;
+}
+
+.remember-me input[type="checkbox"]:checked::after {
+  opacity: 1;
+}
+
+.remember-me label {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  cursor: pointer;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 /* ================================
    HERO
