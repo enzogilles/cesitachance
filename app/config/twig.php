@@ -8,7 +8,7 @@ $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/../views');
 
 // Crée l’environnement Twig avec options : cache et debug
 $twig = new \Twig\Environment($loader, [
-    'cache' => __DIR__ . '/../../cache/twig', // Cache des templates compilés
+    'cache' => false, // Cache des templates compilés
     'debug' => true,                          // Mode debug (désactiver en production)
 ]);
 
