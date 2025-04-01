@@ -3,13 +3,12 @@
 {% block content %}
 
 <section class="content">
-
-    <h3>Entreprises proposant des stages</h3>
-
+        <h3>Entreprises proposant des stages</h3>
+            {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
         <div class="create-offer-button">
-    <a href="{{ BASE_URL }}index.php?controller=entreprise&action=creer" class="btn btn-create">➕ Créer une entreprise</a>
-  </div>
-  
+            <a href="{{ BASE_URL }}index.php?controller=entreprise&action=creer" class="btn btn-create">➕ Créer une entreprise</a>
+        </div>
+    {% endif %}
     {% if entreprises is defined and entreprises is not empty %}
         <table class="styled-table entreprises-table">
             <thead>
