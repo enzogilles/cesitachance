@@ -4,22 +4,22 @@
 <section class="content">
     <h3>Détails de l'Entreprise</h3>
     {% if entreprise is defined %}
-        <p><strong>Nom:</strong> {{ entreprise.nom|e }}</p>
-        <p><strong>Secteur:</strong> {{ entreprise.secteur|e }}</p>
-        <p><strong>Ville:</strong> {{ entreprise.ville|e }}</p>
+        <p>Nom: {{ entreprise.nom|e }}</p>
+        <p>Secteur: {{ entreprise.secteur|e }}</p>
+        <p>Ville: {{ entreprise.ville|e }}</p>
         {% if entreprise.description is not empty %}
-            <p><strong>Description:</strong> {{ entreprise.description|e|nl2br }}</p>
+            <p>Description: {{ entreprise.description|e|nl2br }}</p>
         {% endif %}
         {% if entreprise.email is not empty %}
-            <p><strong>Email de contact:</strong> {{ entreprise.email|e }}</p>
+            <p>Email de contact: {{ entreprise.email|e }}</p>
         {% endif %}
         {% if entreprise.telephone is not empty %}
-            <p><strong>Téléphone:</strong> {{ entreprise.telephone|e }}</p>
+            <p>Téléphone: {{ entreprise.telephone|e }}</p>
         {% endif %}
-        <p><strong>Nombre de stagiaires ayant postulé:</strong> {{ entreprise.nb_stagiaires|default(0) }}</p>
+        <p>Nombre de stagiaires ayant postulé: {{ entreprise.nb_stagiaires|default(0) }}</p>
         {% set moy = entreprise.moyenne_eval|default(null) %}
         {% set moyenneAffiche = moy ? moy|round(2) : 'N/A' %}
-        <p><strong>Moyenne des évaluations:</strong> {{ moyenneAffiche }} / 5</p>
+        <p>Moyenne des évaluations: {{ moyenneAffiche }} / 5</p>
     {% else %}
         <p>Entreprise introuvable.</p>
     {% endif %}
