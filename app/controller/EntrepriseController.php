@@ -141,7 +141,7 @@ class EntrepriseController extends BaseController
         $actions = '';
 
         // Bouton de détails pour tous les utilisateurs
-        $actions .= '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn btn-details">Détails</a>';
+        $actions .= '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn btn-voir">Détails</a>';
 
         // Actions supplémentaires pour Admin et pilote
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
