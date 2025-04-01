@@ -21,6 +21,7 @@
         {# Formulaire de recherche #}
         <div id="recherche" style="margin-top: 40px;">
             <h3>Rechercher un Utilisateur</h3>
+            <h5> Vous pourrez modifier ou supprimer cet utilsateur. </h5>
             <form class="search-form" action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=search" method="POST">
                 <label for="search-user">Nom, Prénom ou Email :</label>
                 <input type="text" id="search-user" name="search_query" required>
