@@ -20,34 +20,63 @@
             </form>
         {% endif %}
     </div>
-    {% if user.id is not defined %}
-  <p>Connectez-vous pour postuler à cette offre.</p>
+    {% if userRole == 'Étudiant' %}
+      <h3>Postuler à cette offre</h3>
+      <form id="postuler-form" action="{{ BASE_URL }}index.php?controller=candidature&action=postuler" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="offre_id" value="{{ offre.id }}">
 
-{% elseif userRole == 'Étudiant' %}
-  <h3>Postuler à cette offre</h3>
-  <form id="postuler-form" action="{{ BASE_URL }}index.php?controller=candidature&action=postuler" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="offre_id" value="{{ offre.id }}">
+        <label for="cv">CV (PDF uniquement) :</label>
+        <div class="cv-upload" id="cv-upload-label"> 
+            Ajouter mon CV
+            <input type="file" id="cv" name="cv" accept=".pdf" required> 
+        </div>         
+        <div class="cv-label-container">
+            <p id="cv-label" class="cv-label"></p>
+            <button type="button" class="cv-btn" id="remove-cv">Retirer le CV</button>
+        </div>
 
-    <label for="cv">CV (PDF uniquement) :</label>
-    <div class="cv-upload" id="cv-upload-label"> 
-        Ajouter mon CV
-        <input type="file" id="cv" name="cv" accept=".pdf" required> 
-    </div>         
-    <div class="cv-label-container">
-        <p id="cv-label" class="cv-label"></p>
-        <button type="button" class="cv-btn" id="remove-cv">Retirer le CV</button>
-    </div>
+        <label for="lettre_motivation">Lettre de motivation :</label>
+        <textarea id="lettre_motivation" name="lettre_motivation" required></textarea>
 
-    <label for="lettre_motivation">Lettre de motivation :</label>
-    <textarea id="lettre_motivation" name="lettre_motivation" required></textarea>
+        <button type="submit" class="btn">Postuler</button>
+        <button type="reset" class="bouton-reset reset-btn">Réinitialiser</button>
+      </form>
 
-    <button type="submit" class="btn">Postuler</button>
-    <button type="reset" class="bouton-reset reset-btn">Réinitialiser</button>
-  </form>
-{% else %}
-  <p>Seuls les étudiants peuvent postuler à une offre.</p>
-{% endif %}
+    <script>
+      document.getElementById('cv').addEventListener('change', function() {
+        const removeButton = document.getElementById('remove-cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        if (this.files.length > 0) {
+          fileNameLabel.textContent = this.files[0].name;
+          removeButton.style.display = 'inline-block';
+        } else {
+          fileNameLabel.textContent = '';
+          removeButton.style.display = 'none';
+        }
+      });
 
+      document.getElementById('remove-cv').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        this.style.display = 'none';
+      });
+
+      document.querySelector('.reset-btn').addEventListener('click', function() {
+        const cvInput = document.getElementById('cv');
+        const fileNameLabel = document.getElementById('cv-label');
+        const removeButton = document.getElementById('remove-cv');
+        cvInput.value = '';
+        fileNameLabel.textContent = '';
+        removeButton.style.display = 'none';
+      });
+    </script>
+    {% elseif userRole is null %}
+      <p>Connecté vous pour postuler</p>
+    {% else %}
+      <p>Seuls les étudiants peuvent postuler à une offre.</p>
+    {% endif %}
     <div class="back-button-container">
         <a href="{{ BASE_URL }}index.php?controller=offre&action=index" class="btn btn-back">⬅ Retour aux offres</a>
     </div>
