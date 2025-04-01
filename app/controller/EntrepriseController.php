@@ -146,7 +146,7 @@ class EntrepriseController extends BaseController
         // Actions supplémentaires pour Admin et pilote
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             $actions .= ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn btn-edit">Modifier</a>';
-            $actions .= ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer&id=' . $entreprise['id'] . '" class="btn btn-delete" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer cette entreprise ?\')">Supprimer</a>';
+            $actions .= ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer&id=' . $entreprise['id'] . '" class="btn btn-supprimer")">Supprimer</a>';
         }
 
         // Action d'évaluation pour les étudiants
