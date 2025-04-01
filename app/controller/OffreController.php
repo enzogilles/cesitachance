@@ -66,42 +66,42 @@ class OffreController extends BaseController {
         $this->render('offres/detail.twig', ['offre' => $offre]);
     }
 
-    public function create() {
+    public function create()
+    {
         $this->checkAuth(['Admin', 'pilote']);
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $titre = trim($_POST['titre']);
-            $description = trim($_POST['description']);
-            $entreprise_id = intval($_POST['entreprise_id']);
-            $remuneration = trim($_POST['remuneration']);
-            $date_debut = $_POST['date_debut'];
-            $date_fin = $_POST['date_fin'];
-            $competences = trim($_POST['competences'] ?? '');
-
-            if (!empty($titre) && !empty($description) && $entreprise_id > 0) {
-                $offre = new Offre();
-                $offre->titre = $titre;
-                $offre->description = $description;
-                $offre->entreprise_id = $entreprise_id;
-                $offre->remuneration = $remuneration;
-                $offre->date_debut = $date_debut;
-                $offre->date_fin = $date_fin;
-                $offre->competences = $competences;
-
-                if ($offre->save()) {
-                    header("Location: " . BASE_URL . "index.php?controller=offre&action=index&notif=created");
-                    exit;
-                } else {
-                    $_SESSION['error'] = "Erreur lors de la sauvegarde de l'offre.";
-                }
-            } else {
-                $_SESSION['error'] = "Veuillez remplir tous les champs obligatoires.";
+    
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $offre = new Offre();
+            $offre->titre = trim($_POST['titre']);
+            $offre->description = trim($_POST['description']);
+            $offre->remuneration = trim($_POST['remuneration']);
+            $offre->date_debut = $_POST['date_debut'];
+            $offre->date_fin = $_POST['date_fin'];
+            $offre->entreprise_id = intval($_POST['entreprise_id']);
+            $offre->competences = trim($_POST['competences'] ?? '');
+    
+            if (
+                empty($offre->titre) || empty($offre->description) || empty($offre->remuneration) ||
+                empty($offre->date_debut) || empty($offre->date_fin) || empty($offre->entreprise_id)
+            ) {
+                $this->render('offres/create.twig', [
+                    'error' => 'Tous les champs obligatoires doivent être remplis.',
+                    'entreprises' => Entreprise::findAll()
+                ]);
+                return;
             }
-        }
+    
+            $offre->save();
 
-        $entreprises = Entreprise::findAll();
-        $this->render('offres/create.twig', ['entreprises' => $entreprises]);
+            header("Location: " . BASE_URL . "index.php?controller=offre&action=gererOffres&notif=created");
+            exit;
+        }
+    
+        $this->render('offres/create.twig', [
+            'entreprises' => Entreprise::findAll()
+        ]);
     }
+    
 
     public function modifier($id) {
         $this->checkAuth(['Admin','pilote']);
