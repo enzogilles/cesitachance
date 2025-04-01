@@ -1322,6 +1322,22 @@ footer {
     text-align: center; 
     border-bottom: 1px solid rgba(0,0,0,0.1);
   }
+
+  .header-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 15px; 
+  }
+
+  #user-menu {
+    order: 1; 
+  }
+
+  .burger-menu {
+    display: flex;
+    order: 2; 
+    margin-left: 0; 
 }
 
 @media (max-width: 768px) {
