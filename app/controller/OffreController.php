@@ -139,7 +139,6 @@ class OffreController extends BaseController {
             $offre->entreprise_id = $entreprise_id;
             $offre->save();
     
-            // ✅ Redirection correcte avec notif visible dans gerer-offres.js
             header("Location: " . BASE_URL . "index.php?controller=offre&action=gererOffres&notif=updated");
             exit;
         }

@@ -17,9 +17,11 @@ class Entreprise extends BaseModel
     public $telephone;
 
     public function __construct()
-    {
-        parent::__construct();
-    }
+{
+    parent::__construct();
+    $this->pdo = \Database::getInstance();
+}
+
 
     public static function findById($id)
     {
