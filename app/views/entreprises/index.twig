@@ -3,12 +3,33 @@
 {% block content %}
 
 <section class="content">
-        <h3>Entreprises proposant des stages</h3>
-            {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
+    <h3>Entreprises proposant des stages</h3>
+
+    {# Formulaire de recherche #}
+    <form class="search-form" method="GET" action="{{ BASE_URL }}index.php">
+        <input type="hidden" name="controller" value="entreprise">
+        <input type="hidden" name="action" value="index">
+        <input type="hidden" name="notif" value="1">
+
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" value="{{ nom is defined ? nom|e : '' }}" placeholder="Nom de l'entreprise">
+
+        <label for="ville">Ville :</label>
+        <input type="text" id="ville" name="ville" value="{{ ville is defined ? ville|e : '' }}" placeholder="Ville">
+
+        <label for="secteur">Secteur :</label>
+        <input type="text" id="secteur" name="secteur" value="{{ secteur is defined ? secteur|e : '' }}" placeholder="Secteur d'activité">
+
+        <button type="submit" class="btn">Rechercher</button>
+        <button type="reset" class="bouton-reset">Réinitialiser</button>
+    </form>
+
+    {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
         <div class="create-offer-button">
             <a href="{{ BASE_URL }}index.php?controller=entreprise&action=creer" class="btn btn-create">➕ Créer une entreprise</a>
         </div>
     {% endif %}
+
     {% if entreprises is defined and entreprises is not empty %}
         <table class="styled-table entreprises-table">
             <thead>
@@ -29,7 +50,7 @@
             </tbody>
         </table>
 
-        <!-- Pagination -->
+        {# Pagination #}
         {% if totalPages is defined and totalPages > 0 %}
             <div class="pagination">
                 {% if page > 1 %}
@@ -69,10 +90,9 @@
     {% endif %}
 </section>
 
-
 <script>
     const BASE_URL = "{{ BASE_URL }}";
-  </script>
-  
-  <script src="{{ BASE_URL }}public/js/entreprises.js"></script>
+</script>
+
+<script src="{{ BASE_URL }}public/js/entreprises.js"></script>
 {% endblock %}
