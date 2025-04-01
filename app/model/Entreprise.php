@@ -5,21 +5,24 @@ namespace App\Model;
 
 use PDO;
 
-class Entreprise extends BaseModel {
+class Entreprise extends BaseModel
+{
     public $id;
     public $nom;
     public $secteur;
     public $ville;
     public $taille;
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
     }
 
     /**
      * Récupère les informations d'une entreprise par son ID.
      */
-    public static function findById($id) {
+    public static function findById($id)
+    {
         try {
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
@@ -108,15 +111,27 @@ class Entreprise extends BaseModel {
             throw new \Exception("Erreur lors du comptage des entreprises : " . $e->getMessage());
         }
     }
-
-        /**
-     * Retrieve all entreprises from the database.
+    /**
+     * Retourne toutes les entreprises.
      */
-    public static function findAll() {
-        $db = \Database::getInstance(); 
-        $query = $db->query("SELECT * FROM entreprises");
-        return $query->fetchAll(PDO::FETCH_ASSOC);
+    public static function findAll()
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "
+            SELECT *
+            FROM entreprise
+            ORDER BY id DESC
+        ";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de toutes les entreprises : " . $e->getMessage());
+        }
     }
+
+
 
     /**
      * Supprime une entreprise par son ID.
@@ -135,7 +150,8 @@ class Entreprise extends BaseModel {
     /**
      * Sauvegarde (insertion ou mise à jour) d'une entreprise.
      */
-    public function save() {
+    public function save()
+    {
         try {
             if (isset($this->id)) {
                 $stmt = $this->pdo->prepare("

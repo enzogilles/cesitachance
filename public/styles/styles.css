@@ -889,28 +889,6 @@ a.btn-register:hover {
   text-align: left;
 }
 
-/* ================================
-   BOUTON POUR LA CREATION DES OFFRES (ADMIN)
-   ================================ */
-
-   .create-offer-button {
-    margin-bottom: 20px;
-    text-align: center; 
-  }
-  
-  .create-offer-button .btn-create {
-    background-color: #2988c7b0;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    font-size: 16px;
-  }
-  
-  .create-offer-button .btn-create:hover {
-    background-color: #2288cc;
-  }
-
 /* ==============================
    STYLE DU FORMULAIRE DE CANDIDATURE
    ============================== */
@@ -1647,6 +1625,28 @@ footer {
     width: 90%;
   }
 }
+
+/* ================================
+   BOUTON POUR LA CREATION DES OFFRES (ADMIN)
+   ================================ */
+
+   .create-offer-button {
+    margin-bottom: 20px;
+    text-align: center; 
+  }
+  
+  .create-offer-button .btn-create {
+    background-color: #2084c7;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  .create-offer-button .btn-create:hover {
+    background-color: #45a049;
+  }
 
 /* ================================
    MENU BURGER
