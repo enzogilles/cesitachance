@@ -285,6 +285,10 @@ button,
   background-color: #666666;
 }
 
+.bouton-reset:hover {
+  background-color: rgb(197, 197, 197);
+}
+
 /* Conteneurs de boutons */
 .offer-buttons,
 .action-buttons,
@@ -450,7 +454,9 @@ button,
 .styled-table {
   width: 100%;
   border-collapse: collapse;
+  border: 1px solid #ddd;
   margin: 20px 0;
+  padding: 12px 15px;
   font-size: 0.9em;
   box-shadow: var(--shadow-sm);
   border-radius: var(--border-radius-sm);
@@ -467,8 +473,9 @@ button,
 .styled-table th,
 .styled-table td {
   padding: 12px 15px;
-  border-bottom: 1px solid #dddddd;
+  border: 1px solid #ddd; /* ✅ bordures horizontales ET verticales */
 }
+
 
 .styled-table tbody tr {
   border-bottom: 1px solid #dddddd;

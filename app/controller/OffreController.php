@@ -139,7 +139,6 @@ class OffreController extends BaseController {
             $offre->entreprise_id = $entreprise_id;
             $offre->save();
     
-            $_SESSION["success"] = "L'offre a été mise à jour avec succès.";
             header("Location: " . BASE_URL . "index.php?controller=offre&action=gererOffres&notif=updated");
             exit;
         }
@@ -155,6 +154,7 @@ class OffreController extends BaseController {
             'entreprises' => $entreprises
         ]);
     }
+    
     
 
     public function supprimer() {

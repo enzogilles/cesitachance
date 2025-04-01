@@ -84,8 +84,8 @@ class EntrepriseController extends BaseController
             foreach (['nom', 'ville', 'secteur', 'taille', 'description', 'email', 'telephone'] as $field) {
                 $entreprise->$field = trim($_POST[$field] ?? '');
             }
-            $entreprise->save();
 
+            $entreprise->save();
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index&notif=updated");
             exit;
         }
@@ -97,7 +97,7 @@ class EntrepriseController extends BaseController
 
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);
-    
+
         $id = $_GET['id'] ?? null;
         if ($id) {
             Entreprise::delete($id);
@@ -105,7 +105,6 @@ class EntrepriseController extends BaseController
             exit;
         }
     }
-    
 
     public function evaluer($id) {
         $this->checkAuth(['Etudiant']);
