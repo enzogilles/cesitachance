@@ -1,14 +1,13 @@
 document.addEventListener('DOMContentLoaded', function () {
   const url = new URL(window.location.href);
   const notif = url.searchParams.get("notif");
-  
+
   if (notif === "deleted") {
     showNotification("✅ Offre supprimée avec succès", "success", 4000);
     url.searchParams.delete("notif");
     window.history.replaceState({}, "", url.toString());
   }
 
-  // Affiche une pop-up de confirmation
   function showCustomConfirm(message, onConfirm) {
     const overlay = document.createElement('div');
     overlay.classList.add('custom-confirm-overlay');
@@ -49,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
     document.body.appendChild(overlay);
   }
 
-  // Affichage notification simple
   function showNotification(message, type = "info", duration = 3000) {
     document.querySelectorAll(".notification").forEach(n => n.remove());
 
@@ -81,21 +79,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.body.appendChild(notification);
+    setTimeout(() => notification.remove(), duration);
+  }
 
-    setTimeout(() => {
-      notification.remove();
-    }, duration);
-  } 
+  document.querySelectorAll('.btn-supprimer').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      const href = this.getAttribute("href");
 
-    // Gestion des boutons supprimer
-    document.querySelectorAll('.btn-supprimer').forEach(button => {
-      button.addEventListener('click', function (e) {
-        e.preventDefault();
-        const href = this.getAttribute("href");
-  
-        showCustomConfirm("Voulez-vous vraiment supprimer cette offre ?", () => {
-          window.location.href = href;
-        });
+      showCustomConfirm("Voulez-vous vraiment supprimer cette offre ?", () => {
+        window.location.href = href;
       });
     });
+  });
 });
