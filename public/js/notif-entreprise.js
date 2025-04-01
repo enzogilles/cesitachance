@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (notif === "updated") {
         showNotification("✅ Entreprise modifiée avec succès", "success", 4000);
+    } else if (notif === "created") {
+        showNotification("✅ Entreprise créée avec succès", "success", 4000);
+    } else if (notif === "deleted") {
+        showNotification("🗑️ Entreprise supprimée", "success", 4000);
+    }
+
+    // Nettoyage de l'URL
+    if (notif) {
         url.searchParams.delete("notif");
         window.history.replaceState({}, "", url.toString());
     }
@@ -16,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
         notification.textContent = message;
         notification.style.position = "fixed";
         notification.style.top = "100px";
-        notification.style.left = "37%";
+        notification.style.left = "50%";
         notification.style.transform = "translateX(-50%)";
         notification.style.zIndex = "1000";
         notification.style.padding = "12px 24px";
