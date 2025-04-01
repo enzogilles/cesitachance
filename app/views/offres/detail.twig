@@ -47,11 +47,11 @@
         const removeButton = document.getElementById('remove-cv');
         const fileNameLabel = document.getElementById('cv-label');
         if (this.files.length > 0) {
-        fileNameLabel.textContent = this.files[0].name;
-        removeButton.style.display = 'inline-block';
+          fileNameLabel.textContent = this.files[0].name;
+          removeButton.style.display = 'inline-block';
         } else {
-        fileNameLabel.textContent = '';
-        removeButton.style.display = 'none';
+          fileNameLabel.textContent = '';
+          removeButton.style.display = 'none';
         }
       });
 
@@ -72,6 +72,8 @@
         removeButton.style.display = 'none';
       });
     </script>
+    {% elseif userRole is null %}
+      <p>Connecté vous pour postuler</p>
     {% else %}
       <p>Seuls les étudiants peuvent postuler à une offre.</p>
     {% endif %}
