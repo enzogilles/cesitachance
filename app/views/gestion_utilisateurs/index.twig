@@ -63,13 +63,13 @@
             </form>
     
             {% if user.id != search_result.id %}
-    <h3>Supprimer cet utilisateur</h3>
+    <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
     <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete" method="POST">
         <input type="hidden" name="id" value="{{ search_result.id }}">
         <button type="submit" class="btn-supprimer">Supprimer</button>
     </form>
 {% else %}
-    <h3>Suppression non autorisée</h3>
+    <h3 style="margin-top:10px;">Suppression non autorisée</h3>
     <p style="color: darkred;">Vous ne pouvez pas supprimer votre propre compte.</p>
 {% endif %}
 
