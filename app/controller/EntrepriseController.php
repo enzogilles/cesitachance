@@ -52,22 +52,23 @@ class EntrepriseController extends BaseController
     }
 
     public function creer() {
+        echo "création entreprise OK";
         $this->checkAuth(['Admin', 'pilote']);
-
+    
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $entreprise = new Entreprise();
             foreach (['nom', 'ville', 'secteur', 'taille', 'description', 'email', 'telephone'] as $field) {
                 $entreprise->$field = trim($_POST[$field] ?? '');
             }
-
+    
             if (!empty($entreprise->nom) && !empty($entreprise->ville) && !empty($entreprise->secteur) && !empty($entreprise->taille)) {
                 $entreprise->save();
                 header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index&notif=created");
                 exit;
             }
         }
-
-        $this->render('entreprises/gestion.twig');
+    
+        $this->render('entreprises/creer.twig');
     }
 
     public function modifier($id) {
