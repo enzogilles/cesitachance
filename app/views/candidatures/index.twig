@@ -7,7 +7,7 @@
     {% elseif userRole|lower matches '/^(etudiant|étudiant)$/' %}
         <h3>Mes Candidatures</h3>
     {% endif %}
-    <table class="styled-table">
+    <table class="styled-table candidatures-table">
         <thead>
             <tr>
                 <th>Entreprise</th>
@@ -33,13 +33,13 @@
                         {% set statut_label = 'En attente' %}
                     {% endif %}
                     <tr data-id="{{ candidature.id }}">
-                        <td>{{ candidature.entreprise|e }}</td>
-                        <td>{{ candidature.titre|e }}</td>
+                        <td data-label="Entreprise">{{ candidature.entreprise_nom|e }}</td>
+                        <td data-label="Offre">{{ candidature.offre_titre|e }}</td>
                         {% if userRole in ['Admin', 'pilote'] %}
-                            <td>{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
+                            <td data-label="Élève">{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
                         {% endif %}
-                        <td>{{ candidature.date_soumission|e }}</td>
-                        <td class="status {{ statut_class }}">
+                        <td data-label="Date">{{ candidature.date_soumission }}</td>
+                        <td data-label="Statut" class="status {{ statut_class }}">
                             {{ statut_label }}
                         </td>
                     </tr>

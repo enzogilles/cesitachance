@@ -1915,6 +1915,11 @@ footer {
   .btn-wishlist,
   .btn-postuler,
   .bouton-reset,
+  .btn-modifier,
+  .btn-supprimer,
+  .btn-register,
+  .status-btn,
+  .btn-view,
   .contact-button,
   .btn-view,
   .btn-supprimer,
@@ -2072,5 +2077,240 @@ footer {
     height: 40px;
     bottom: 10px;
     right: 10px;
+  }
+}
+
+/* ================================
+   RESPONSIVE TABLES
+   ================================ */
+@media screen and (max-width: 768px) {
+  /* Card layout for very small screens */
+  .styled-table {
+    border-spacing: 0;
+  }
+  
+  .styled-table thead {
+    display: none; /* Hide header on small screens */
+  }
+  
+  .styled-table tbody tr {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background-color: #fff;
+  }
+  
+  .styled-table td {
+    display: block;
+    text-align: right;
+    padding: 10px 15px;
+    border: none;
+    border-bottom: 1px solid #eee;
+    position: relative;
+    min-height: 30px;
+  }
+  
+  .styled-table td:last-child {
+    border-bottom: none;
+  }
+  
+  /* Add header labels */
+  .styled-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 15px;
+    width: 40%;
+    padding-right: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #666;
+  }
+  
+  /* Container for action buttons */
+  .styled-table td .offer-buttons,
+  .styled-table td .action-buttons {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 25px;
+  }
+  
+  /* Adjust button sizes */
+  .styled-table td .btn-voir,
+  .styled-table td .btn-modifier,
+  .styled-table td .btn-supprimer {
+    font-size: 13px;
+    padding: 6px 10px;
+    margin: 2px;
+  }
+  
+  /* Special case for status column */
+  .styled-table td.status {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  /* Fix for tables with colspan */
+  .styled-table td[colspan] {
+    text-align: center;
+  }
+}
+
+/* For medium-sized screens, use horizontal scrolling */
+@media screen and (min-width: 481px) and (max-width: 767px) {
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+  }
+}
+
+/* ================================
+   UNIFORM TABLE COLUMNS
+   ================================ */
+
+/* Table layout with equal column widths */
+.styled-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+/* Set equal width for all columns by default */
+.styled-table th {
+  width: calc(100% / var(--column-count, 6));
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Specific adjustments for different tables */
+.styled-table.offres-table th { --column-count: 6; }
+.styled-table.candidatures-table th { --column-count: 5; }
+.styled-table.entreprises-table th { --column-count: 3; }
+
+/* Ensure cell content doesn't overflow */
+.styled-table td {
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Adjust action column width if needed */
+.styled-table th:last-child,
+.styled-table td:last-child {
+  width: auto; /* Let the action column adapt to its content */
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 768px) {
+  .styled-table {
+    table-layout: auto; /* Revert to auto for mobile view */
+  }
+  
+  /* ...existing responsive table styles... */
+}
+
+/* ================================
+   BOUTONS STANDARDISÉS
+   ================================ */
+/* Ces styles seront appliqués en complément du JS pour les navigateurs sans JavaScript */
+
+button.btn,
+a.btn-voir,
+a.btn-add,
+.btn-login,
+.btn-back,
+.btn-wishlist,
+.btn-postuler,
+.bouton-reset,
+.btn-modifier,
+.btn-supprimer,
+.btn-register,
+.status-btn,
+.btn-view,
+.contact-button {
+  padding: 8px 15px;
+  font-size: 14px;
+  font-weight: bold;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  margin: 5px;
+  border: none;
+}
+
+/* Maintenir les couleurs spécifiques pour chaque type de bouton */
+.btn-modifier { background-color: #007BFF; color: white; }
+.btn-supprimer { background-color: #DC3545; color: white; }
+.btn-voir { background-color: #8CD0A8; color: white; }
+.btn-back { background-color: #FFA07A; color: white; padding: 10px 20px; }
+.btn-wishlist { background-color: #6FCF97; color: white; border-radius: 25px; }
+
+/* Largeurs standardisées pour certains types de boutons */
+.btn-modifier, .btn-supprimer, .btn-voir {
+  min-width: 100px;
+  max-width: 120px;
+}
+
+/* Style spécifique pour les conteneurs de boutons */
+.offer-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+  button.btn,
+  a.btn-voir,
+  a.btn-add,
+  .btn-login,
+  .btn-back,
+  .btn-wishlist,
+  .btn-postuler,
+  .bouton-reset,
+  .btn-modifier,
+  .btn-supprimer,
+  .btn-register,
+  .status-btn,
+  .btn-view,
+  .contact-button {
+    width: auto;
+    min-width: fit-content;
+  }
+}
+
+@media (max-width: 480px) {
+  .action-buttons, .offer-buttons {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  button.btn,
+  a.btn-voir,
+  a.btn-add,
+  .btn-login, 
+  .btn-back,
+  .btn-wishlist,
+  .btn-postuler,
+  .bouton-reset,
+  .btn-modifier,
+  .btn-supprimer,
+  .btn-register,
+  .status-btn,
+  .btn-view,
+  .contact-button {
+    width: 100%;
+    margin: 4px 0;
   }
 }
