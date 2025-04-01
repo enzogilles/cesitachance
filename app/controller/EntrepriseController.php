@@ -52,7 +52,6 @@ class EntrepriseController extends BaseController
     }
 
     public function creer() {
-        echo "création entreprise OK";
         $this->checkAuth(['Admin', 'pilote']);
     
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
