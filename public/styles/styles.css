@@ -263,6 +263,10 @@ button,
   background-color: #666666;
 }
 
+.bouton-reset:hover {
+  background-color: rgb(197, 197, 197);
+}
+
 /* Conteneurs de boutons */
 .offer-buttons,
 .action-buttons,
