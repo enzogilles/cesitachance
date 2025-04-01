@@ -18,7 +18,12 @@
         <input type="text" id="ville" name="ville" value="{{ ville is defined ? ville|e : '' }}" placeholder="Ville">
 
         <label for="secteur">Secteur :</label>
-        <input type="text" id="secteur" name="secteur" value="{{ secteur is defined ? secteur|e : '' }}" placeholder="Secteur d'activité">
+        <select id="secteur" name="secteur">
+            <option value="">Tous les secteurs</option>
+            {% for secteurOption in secteurs %}
+                <option value="{{ secteurOption|e }}" {% if secteur is defined and secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
+            {% endfor %}
+        </select>
 
         <button type="submit" class="btn">Rechercher</button>
         <button type="reset" class="bouton-reset">Réinitialiser</button>

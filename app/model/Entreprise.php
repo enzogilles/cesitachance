@@ -186,4 +186,27 @@ class Entreprise extends BaseModel
             throw new \Exception("Erreur lors de la sauvegarde de l'entreprise : " . $e->getMessage());
         }
     }
+
+    /**
+     * Récupère tous les secteurs d'activité distincts des entreprises
+     * 
+     * @return array Liste des secteurs d'activité
+     */
+    public function getAllSecteurs() {
+        try {
+            // Notez que nous utilisons la table 'entreprise' (au singulier)
+            // et la colonne 'secteur' au lieu de 'secteur_activite'
+            $stmt = $this->pdo->prepare("SELECT DISTINCT secteur FROM entreprise WHERE secteur IS NOT NULL AND secteur != '' ORDER BY secteur");
+            $stmt->execute();
+            
+            $secteurs = [];
+            while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                $secteurs[] = $row['secteur'];
+            }
+            
+            return $secteurs;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des secteurs : " . $e->getMessage());
+        }
+    }
 }
