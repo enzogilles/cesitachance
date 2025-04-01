@@ -31,4 +31,14 @@ document.addEventListener('DOMContentLoaded', function() {
       });
     });
   });
+  
+  // Fix button containers inside tables
+  const tableButtonContainers = document.querySelectorAll('.styled-table .offer-buttons');
+  tableButtonContainers.forEach(container => {
+    container.style.display = 'flex';
+    container.style.flexDirection = 'row';
+    container.style.flexWrap = 'wrap';
+    container.style.justifyContent = 'center';
+    container.style.gap = '5px';
+  });
 });

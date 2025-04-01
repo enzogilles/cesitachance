@@ -33,8 +33,8 @@
                         {% set statut_label = 'En attente' %}
                     {% endif %}
                     <tr data-id="{{ candidature.id }}">
-                        <td data-label="Entreprise">{{ candidature.entreprise_nom|e }}</td>
-                        <td data-label="Offre">{{ candidature.offre_titre|e }}</td>
+                        <td data-label="Entreprise">{{ candidature.entreprise|default('Non disponible')|e }}</td>
+                        <td data-label="Offre">{{ candidature.offre|default('Non disponible')|e }}</td>
                         {% if userRole in ['Admin', 'pilote'] %}
                             <td data-label="Élève">{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
                         {% endif %}
