@@ -47,6 +47,41 @@
       </tbody>
     </table>
   </div>
+  
+  {% if totalPages > 1 %}
+  <div class="pagination">
+    {% if page > 1 %}
+      <a href="{{ BASE_URL }}index.php?controller=offre&action=gererOffres&page={{ page - 1 }}">Précédent</a>
+    {% endif %}
+
+    {% set window = 3 %}
+    {% if totalPages <= window %}
+      {% set start = 1 %}
+      {% set end = totalPages %}
+    {% else %}
+      {% set start = page - 1 %}
+      {% if start < 1 %}
+        {% set start = 1 %}
+      {% endif %}
+      {% set end = start + window - 1 %}
+      {% if end > totalPages %}
+        {% set end = totalPages %}
+        {% set start = end - window + 1 %}
+        {% if start < 1 %}
+          {% set start = 1 %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    {% for i in start..end %}
+      <a href="{{ BASE_URL }}index.php?controller=offre&action=gererOffres&page={{ i }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+    {% endfor %}
+
+    {% if page < totalPages %}
+      <a href="{{ BASE_URL }}index.php?controller=offre&action=gererOffres&page={{ page + 1 }}">Suivant</a>
+    {% endif %}
+  </div>
+  {% endif %}
 </section>
 
 <script>
