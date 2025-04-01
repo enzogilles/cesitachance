@@ -17,12 +17,14 @@ class Entreprise extends BaseModel
     public $telephone;
 
     public function __construct()
-{
-    parent::__construct();
-    $this->pdo = \Database::getInstance();
-}
+    {
+        parent::__construct();
+        $this->pdo = \Database::getInstance();
+    }
 
-
+    /**
+     * Trouver une entreprise par son ID.
+     */
     public static function findById($id)
     {
         try {
@@ -35,6 +37,9 @@ class Entreprise extends BaseModel
         }
     }
 
+    /**
+     * Rechercher des entreprises en fonction de filtres (nom, ville, secteur) avec pagination.
+     */
     public static function search($nom, $ville, $secteur, $limit, $offset)
     {
         try {
@@ -42,6 +47,7 @@ class Entreprise extends BaseModel
             $sqlFilter = " WHERE 1=1 ";
             $params = [];
 
+            // Ajouter des filtres dynamiques en fonction des paramètres fournis
             if ($nom !== '') {
                 $sqlFilter .= " AND nom LIKE ? ";
                 $params[] = "%$nom%";
@@ -55,9 +61,11 @@ class Entreprise extends BaseModel
                 $params[] = "%$secteur%";
             }
 
+            // Construire la requête SQL avec tri et pagination
             $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT ? OFFSET ?";
             $stmt = $pdo->prepare($sqlData);
 
+            // Lier les paramètres dynamiques
             $i = 1;
             foreach ($params as $p) {
                 $stmt->bindValue($i++, $p);
@@ -73,6 +81,9 @@ class Entreprise extends BaseModel
         }
     }
 
+    /**
+     * Compter le nombre total d'entreprises en fonction des filtres (nom, ville, secteur).
+     */
     public static function countAll($nom, $ville, $secteur)
     {
         try {
@@ -80,6 +91,7 @@ class Entreprise extends BaseModel
             $sqlFilter = " WHERE 1=1 ";
             $params = [];
 
+            // Ajouter des filtres dynamiques en fonction des paramètres fournis
             if ($nom !== '') {
                 $sqlFilter .= " AND nom LIKE ? ";
                 $params[] = "%$nom%";
@@ -93,6 +105,7 @@ class Entreprise extends BaseModel
                 $params[] = "%$secteur%";
             }
 
+            // Construire la requête SQL pour compter les entreprises
             $sqlCount = "SELECT COUNT(*) as total FROM entreprise " . $sqlFilter;
             $stmtCount = $pdo->prepare($sqlCount);
             $stmtCount->execute($params);
@@ -104,6 +117,9 @@ class Entreprise extends BaseModel
         }
     }
 
+    /**
+     * Récupérer toutes les entreprises de la base de données.
+     */
     public static function findAll()
     {
         try {
@@ -116,6 +132,9 @@ class Entreprise extends BaseModel
         }
     }
 
+    /**
+     * Supprimer une entreprise par son ID.
+     */
     public static function delete($id)
     {
         try {
@@ -127,10 +146,14 @@ class Entreprise extends BaseModel
         }
     }
 
+    /**
+     * Sauvegarder une entreprise (insertion ou mise à jour en fonction de la présence d'un ID).
+     */
     public function save()
     {
         try {
             if (isset($this->id)) {
+                // Mise à jour d'une entreprise existante
                 $stmt = $this->pdo->prepare("UPDATE entreprise SET nom = ?, secteur = ?, ville = ?, taille = ?, description = ?, email = ?, telephone = ? WHERE id = ?");
                 return $stmt->execute([
                     $this->nom,
@@ -143,6 +166,7 @@ class Entreprise extends BaseModel
                     $this->id
                 ]);
             } else {
+                // Insertion d'une nouvelle entreprise
                 $stmt = $this->pdo->prepare("INSERT INTO entreprise (nom, secteur, ville, taille, description, email, telephone) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 $result = $stmt->execute([
                     $this->nom,
