@@ -14,32 +14,57 @@ class WishlistController extends BaseController
      * Affiche la wishlist de l'étudiant connecté
      * ou la liste des étudiants si Admin/pilote.
      */
+
     public function index()
     {
-        // Rôles autorisés : Étudiant, Admin, pilote
-        $this->checkAuth(['Étudiant','Admin','pilote']);
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
 
-
-        $role = $_SESSION['user']['role'];
-
-        if ($role === 'Étudiant') {
-            $user_id = $_SESSION['user']['id'];
-            $wishlist = Wishlist::findByUserIdWithRelations($user_id);
-            $this->render('wishlist/index.twig', [
-                'wishlist' => $wishlist,
-                'userRole' => $role,
-                'user'     => $_SESSION['user']
-            ]);
-        } elseif (in_array($role, ['Admin', 'pilote'])) {
-            $students = Utilisateur::findAllEtudiants();
-            $this->render('wishlist/index.twig', [
-                'students' => $students,
-                'userRole' => $role,
-                'user'     => $_SESSION['user']
-            ]);
-        } else {
+        if (!isset($_SESSION['user'])) {
             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
             exit;
+        }
+
+        $pdo = \Database::getInstance();
+
+        // Si c'est un admin/pilote qui consulte la liste des étudiants
+        if (in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+            $limit = 10;
+            $offset = ($page - 1) * $limit;
+        
+            // Compte total des étudiants pour la pagination
+            $stmt = $pdo->prepare("
+                SELECT COUNT(*) as total 
+                FROM user 
+                WHERE role = 'Étudiant'
+            ");
+            $stmt->execute();
+            $count = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $total = $count['total'];
+            $totalPages = ceil($total / $limit);
+        
+            // Récupération des étudiants avec pagination
+            $stmt = $pdo->prepare("
+                SELECT id, nom, prenom, email
+                FROM user 
+                WHERE role = 'Étudiant'
+                ORDER BY nom, prenom
+                LIMIT ?, ?
+            ");
+            $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
+            $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
+            $stmt->execute();
+            $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+            $this->render('wishlist/index.twig', [
+                'students' => $students,
+                'page' => $page,
+                'totalPages' => $totalPages,
+                'user' => $_SESSION['user']
+            ]);
+            return;
         }
     }
 
@@ -48,7 +73,7 @@ class WishlistController extends BaseController
      */
     public function view()
     {
-        $this->checkAuth(['Admin','pilote']);
+        $this->checkAuth(['Admin', 'pilote']);
 
         if (!isset($_GET['student_id'])) {
             header("Location: " . BASE_URL . "index.php?controller=wishlist&action=index");
@@ -58,24 +83,26 @@ class WishlistController extends BaseController
         $student_id = (int) $_GET['student_id'];
 
         $wishlist = Wishlist::findByUserIdWithRelations($student_id);
-        $student  = Utilisateur::findById($student_id);
+        $student = Utilisateur::findById($student_id);
 
         $this->render('wishlist/index.twig', [
             'wishlist' => $wishlist,
-            'user'     => $_SESSION['user'],
-            'student'  => $student,
+            'user' => $_SESSION['user'],
+            'student' => $student,
         ]);
     }
 
     /**
      * Ajoute une offre à la wishlist -> réservé aux Étudiants ou Admin.
      */
-    public function add() {
-        $this->checkAuth(['Étudiant','Admin']);
+    public function add()
+    {
+        $this->checkAuth(['Étudiant', 'Admin']);
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' &&
-            strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false)
-        {
+        if (
+            $_SERVER['REQUEST_METHOD'] === 'POST' &&
+            strpos($_SERVER['CONTENT_TYPE'] ?? '', 'application/json') !== false
+        ) {
             $data = json_decode(file_get_contents("php://input"), true);
 
             if (!isset($data['offre_id'])) {
@@ -110,8 +137,9 @@ class WishlistController extends BaseController
     /**
      * Retire une offre de la wishlist -> réservé aux Étudiants ou Admin.
      */
-    public function remove() {
-        $this->checkAuth(['Étudiant','Admin']);
+    public function remove()
+    {
+        $this->checkAuth(['Étudiant', 'Admin']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = file_get_contents("php://input");
@@ -145,12 +173,13 @@ class WishlistController extends BaseController
     /**
      * Recherche d'offres dans la wishlist (exemple).
      */
-    public function search() {
+    public function search()
+    {
         // On peut exiger d'être connecté, en pratique
         $this->checkAuth();
 
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
-        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
