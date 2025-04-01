@@ -15,6 +15,7 @@
     {# Script de déconnexion automatique si "Rester connecté" n'est pas activé #}
     {% if session.remember is not defined or not session.remember %}
     <script>
+        // Code existant pour la déconnexion automatique
         // Flag qui empêchera la déconnexion lors d'une navigation interne
         let preventLogout = false;
 
@@ -44,7 +45,10 @@
     </script>
     {% endif %}
     
-    {# Script pour le bouton "Retour en haut" #}
+    {# Scripts généraux #}
     <script src="{{ BASE_URL }}public/js/back-to-top.js"></script>
+    <script src="{{ BASE_URL }}public/js/responsive-tables.js"></script>
+    <script src="{{ BASE_URL }}public/js/button-standardizer.js"></script>
+    <script src="{{ BASE_URL }}public/js/burger-menu.js"></script>
 </body>
 </html>
