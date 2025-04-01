@@ -12,42 +12,40 @@ class EntrepriseController extends BaseController
      * Affiche la liste des entreprises avec recherche/pagination (ouvert à tous).
      */
     public function index() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $nom = $_GET['nom'] ?? '';
-        $ville = $_GET['ville'] ?? '';
-        $secteur = $_GET['secteur'] ?? '';
-
-        $page = max(1, (int)($_GET['page'] ?? 1));
+        // Récupération des paramètres de recherche
+        $nom = isset($_GET['nom']) ? $_GET['nom'] : '';
+        $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
+        $secteur = isset($_GET['secteur']) ? $_GET['secteur'] : '';
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        
+        // Nombre d'éléments par page
         $limit = 10;
         $offset = ($page - 1) * $limit;
-
-        $total = Entreprise::countAll($nom, $ville, $secteur);
-        $totalPages = ceil($total / $limit);
+        
+        // Récupération des entreprises
         $entreprises = Entreprise::search($nom, $ville, $secteur, $limit, $offset);
-
+        $totalEntreprises = Entreprise::countAll($nom, $ville, $secteur);
+        $totalPages = ceil($totalEntreprises / $limit);
+        
+        // Récupération de tous les secteurs distincts pour le menu déroulant
+        $entrepriseModel = new Entreprise();
+        $secteurs = $entrepriseModel->getAllSecteurs();
+        
+        // Ajout des actions pour chaque entreprise
         foreach ($entreprises as &$entreprise) {
-            $detailLink = '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn-voir">Détails</a>';
-
-            if (!empty($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-                $modifyLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn-modifier">Modifier</a>';
-                $deleteLink = ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer&id=' . $entreprise['id'] . '" class="btn-supprimer" data-id="' . $entreprise['id'] . '">Supprimer</a>';
-                $entreprise['actions'] = $detailLink . $modifyLink . $deleteLink;
-            } else {
-                $entreprise['actions'] = $detailLink;
-            }
+            $entreprise['actions'] = $this->getActionsForEntreprise($entreprise);
         }
-        unset($entreprise);
-
-        $this->render('entreprises/index.twig', [
+        
+        // Rendu du template
+        echo $this->render('entreprises/index.twig', [
             'entreprises' => $entreprises,
-            'page' => $page,
-            'totalPages' => $totalPages,
             'nom' => $nom,
             'ville' => $ville,
-            'secteur' => $secteur
+            'secteur' => $secteur,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'user' => isset($_SESSION['user']) ? $_SESSION['user'] : null,
+            'secteurs' => $secteurs
         ]);
     }
 
@@ -134,5 +132,28 @@ class EntrepriseController extends BaseController
         $this->render('entreprises/details.twig', [
             'entreprise' => $entrepriseData
         ]);
+    }
+
+    /**
+     * Génère les actions disponibles pour une entreprise.
+     */
+    private function getActionsForEntreprise($entreprise) {
+        $actions = '';
+
+        // Bouton de détails pour tous les utilisateurs
+        $actions .= '<a href="' . BASE_URL . 'index.php?controller=entreprise&action=details&id=' . $entreprise['id'] . '" class="btn btn-details">Détails</a>';
+
+        // Actions supplémentaires pour Admin et pilote
+        if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+            $actions .= ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=modifier&id=' . $entreprise['id'] . '" class="btn btn-edit">Modifier</a>';
+            $actions .= ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=supprimer&id=' . $entreprise['id'] . '" class="btn btn-delete" onclick="return confirm(\'Êtes-vous sûr de vouloir supprimer cette entreprise ?\')">Supprimer</a>';
+        }
+
+        // Action d'évaluation pour les étudiants
+        if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Etudiant') {
+            $actions .= ' <a href="' . BASE_URL . 'index.php?controller=entreprise&action=evaluer&id=' . $entreprise['id'] . '" class="btn btn-evaluate">Évaluer</a>';
+        }
+
+        return $actions;
     }
 }
