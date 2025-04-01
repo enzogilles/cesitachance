@@ -142,6 +142,7 @@ button,
 .btn-add,
 .btn-login,
 .btn-back,
+.btn-details,
 .btn-wishlist,
 .btn-postuler,
 .btn-modifier,
@@ -182,6 +183,11 @@ button,
   color: white;
   border-radius: 20px;
   margin-bottom: 15px;
+}
+
+.btn-details {
+  background-color: rgb(108, 108, 236);
+  color : white ;
 }
 
 .btn-modifier {
@@ -253,6 +259,10 @@ button,
 .btn-login:hover {
   background-color: var(--accent-color);
   color: black;
+}
+
+.btn-details:hover {
+  background-color: rgb(95, 95, 211);
 }
 
 .btn-modifier:hover {
