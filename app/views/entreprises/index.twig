@@ -6,7 +6,7 @@
 
     <h3>Entreprises proposant des stages</h3>
     {% if entreprises is defined and entreprises is not empty %}
-        <table class="styled-table">
+        <table class="styled-table entreprises-table">
             <thead>
                 <tr>
                     <th>Nom</th>
@@ -17,14 +17,49 @@
             <tbody>
                 {% for entreprise in entreprises %}
                     <tr>
-                        <td>{{ entreprise.nom|e }}</td>
-                        <td>{{ entreprise.ville|e }}</td>
-                        <td>{{ entreprise.actions|raw }}</td>
+                        <td data-label="Nom">{{ entreprise.nom|e }}</td>
+                        <td data-label="Ville">{{ entreprise.ville|e }}</td>
+                        <td data-label="Actions">{{ entreprise.actions|raw }}</td>
                     </tr>
                 {% endfor %}
             </tbody>
         </table>
-        ...
+
+        <!-- Pagination -->
+        {% if totalPages is defined and totalPages > 0 %}
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a href="?controller=entreprise&action=index&page={{ page - 1 }}&nom={{ nom|url_encode }}&ville={{ ville|url_encode }}&secteur={{ secteur|url_encode }}">Précédent</a>
+                {% endif %}
+
+                {% set window = 3 %}
+                {% if totalPages <= window %}
+                    {% set start = 1 %}
+                    {% set end = totalPages %}
+                {% else %}
+                    {% set start = page - 1 %}
+                    {% if start < 1 %}
+                        {% set start = 1 %}
+                    {% endif %}
+                    {% set end = start + window - 1 %}
+                    {% if end > totalPages %}
+                        {% set end = totalPages %}
+                        {% set start = end - window + 1 %}
+                        {% if start < 1 %}
+                            {% set start = 1 %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
+                {% for i in start..end %}
+                    <a href="?controller=entreprise&action=index&page={{ i }}&nom={{ nom|url_encode }}&ville={{ ville|url_encode }}&secteur={{ secteur|url_encode }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+                {% endfor %}
+
+                {% if page < totalPages %}
+                    <a href="?controller=entreprise&action=index&page={{ page + 1 }}&nom={{ nom|url_encode }}&ville={{ ville|url_encode }}&secteur={{ secteur|url_encode }}">Suivant</a>
+                {% endif %}
+            </div>
+        {% endif %}
     {% else %}
         <p>Aucune entreprise trouvée.</p>
     {% endif %}

@@ -4,13 +4,18 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Fonction pour basculer le menu
     function toggleMenu() {
+        if (!burgerMenu || !nav) return;
         burgerMenu.classList.toggle("active");
         nav.classList.toggle("active");
     }
     
     // Écouteur d'événement pour le menu burger
     if (burgerMenu) {
-        burgerMenu.addEventListener("click", toggleMenu);
+        burgerMenu.addEventListener("click", function(event) {
+            event.preventDefault();
+            event.stopPropagation();
+            toggleMenu();
+        });
     }
     
     // Fermer le menu lorsque l'utilisateur clique sur un lien
@@ -18,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function() {
     navLinks.forEach(link => {
         link.addEventListener("click", function() {
             // Vérifie si on est en vue mobile (le burger est visible)
-            if (window.getComputedStyle(burgerMenu).display !== 'none') {
+            if (burgerMenu && window.getComputedStyle(burgerMenu).display !== 'none') {
                 toggleMenu();
             }
         });
@@ -26,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     // Fermer le menu lorsque l'utilisateur clique en dehors
     document.addEventListener("click", function(event) {
+        if (!nav || !burgerMenu) return;
         const isClickInsideNav = nav.contains(event.target);
         const isClickOnBurger = burgerMenu.contains(event.target);
         

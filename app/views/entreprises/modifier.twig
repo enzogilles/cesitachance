@@ -21,7 +21,13 @@
         <button type="submit" class="btn">Modifier</button>
     </form>
     <div class="back-button-container">
-        <a href="{{ BASE_URL }}index.php?controller=offre&action=index" class="btn btn-back">⬅ Retour aux Entreprises</a>
-    </div>
+<a href="{{ BASE_URL }}index.php?controller=entreprise&action=index" class="btn btn-back">⬅ Retour aux Entreprises</a>
+</div>
 </section>
+
+<script>
+    const BASE_URL = "{{ BASE_URL }}";
+  </script>
+  
+  <script src="{{ BASE_URL }}public/js/entreprises.js"></script>
 {% endblock %}

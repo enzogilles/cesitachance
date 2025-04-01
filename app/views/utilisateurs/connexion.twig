@@ -19,9 +19,10 @@
         </div>
         
         <button type="submit" class="btn">Se connecter</button>
-        <p class="forgot-password">
-            <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword">Mot de passe oublié ?</a>
-        </p>
+        
+        <div class="password-reset-container">
+            <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=resetPassword" class="btn btn-password-reset">Mot de passe oublié ?</a>
+        </div>
     </form>
 </section>
 {% endblock %}

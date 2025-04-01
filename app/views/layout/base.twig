@@ -15,13 +15,15 @@
     {# Script de déconnexion automatique si "Rester connecté" n'est pas activé #}
     {% if session.remember is not defined or not session.remember %}
     <script>
+        // Code existant pour la déconnexion automatique
         // Flag qui empêchera la déconnexion lors d'une navigation interne
         let preventLogout = false;
 
         // Lorsqu'un lien interne est cliqué, on désactive le logout
         document.querySelectorAll('a').forEach(function(link) {
             link.addEventListener('click', function() {
-                if (link.href.indexOf('{{ BASE_URL }}') === 0) {
+                // Utiliser == au lieu de === pour éviter les problèmes de parsing avec Twig
+                if (link.href.indexOf('{{ BASE_URL }}') == 0) {
                     preventLogout = true;
                 }
             });
@@ -42,5 +44,10 @@
         });
     </script>
     {% endif %}
-</body>
-</html>
+    
+    {# Scripts généraux #}
+    <script src="{{ BASE_URL }}public/js/back-to-top.js"></script>
+    <script src="{{ BASE_URL }}public/js/responsive-tables.js"></script>
+    <script src="{{ BASE_URL }}public/js/button-standardizer.js"></script>
+
+

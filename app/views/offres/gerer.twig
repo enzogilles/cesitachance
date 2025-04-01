@@ -8,41 +8,49 @@
     <a href="{{ BASE_URL }}index.php?controller=offre&action=create" class="btn btn-create">➕ Créer une Offre</a>
   </div>
 
-  <table class="styled-table">
-    <thead>
-      <tr>
-        <th>Titre</th>
-        <th>Entreprise</th>
-        <th>Rémunération</th>
-        <th>Début</th>
-        <th>Fin</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for offre in offres %}
+  <div class="table-responsive">
+    <table class="styled-table offres-table">
+      <thead>
         <tr>
-          <td>{{ offre.titre|e }}</td>
-          <td>{{ offre.entreprise|e }}</td>
-          <td>{{ offre.remuneration|e }}€</td>
-          <td>{{ offre.date_debut|e }}</td>
-          <td>{{ offre.date_fin|e }}</td>
-          <td>
-            <div class="offer-buttons">
-              <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" 
-                 class="btn-modifier">Modifier</a>
-              <a href="{{ BASE_URL }}index.php?controller=offre&action=supprimer&id={{ offre.id }}" 
-                 class="btn-supprimer">Supprimer</a>
-            </div>
-          </td>
+          <th>Titre</th>
+          <th>Entreprise</th>
+          <th>Rémunération</th>
+          <th>Début</th>
+          <th>Fin</th>
+          <th>Actions</th>
         </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+      </thead>
+      <tbody>
+        {% for offre in offres %}
+          <tr>
+            <td data-label="Titre">{{ offre.titre|e }}</td>
+            <td data-label="Entreprise">{{ offre.entreprise|e }}</td>
+            <td data-label="Rémunération">{{ offre.remuneration|e }}€</td>
+            <td data-label="Début">{{ offre.date_debut|e }}</td>
+            <td data-label="Fin">{{ offre.date_fin|e }}</td>
+            <td data-label="Actions">
+              <div class="offer-buttons">
+                <a href="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}" 
+                  class="btn-modifier"
+                  data-id="{{ offre.id }}">
+                  Modifier
+                </a>
+                <a href="#" 
+                  class="btn-supprimer"
+                  data-id="{{ offre.id }}">
+                  Supprimer
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </section>
+
 <script>
   const BASE_URL = "{{ BASE_URL }}";
 </script>
-
 <script src="{{ BASE_URL }}public/js/gerer-offres.js"></script>
 {% endblock %}
