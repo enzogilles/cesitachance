@@ -8,8 +8,13 @@
         <input type="text" id="nom" name="nom" value="{{ entreprise.nom|e }}" required>
         <label for="ville">Ville :</label>
         <input type="text" id="ville" name="ville" value="{{ entreprise.ville|e }}" required>
-        <label for="secteur">Secteur :</label>
-        <input type="text" id="secteur" name="secteur" value="{{ entreprise.secteur|e }}" required>
+    <label for="secteur">Secteur :</label>
+    <select id="secteur" name="secteur">
+        <option value="">Tous les secteurs</option>
+        {% for secteurOption in secteurs %}
+            <option value="{{ secteurOption|e }}" {% if secteur is defined and secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
+        {% endfor %}
+    </select>
         <label for="taille">Taille :</label>
         <input type="text" id="taille" name="taille" value="{{ entreprise.taille|e }}" required>
         <label for="description">Description :</label>

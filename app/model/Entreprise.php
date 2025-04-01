@@ -194,8 +194,6 @@ class Entreprise extends BaseModel
      */
     public function getAllSecteurs() {
         try {
-            // Notez que nous utilisons la table 'entreprise' (au singulier)
-            // et la colonne 'secteur' au lieu de 'secteur_activite'
             $stmt = $this->pdo->prepare("SELECT DISTINCT secteur FROM entreprise WHERE secteur IS NOT NULL AND secteur != '' ORDER BY secteur");
             $stmt->execute();
             
