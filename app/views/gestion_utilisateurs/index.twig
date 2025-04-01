@@ -62,11 +62,17 @@
                 <button type="submit" class="btn-login">Modifier</button>
             </form>
     
-            <h3>Supprimer cet utilisateur</h3>
-            <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete" method="POST">
-                <input type="hidden" name="id" value="{{ search_result.id }}">
-                <button type="submit" class="btn-supprimer" style="display: block;text-align: left; align-items:center; justify-content:center;">Supprimer</button>
-            </form>
+            {% if user.id != search_result.id %}
+    <h3>Supprimer cet utilisateur</h3>
+    <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete" method="POST">
+        <input type="hidden" name="id" value="{{ search_result.id }}">
+        <button type="submit" class="btn-supprimer">Supprimer</button>
+    </form>
+{% else %}
+    <h3>Suppression non autorisée</h3>
+    <p style="color: darkred;">Vous ne pouvez pas supprimer votre propre compte.</p>
+{% endif %}
+
         </div>
         {% elseif search_result is defined and search_result is empty %}
         <div id="resultat">
