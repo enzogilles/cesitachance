@@ -49,9 +49,24 @@ class OffreController extends BaseController {
 
     public function gererOffres() {
         $this->checkAuth(['Admin','pilote']);
-    
-        $offres = Offre::findAll();
-        $this->render('offres/gerer.twig', ['offres' => $offres]);
+
+        // Paramètres de pagination
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+
+        // Récupérer le nombre total d'offres pour la pagination
+        $total = Offre::countAll();
+        $totalPages = ceil($total / $limit);
+        
+        // Récupérer les offres pour la page actuelle
+        $offres = Offre::findAllPaginated($limit, $offset);
+        
+        $this->render('offres/gerer.twig', [
+            'offres' => $offres,
+            'page' => $page,
+            'totalPages' => $totalPages
+        ]);
     }
     
 
