@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
     notification.textContent = message;
     notification.style.position = "fixed";
     notification.style.top = "100px";
-    notification.style.left = "38%";
+    notification.style.left = "40%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
     notification.style.padding = "12px 24px";
