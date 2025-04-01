@@ -50,8 +50,19 @@ class OffreController extends BaseController {
     public function gererOffres() {
         $this->checkAuth(['Admin','pilote']);
     
-        $offres = Offre::findAll();
-        $this->render('offres/gerer.twig', ['offres' => $offres]);
+        $page = max(1, (int)($_GET['page'] ?? 1));
+        $limit = 10;
+        $offset = ($page - 1) * $limit;
+        
+        $total = Offre::countAllOffres();
+        $totalPages = ceil($total / $limit);
+        $offres = Offre::findAllPaginated($limit, $offset);
+        
+        $this->render('offres/gerer.twig', [
+            'offres' => $offres,
+            'page' => $page,
+            'totalPages' => $totalPages
+        ]);
     }
     
 
@@ -161,9 +172,11 @@ class OffreController extends BaseController {
         $this->checkAuth(['Admin', 'pilote']);
     
         $id = $_GET['id'] ?? null;
+        $page = $_GET['page'] ?? 1;
+        
         if ($id) {
             Offre::deleteById($id);
-            header("Location: " . BASE_URL . "index.php?controller=offre&action=gererOffres&notif=deleted");
+            header("Location: " . BASE_URL . "index.php?controller=offre&action=gererOffres&notif=deleted&page=" . $page);
             exit;
         }
     }

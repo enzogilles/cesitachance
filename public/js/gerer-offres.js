@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', function () {
   const url = new URL(window.location.href);
   const notif = url.searchParams.get("notif");
+  const page = url.searchParams.get("page") || 1;
 
   if (notif === "deleted") {
     showNotification("🗑️ Offre supprimée", "success", 4000);
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   if (notif) {
+    // Préserver le paramètre de pagination en supprimant seulement la notification
     url.searchParams.delete("notif");
     window.history.replaceState({}, "", url.toString());
   }

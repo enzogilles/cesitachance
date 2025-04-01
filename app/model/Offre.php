@@ -239,5 +239,51 @@ class Offre extends BaseModel
             throw new \Exception("Erreur lors de la sauvegarde de l'offre : " . $e->getMessage());
         }
     }
+
+    /**
+     * Compte le nombre total d'offres.
+     */
+    public static function countAllOffres()
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "SELECT COUNT(*) as total FROM offre";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $result['total'] ?? 0;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors du comptage des offres : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Récupère les offres avec pagination.
+     */
+    public static function findAllPaginated($limit, $offset)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "
+                SELECT o.id,
+                       o.titre,
+                       o.remuneration,
+                       o.date_debut,
+                       o.date_fin,
+                       e.nom AS entreprise
+                FROM offre o
+                JOIN entreprise e ON o.entreprise_id = e.id
+                ORDER BY o.id DESC
+                LIMIT ? OFFSET ?
+            ";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+            $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des offres paginées : " . $e->getMessage());
+        }
+    }
 }
 ?>
