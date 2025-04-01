@@ -25,8 +25,7 @@
     {% endif %}
     {% if user is not defined or user.id is not defined %}
     <p>Connectez-vous pour évaluer cette entreprise.</p>
-
-{% elseif user.role == 'Étudiant' %}
+        {% else %}
     <h3>Évaluer cette entreprise</h3>
     <form action="{{ BASE_URL }}index.php?controller=entreprise&action=evaluer&id={{ entreprise.id }}" method="POST">
         <label for="note">Note (1 à 5) :</label>
@@ -38,9 +37,6 @@
         <button type="submit" class="btn">Envoyer l'évaluation</button>
         <button type="reset" class="bouton-reset">Réinitialiser</button>
     </form>
-
-{% else %}
-    <p>Seuls les étudiants peuvent évaluer une entreprise.</p>
 {% endif %}
 
         <div class="back-button-container">
