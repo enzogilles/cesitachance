@@ -220,6 +220,28 @@ button,
   color: white;
 }
 
+.btn-view {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: white;
+  background-color: var(--secondary-color);
+  border-radius: var(--border-radius-md);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.btn-view:hover {
+  background-color: var(--accent-color);
+  transform: scale(1.05);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
 .btn:hover, .btn-add:hover {
   background-color: var(--accent-color);
 }
@@ -1434,4 +1456,29 @@ footer {
     bottom: 10px;
     right: 10px;
   }
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  font-size: 16px;
+  text-align: left;
+}
+
+table th, table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd; /* Ligne de séparation */
+}
+
+table tr {
+  border-bottom: 1px solid #ddd; /* Ligne de séparation entre les lignes */
+}
+
+table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Couleur de fond alternée */
+}
+
+table tr:hover {
+  background-color: #f1f1f1; /* Couleur au survol */
 }
