@@ -5,6 +5,11 @@
 <section class="content">
 
     <h3>Entreprises proposant des stages</h3>
+
+        <div class="create-offer-button">
+    <a href="{{ BASE_URL }}index.php?controller=entreprise&action=creer" class="btn btn-create">➕ Créer une entreprise</a>
+  </div>
+  
     {% if entreprises is defined and entreprises is not empty %}
         <table class="styled-table entreprises-table">
             <thead>

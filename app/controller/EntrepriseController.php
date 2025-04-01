@@ -67,9 +67,8 @@ class EntrepriseController extends BaseController
             }
         }
     
-        $this->render('entreprises/gestion.twig');
+        $this->render('entreprises/creer.twig');
     }
-    
 
     public function modifier($id) {
         $this->checkAuth(['Admin', 'pilote']);
