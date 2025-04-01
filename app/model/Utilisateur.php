@@ -186,6 +186,28 @@ class Utilisateur extends BaseModel
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
+    /**
+     * Recherche par nom/prenom/email avec filtre par rôle
+     */
+    public static function searchByRole($searchQuery, $role)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT * FROM user 
+                           WHERE role = :role 
+                           AND (nom LIKE :q 
+                           OR prenom LIKE :q 
+                           OR email LIKE :q)
+                           LIMIT 1");
+            $stmt->bindValue(':role', $role);
+            $stmt->bindValue(':q', '%' . $searchQuery . '%');
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la recherche d'utilisateur par rôle : " . $e->getMessage());
+        }
+    }
+
 
 
     /**
@@ -215,6 +237,46 @@ class Utilisateur extends BaseModel
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             throw new \Exception("Erreur lors de la récupération de la liste des étudiants : " . $e->getMessage());
+        }
+    }
+
+
+    /**
+     * Compte le nombre d'utilisateurs par rôle
+     */
+    public static function countByRole($role)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user WHERE role = ?");
+            $stmt->execute([$role]);
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $row['total'] ?? 0;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors du comptage des utilisateurs par rôle : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Récupère tous les utilisateurs d'un rôle spécifique
+     */
+    public static function findByRole($role, $limit, $offset)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "SELECT id, nom, prenom, email, role 
+                FROM user 
+                WHERE role = ? 
+                ORDER BY id DESC 
+                LIMIT ? OFFSET ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(1, $role, PDO::PARAM_STR);
+            $stmt->bindValue(2, $limit, PDO::PARAM_INT);
+            $stmt->bindValue(3, $offset, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des utilisateurs par rôle : " . $e->getMessage());
         }
     }
 }
