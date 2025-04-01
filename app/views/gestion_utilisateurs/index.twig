@@ -112,8 +112,55 @@
     {% endif %}
 </main>
 
+<section class="content">
+  <h2>Mes candidatures</h2>
+
+  {% if candidatures is empty %}
+    <p>Vous n'avez pas encore de candidatures.</p>
+  {% else %}
+    <div class="table-responsive">
+      <table class="styled-table candidatures-table">
+        <thead>
+          <tr>
+            <th>Entreprise</th>
+            <th>Offre</th>
+            <th>Date</th>
+            <th>Statut</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for candidature in candidatures %}
+            <tr data-id="{{ candidature.id }}">
+              <td data-label="Entreprise">{{ candidature.entreprise|default('Non disponible')|e }}</td>
+              <td data-label="Offre">{{ candidature.titre|default('Non disponible')|e }}</td>
+              <td data-label="Date">{{ candidature.date_soumission|default('Non disponible')|e }}</td>
+              <td data-label="Statut" class="status 
+                {% if candidature.statut == 'acceptée' %}accepted
+                {% elseif candidature.statut == 'en attente' %}pending
+                {% elseif candidature.statut == 'refusée' %}refused{% endif %}">
+                {{ candidature.statut|default('en attente')|e }}
+              </td>
+              <td data-label="Actions">
+                {% if candidature.cv %}
+                  <a href="{{ BASE_URL }}{{ candidature.cv }}" class="btn-voir" target="_blank">CV</a>
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+</section>
+
 <script>
-    const BASE_URL = "{{ BASE_URL }}";
+  const BASE_URL = "{{ BASE_URL }}";
 </script>
 <script src="{{ BASE_URL }}public/js/gestion-etudiant.js"></script>
+<script src="{{ BASE_URL }}public/js/candidatures.js"></script>
 {% endblock %}
+
+{# Check how you're trying to display the enterprise and offer title #}
+<td data-label="Entreprise">{{ candidature.entreprise|e }}</td>
+<td data-label="Offre">{{ candidature.titre|e }}</td>

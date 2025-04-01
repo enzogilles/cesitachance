@@ -27,20 +27,19 @@ document.addEventListener('DOMContentLoaded', function() {
     button.style.fontSize = '14px';
     button.style.fontWeight = 'bold';
     button.style.borderRadius = '5px';
-    button.style.textAlign = 'center';
     button.style.display = 'inline-flex';
     button.style.justifyContent = 'center';
     button.style.alignItems = 'center';
     button.style.textDecoration = 'none';
     button.style.transition = 'all 0.3s ease';
     button.style.cursor = 'pointer';
+    button.style.flex = '0 1 auto';
 
     // Gestion des largeurs selon le type de bouton
     if (button.classList.contains('btn-modifier') || 
         button.classList.contains('btn-supprimer') ||
         button.classList.contains('btn-voir')) {
       button.style.minWidth = '100px';
-      button.style.maxWidth = '120px';
     } else if (button.classList.contains('btn-wishlist')) {
       // Les boutons wishlist gardent leur style arrondi
       button.style.borderRadius = '25px';
@@ -54,21 +53,28 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   // Correction spécifique pour les conteneurs de boutons
-  const offerButtons = document.querySelectorAll('.offer-buttons');
-  offerButtons.forEach(container => {
+  const buttonContainers = document.querySelectorAll(
+    '.offer-buttons, .action-buttons, .form-actions, .back-button-container'
+  );
+  
+  buttonContainers.forEach(container => {
     container.style.display = 'flex';
+    container.style.flexDirection = 'row';
     container.style.flexWrap = 'wrap';
     container.style.justifyContent = 'center';
     container.style.gap = '8px';
-    container.style.marginTop = '10px';
+    container.style.margin = '10px 0';
+    container.style.width = '100%';
   });
 
   // Standardisation des boutons dans les tableaux
   const tableButtons = document.querySelectorAll('.styled-table .btn-modifier, .styled-table .btn-supprimer, .styled-table .btn-voir');
   tableButtons.forEach(button => {
+    button.style.display = 'inline-flex';
     button.style.padding = '6px 12px';
     button.style.fontSize = '13px';
     button.style.minWidth = '90px';
     button.style.margin = '2px';
+    button.style.flexDirection = 'row';
   });
 });

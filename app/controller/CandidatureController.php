@@ -27,6 +27,9 @@ class CandidatureController extends BaseController {
             $candidatures = Candidature::findAllByUserIdWithRelations($userId);
         }
 
+        // Debug the candidatures data
+        // var_dump($candidatures); exit;
+
         $this->render('candidatures/index.twig', [
             'candidatures' => $candidatures,
             'userRole' => $userRole
