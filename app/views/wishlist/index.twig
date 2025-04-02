@@ -14,13 +14,14 @@
     {% if user.role in ['Étudiant', 'Admin'] and wishlist is defined and student is not defined %}
         <h2>Ma Wishlist</h2>
         {% if wishlist is not empty %}
-            <ul>
+            <ul class="wishlist-list">
                 {% for item in wishlist %}
                     <li>
                         {{ item.titre|e }} - {{ item.entreprise|e }}
                         <form action="{{ url('wishlist', 'remove') }}" method="POST">
                             <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
-                            <button type="submit" class="btn">Supprimer</button>
+                        <button type="button" class="btn btn-delete" data-id="{{ item.wishlist_id }}">Supprimer</button>
+
                         </form>
                     </li>
                 {% endfor %}
@@ -33,11 +34,18 @@
     {% elseif user.role in ['Admin', 'pilote'] and student is defined %}
         <h2>Wishlist de {{ student.prenom }} {{ student.nom }}</h2>
         {% if wishlist is not empty %}
-            <ul>
-                {% for item in wishlist %}
-                    <li>{{ item.titre|e }} - {{ item.entreprise|e }}</li>
-                {% endfor %}
-            </ul>
+        <ul class="wishlist-list">
+            {% for item in wishlist %}
+                <li>
+                    {{ item.titre|e }} - {{ item.entreprise|e }}
+                    <form action="{{ url('wishlist', 'remove') }}" method="POST">
+                        <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+                    <button type="button" class="btn btn-delete" data-id="{{ item.wishlist_id }}">Supprimer</button>
+
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
         {% else %}
             <p>La wishlist est vide.</p>
         {% endif %}

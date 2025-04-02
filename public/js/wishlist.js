@@ -6,20 +6,17 @@ document.addEventListener("DOMContentLoaded", function () {
     wishlistList.addEventListener("click", function (e) {
       if (
         e.target.tagName === "BUTTON" &&
-        e.target.closest("form") &&
-        e.target.textContent.trim().toLowerCase().includes("supprimer")
+        e.target.classList.contains("btn-delete")
       ) {
         e.preventDefault();
-
-        const form = e.target.closest("form");
-        const wishlistIdInput = form.querySelector('input[name="wishlist_id"]');
-        const wishlistId = wishlistIdInput?.value;
-
+    
+        const wishlistId = e.target.getAttribute("data-id");
+    
         if (!wishlistId) {
           showNotification("Aucun ID trouvé pour la suppression.", "error");
           return;
         }
-
+    
         fetch(BASE_URL + "wishlist/remove", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -28,8 +25,8 @@ document.addEventListener("DOMContentLoaded", function () {
           .then(response => response.json())
           .then(data => {
             if (data.success) {
-              form.closest("li")?.remove();
-              showNotification("ℹ️ Offre retirée de la wishlist.", "info");
+              e.target.closest("li")?.remove();
+              showNotification("🗑️ Offre retirée de la wishlist.", "info");
             } else {
               showNotification("Erreur : " + data.message, "error");
             }
@@ -40,6 +37,7 @@ document.addEventListener("DOMContentLoaded", function () {
           });
       }
     });
+    
   }
 
   // === AJOUT D'UNE OFFRE ===
@@ -125,7 +123,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.className = `notification ${type}`;
     notification.style.position = "fixed";
     notification.style.top = "100px";
-    notification.style.left = "40%";
+    notification.style.left = "37%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "9999";
     notification.style.padding = "15px 25px";
