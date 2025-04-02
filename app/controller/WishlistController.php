@@ -27,19 +27,19 @@ class WishlistController extends BaseController
             $limit = 10;
             $offset = ($page - 1) * $limit;
 
-            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user WHERE role IN ('\u00c9tudiant', 'Admin')");
+            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user WHERE role IN ('Étudiant', 'Admin')");
             $stmt->execute();
             $count = $stmt->fetch(\PDO::FETCH_ASSOC);
             $total = $count['total'];
             $totalPages = ceil($total / $limit);
 
-            $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role IN ('\u00c9tudiant', 'Admin') ORDER BY nom, prenom LIMIT ?, ?");
+            $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role IN ('Étudiant', 'Admin') ORDER BY nom, prenom LIMIT ?, ?");
             $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
             $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
             $stmt->execute();
             $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-            $stmtAll = $pdo->prepare("SELECT id, nom, prenom, role FROM user WHERE role IN ('\u00c9tudiant', 'Admin') ORDER BY nom, prenom");
+            $stmtAll = $pdo->prepare("SELECT id, nom, prenom, role FROM user WHERE role IN ('Étudiant', 'Admin') ORDER BY nom, prenom");
             $stmtAll->execute();
             $allUsers = $stmtAll->fetchAll(\PDO::FETCH_ASSOC);
 
@@ -54,7 +54,7 @@ class WishlistController extends BaseController
             return;
         }
 
-        if (in_array($_SESSION['user']['role'], ['\u00c9tudiant', 'Admin'])) {
+        if (in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
             $userId = $_SESSION['user']['id'];
             $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
             $limit = 10;
@@ -96,7 +96,7 @@ class WishlistController extends BaseController
 
     public function add()
     {
-        $this->checkAuth(['\u00c9tudiant', 'Admin']);
+        $this->checkAuth(['Étudiant', 'Admin']);
 
         if (
             $_SERVER['REQUEST_METHOD'] === 'POST' &&
@@ -128,13 +128,13 @@ class WishlistController extends BaseController
         }
 
         header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Requ\u00eate invalide']);
+        echo json_encode(['success' => false, 'message' => 'Requête invalide']);
         exit;
     }
 
     public function remove()
     {
-        $this->checkAuth(['\u00c9tudiant', 'Admin']);
+        $this->checkAuth(['Étudiant', 'Admin']);
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $data = json_decode(file_get_contents("php://input"), true);
@@ -153,7 +153,7 @@ class WishlistController extends BaseController
         }
 
         header('Content-Type: application/json');
-        echo json_encode(['success' => false, 'message' => 'Requ\u00eate invalide.']);
+        echo json_encode(['success' => false, 'message' => 'Requête invalide.']);
         exit;
     }
 
