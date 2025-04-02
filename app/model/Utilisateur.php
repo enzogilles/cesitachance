@@ -169,6 +169,7 @@ class Utilisateur extends BaseModel
             throw new \Exception("Erreur lors de la suppression de l'utilisateur : " . $e->getMessage());
         }
     }
+    
 
     /**
      * Recherche par nom/prenom/email.

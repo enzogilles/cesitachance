@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  const searchForm = document.querySelector(".search-form");
-  const resetButton = document.querySelector(".search-form .bouton-reset");
+  const BASE_URL = window.BASE_URL || "";
 
   function showNotification(message, type = "info", duration = 3000) {
     document.querySelectorAll(".notification").forEach(n => n.remove());
@@ -13,6 +12,25 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.style.left = "37%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
+    notification.style.padding = "12px 24px";
+    notification.style.borderRadius = "8px";
+    notification.style.fontWeight = "600";
+
+    switch (type) {
+      case "success":
+        notification.style.backgroundColor = "#d1fae5";
+        notification.style.color = "#065f46";
+        break;
+      case "error":
+        notification.style.backgroundColor = "#fee2e2";
+        notification.style.color = "#991b1b";
+        break;
+      case "info":
+      default:
+        notification.style.backgroundColor = "#dbeafe";
+        notification.style.color = "#1e3a8a";
+        break;
+    }
 
     document.body.appendChild(notification);
 
@@ -21,27 +39,15 @@ document.addEventListener("DOMContentLoaded", function () {
     }, duration);
   }
 
-  if (resetButton) {
-    resetButton.addEventListener("click", function (e) {
-      e.preventDefault();
-      window.location.href = BASE_URL + "gestionutilisateurs/index";
-    });
-  }
-
-  const currentUrl = new URL(window.location.href);
-  const notif = currentUrl.searchParams.get("notif");
+  // === Redirection / notifications ===
+  const url = new URL(window.location.href);
+  const notif = url.searchParams.get("notif");
 
   if (notif === "1") {
     showNotification("🔍 Résultat de la recherche affiché", "info", 5000);
-
-    currentUrl.searchParams.delete("notif")
-    window.history.replaceState({}, "", currentUrl.toString());
+    url.searchParams.delete("notif");
+    window.history.replaceState({}, "", url.toString());
   }
-});
-
-document.addEventListener("DOMContentLoaded", function () {
-  const url = new URL(window.location.href);
-  const notif = url.searchParams.get("notif");
 
   if (notif === "deleted") {
     showNotification("✅ Utilisateur supprimé avec succès", "success", 5000);
@@ -49,7 +55,27 @@ document.addEventListener("DOMContentLoaded", function () {
     window.history.replaceState({}, "", url.toString());
   }
 
-  // === POPUP DE CONFIRMATION ===
+  // === Bouton réinitialiser ===
+  const searchForm = document.querySelector(".search-form");
+  const resetButton = document.querySelector(".search-form .bouton-reset");
+  if (resetButton && searchForm) {
+    resetButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.location.href = BASE_URL + "gestionutilisateurs/index";
+    });
+  }
+
+  // === Confirmation suppression ===
+  document.querySelectorAll('form[action*="gestionutilisateurs"][method="POST"] .btn-supprimer').forEach(button => {
+    button.addEventListener('click', function (e) {
+      e.preventDefault();
+      const form = this.closest('form');
+      showCustomConfirm("Voulez-vous vraiment supprimer cet utilisateur ?", () => {
+        form.submit();
+      });
+    });
+  });
+
   function showCustomConfirm(message, onConfirm) {
     const overlay = document.createElement('div');
     overlay.classList.add('custom-confirm-overlay');
@@ -89,55 +115,4 @@ document.addEventListener("DOMContentLoaded", function () {
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
   }
-
-  // === CIBLE LES FORMULAIRES DE SUPPRESSION ===
-  document.querySelectorAll('form[action*="gestionutilisateurs"][method="POST"] .btn-supprimer').forEach(button => {
-    button.addEventListener('click', function (e) {
-      e.preventDefault();
-      const form = this.closest('form');
-
-      showCustomConfirm("Voulez-vous vraiment supprimer cet utilisateur ?", () => {
-        form.submit(); 
-      });
-    });
-  });
-
-  function showNotification(message, type = "info", duration = 3000) {
-    document.querySelectorAll(".notification").forEach(n => n.remove());
-
-    const notification = document.createElement("div");
-    notification.className = "notification " + type;
-    notification.textContent = message;
-    notification.style.position = "fixed";
-    notification.style.top = "130px";
-    notification.style.left = "37%";
-    notification.style.transform = "translateX(-50%)";
-    notification.style.zIndex = "1000";
-    notification.style.padding = "12px 24px";
-    notification.style.borderRadius = "8px";
-    notification.style.fontWeight = "600";
-
-    switch (type) {
-      case "success":
-        notification.style.backgroundColor = "#d1fae5";
-        notification.style.color = "#065f46";
-        break;
-      case "error":
-        notification.style.backgroundColor = "#fee2e2";
-        notification.style.color = "#991b1b";
-        break;
-      case "info":
-      default:
-        notification.style.backgroundColor = "#dbeafe";
-        notification.style.color = "#1e3a8a";
-        break;
-    }
-
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-      notification.remove();
-    }, duration);
-  }
 });
-

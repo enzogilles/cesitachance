@@ -111,12 +111,12 @@ class GestionUtilisateursController extends BaseController
             if ($_SESSION['user']['role'] === 'pilote') {
                 // Vérifier que l'utilisateur à modifier est un étudiant
                 $user = Utilisateur::findById($id);
-                if (!$user || $user['role'] !== 'Etudiant') {
+                if (!$user || $user['role'] !== 'Étudiant') {
                     $_SESSION["error"] = "Vous ne pouvez modifier que les comptes étudiants.";
                     $this->redirect('gestionutilisateurs', 'index');
                 }
                 // Forcer le rôle étudiant pour les modifications par un pilote
-                $role = 'Etudiant';
+                $role = 'Étudiant';
             }
 
             Utilisateur::updateUser($id, $nom, $prenom, $email, $role);
@@ -131,24 +131,26 @@ class GestionUtilisateursController extends BaseController
     public function delete()
     {
         $this->checkAuth(['Admin', 'pilote']);
-
+    
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
-
+    
             // Vérification supplémentaire pour les pilotes
             if ($_SESSION['user']['role'] === 'pilote') {
                 $user = Utilisateur::findById($id);
-                if (!$user || $user['role'] !== 'Etudiant') {
+                if (!$user || $user->role !== 'Étudiant') {
                     $_SESSION["error"] = "Vous ne pouvez supprimer que les comptes étudiants.";
                     $this->redirect('gestionutilisateurs', 'index');
+                    return;
                 }
             }
-
+    
             Utilisateur::deleteUser($id);
             $_SESSION["message"] = "Utilisateur supprimé avec succès.";
             $this->redirect('gestionutilisateurs', 'index', ['notif' => 'deleted']);
         }
     }
+    
 
     /**
      * Recherche d'un utilisateur
