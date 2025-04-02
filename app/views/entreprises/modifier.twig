@@ -9,10 +9,10 @@
         <label for="ville">Ville :</label>
         <input type="text" id="ville" name="ville" value="{{ entreprise.ville|e }}" required>
         <label for="secteur">Secteur :</label>
-        <select id="secteur" name="secteur">
-            <option value="">Tous les secteurs</option>
+        <select id="secteur" name="secteur" required>
+            <option value="">Sélectionnez un secteur</option>
             {% for secteurOption in secteurs %}
-                <option value="{{ secteurOption|e }}" {% if entreprise.secteur is defined and entreprise.secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
+                <option value="{{ secteurOption|e }}" {% if entreprise.secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
             {% endfor %}
         </select>
         <label for="taille">Taille :</label>

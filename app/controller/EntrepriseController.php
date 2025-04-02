@@ -65,6 +65,10 @@ class EntrepriseController extends BaseController
             die("Entreprise introuvable.");
         }
 
+        // Instantiate Entreprise model to get all sectors
+        $entrepriseModel = new Entreprise();
+        $secteurs = $entrepriseModel->getAllSecteurs();
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $entreprise = new Entreprise();
             $entreprise->id = $id;
@@ -77,7 +81,8 @@ class EntrepriseController extends BaseController
         }
 
         $this->render('entreprises/modifier.twig', [
-            'entreprise' => $entrepriseData
+            'entreprise' => $entrepriseData,
+            'secteurs' => $secteurs
         ]);
     }
 
