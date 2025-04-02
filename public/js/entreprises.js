@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
     showNotification("✅ Entreprise créée avec succès", "success", 4000);
   } else if (notif === "deleted") {
     showNotification("🗑️ Entreprise supprimée avec succès", "success", 4000);
+  } else if (notif === "1") {
+    showNotification("🔍 Résultat(s) de la recherche affiché(s)", "info", 5000);
   }
 
   if (notif) {
@@ -23,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     notification.textContent = message;
     notification.style.position = "fixed";
     notification.style.top = "100px";
-    notification.style.left = "37%";
+    notification.style.left = "38%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
     notification.style.padding = "12px 24px";
@@ -52,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   // Confirmation de suppression
-  document.querySelectorAll('.btn-supprimer').forEach(button => {
+  document.querySelectorAll('.btn-supprimer, .btn-delete').forEach(button => {
     button.addEventListener('click', function (e) {
       e.preventDefault();
       const id = this.getAttribute("data-id");
@@ -101,5 +103,13 @@ document.addEventListener('DOMContentLoaded', function () {
     modal.appendChild(btnContainer);
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
+  }
+
+  const resetButton = document.querySelector(".search-form .bouton-reset");
+  if (resetButton) {
+    resetButton.addEventListener("click", function (e) {
+      e.preventDefault();
+      window.location.href = BASE_URL + "index.php?controller=entreprise&action=index";
+    });
   }
 });
