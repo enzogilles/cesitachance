@@ -196,29 +196,29 @@ class WishlistController extends BaseController
      */
     public function search()
     {
-        // On peut exiger d'être connecté, en pratique
-        $this->checkAuth();
-
+        $this->checkAuth(['Admin', 'pilote']);
+        
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
-        $page = isset($_GET['page']) ? max(1, (int) $_GET['page']) : 1;
+        $studentId = isset($_GET['student_id']) ? (int)$_GET['student_id'] : 0;
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
-
-        if (!empty($motcle)) {
-            $result = Offre::search($motcle, '', $limit, $offset);
-            $offres = $result['offres'];
-            $total = $result['total'];
-            $totalPages = ceil($total / $limit);
-
-            $this->render('offres/index.twig', [
-                'offres' => $offres,
-                'motcle' => $motcle,
-                'page' => $page,
-                'totalPages' => $totalPages,
-                'competences' => ''
-            ]);
-        } else {
-            $this->index();
-        }
+    
+        $result = Wishlist::searchByStudent($studentId, $motcle, $limit, $offset);
+        $wishlist = $result['wishlist'];
+        $total = $result['total'];
+        $totalPages = ceil($total / $limit);
+        $student = Utilisateur::findById($studentId);
+    
+        $this->render('wishlist/index.twig', [
+            'wishlist' => $wishlist,
+            'motcle' => $motcle,
+            'page' => $page,
+            'totalPages' => $totalPages,
+            'student' => $student,
+            'user' => $_SESSION['user'],
+            'notif' => '1'
+        ]);
     }
+    
 }

@@ -50,6 +50,16 @@
     {# Cas 3 : Admin/Pilote visualise la liste des étudiants #}
     {% elseif user.role in ['Admin', 'pilote'] and students is defined %}
         <h3>Liste des étudiants</h3>
+            <form method="get" class="search-form" action="{{ BASE_URL }}index.php">
+    <input type="hidden" name="controller" value="wishlist">
+    <input type="hidden" name="action" value="search">
+    <input type="hidden" name="student_id" value="{{ student.id }}">
+    <input type="text" name="motcle" placeholder="Rechercher un étudiant" value="{{ motcle|default('') }}">
+    <button type="submit" class="btn">Rechercher</button>
+    <button type="reset" class="bouton-reset">Réinitialiser</button>
+</form>
+
+            
         {% if students is not empty %}
             <div class="table-container">
                 <ul class="students-list">

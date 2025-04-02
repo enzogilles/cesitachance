@@ -64,6 +64,65 @@ class Wishlist extends BaseModel
         }
     }
 
+        /**
+     * Recherche dans la wishlist d'un étudiant donné (titre offre + entreprise)
+     */
+    public static function searchByStudent($userId, $motcle, $limit, $offset)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $params = [$userId];
+            $sqlFilter = "";
+
+            if (!empty($motcle)) {
+                $sqlFilter .= " AND (o.titre LIKE ? OR e.nom LIKE ?) ";
+                $params[] = "%$motcle%";
+                $params[] = "%$motcle%";
+            }
+
+            // Total count
+            $sqlCount = "SELECT COUNT(*) as total
+                         FROM wishlist w
+                         JOIN offre o ON w.offre_id = o.id
+                         JOIN entreprise e ON o.entreprise_id = e.id
+                         WHERE w.user_id = ? $sqlFilter";
+
+            $stmtCount = $pdo->prepare($sqlCount);
+            $stmtCount->execute($params);
+            $total = $stmtCount->fetch(PDO::FETCH_ASSOC)['total'] ?? 0;
+
+            // Data fetch
+            $sql = "SELECT w.id AS wishlist_id,
+                           o.id AS offre_id,
+                           o.titre,
+                           e.nom AS entreprise
+                    FROM wishlist w
+                    JOIN offre o ON w.offre_id = o.id
+                    JOIN entreprise e ON o.entreprise_id = e.id
+                    WHERE w.user_id = ? $sqlFilter
+                    ORDER BY w.id DESC
+                    LIMIT ? OFFSET ?";
+
+            $stmt = $pdo->prepare($sql);
+            $i = 1;
+            foreach ($params as $p) {
+                $stmt->bindValue($i++, $p);
+            }
+            $stmt->bindValue($i++, $limit, PDO::PARAM_INT);
+            $stmt->bindValue($i, $offset, PDO::PARAM_INT);
+
+            $stmt->execute();
+            $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            return [
+                'wishlist' => $result,
+                'total' => $total
+            ];
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la recherche dans la wishlist : " . $e->getMessage());
+        }
+    }
+
     /**
      * Récupère la wishlist d'un utilisateur (jointure sur Offre et Entreprise).
      */
