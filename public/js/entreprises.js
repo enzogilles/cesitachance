@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchForm = document.querySelector(".search-form");
   const entreprisesList = document.getElementById("entreprises-list");
 
-<<<<<<< Updated upstream
   // Gestion de la soumission du formulaire de recherche
   searchForm.addEventListener("submit", function (e) {
     e.preventDefault();
@@ -22,26 +21,6 @@ document.addEventListener("DOMContentLoaded", function () {
         notification.style.transform = "translateX(-50%)";
         notification.style.zIndex = "1000";
     
-=======
-  if (notif === "updated") {
-    showNotification("✅ Entreprise modifiée avec succès", "success", 4000);
-  } else if (notif === "created") {
-    showNotification("✅ Entreprise créée avec succès", "success", 4000);
-  } else if (notif === "deleted") {
-    showNotification("🗑️ Entreprise supprimée avec succès", "success", 4000);
-  }
-
-  if (notif) {
-    url.searchParams.delete("notif");
-    window.history.replaceState({}, "", url.toString());
-  }
-
-  function showNotification(message, type = "info", duration = 3000) {
-    document.querySelectorAll(".notification").forEach(notification => notification.remove());
-    const notification = document.createElement("div");
-    notification.className = `notification ${type}`;
-    notification.textContent = message;
->>>>>>> Stashed changes
     document.body.appendChild(notification);
 
     // Suppression automatique de la notification après 3 secondes
@@ -49,7 +28,6 @@ document.addEventListener("DOMContentLoaded", function () {
       notification.remove();
     }, 3000);
 
-<<<<<<< Updated upstream
     // Récupération de la valeur saisie
     const searchValue = document.getElementById("recherche").value.trim().toLowerCase();
 
@@ -95,52 +73,4 @@ document.addEventListener("DOMContentLoaded", function () {
         .catch(error => console.error("Erreur lors du chargement des détails de l'entreprise :", error));
     }
 });
-=======
-  // Confirmation de suppression
-  document.querySelectorAll('.btn-supprimer').forEach(button => {
-    button.addEventListener('click', function (e) {
-      e.preventDefault();
-      const id = this.getAttribute("data-id");
-      showCustomConfirm("Voulez-vous vraiment supprimer cette entreprise ?", () => {
-        window.location.href = BASE_URL + "entreprise/supprimer/" + id;
-      });
-    });
-  });
-
-  function showCustomConfirm(message, onConfirm) {
-    // Supprimer tout confirm box existant
-    document.querySelectorAll('.custom-confirm').forEach(el => el.remove());
-    
-    // Créer la boîte de confirmation
-    const confirmBox = document.createElement('div');
-    confirmBox.className = 'custom-confirm';
-    
-    const messageEl = document.createElement('p');
-    messageEl.textContent = message;
-    
-    const buttonContainer = document.createElement('div');
-    buttonContainer.className = 'confirm-buttons';
-    
-    const confirmBtn = document.createElement('button');
-    confirmBtn.className = 'btn-confirm';
-    confirmBtn.textContent = 'Confirmer';
-    confirmBtn.addEventListener('click', () => {
-      confirmBox.remove();
-      onConfirm();
-    });
-    
-    const cancelBtn = document.createElement('button');
-    cancelBtn.className = 'btn-cancel';
-    cancelBtn.textContent = 'Annuler';
-    cancelBtn.addEventListener('click', () => {
-      confirmBox.remove();
-    });
-    
-    buttonContainer.appendChild(confirmBtn);
-    buttonContainer.appendChild(cancelBtn);
-    confirmBox.appendChild(messageEl);
-    confirmBox.appendChild(buttonContainer);
-    document.body.appendChild(confirmBox);
-  }
->>>>>>> Stashed changes
 });

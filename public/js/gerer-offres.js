@@ -1,31 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
 
-<<<<<<< Updated upstream
-  // GESTION DU BOUTON MODIFIER
-  document.querySelectorAll('.btn-modifier').forEach(button => {
-    button.addEventListener('click', function() {
-      const offreId = this.getAttribute("data-id");
-      window.location.href = `modifier-offre.php?id=${offreId}`;
-    });
-  });
-
-  // GESTION DU BOUTON SUPPRIMER
-  document.querySelectorAll('.btn-supprimer').forEach(button => {
-    button.addEventListener('click', function() {
-      const offreId = this.getAttribute("data-id");
-
-      if (confirm("Voulez-vous vraiment supprimer cette offre ?")) {
-        fetch(`../api/gerer-offres.php?action=delete&id=${offreId}`, {
-          method: "DELETE"
-        })
-        .then(response => response.json())
-        .then(data => {
-          alert(data.message);
-          location.reload();
-        })
-        .catch(error => console.error("Erreur de suppression :", error));
-      }
-=======
   if (notif === "deleted") {
     showNotification("🗑️ Offre supprimée", "success", 4000);
   } else if (notif === "updated") {
@@ -155,12 +129,9 @@ document.addEventListener('DOMContentLoaded', function() {
     btnOk.addEventListener('click', () => {
       onConfirm();
       document.body.removeChild(overlay);
->>>>>>> Stashed changes
     });
   });
 
-<<<<<<< Updated upstream
-=======
     btnCancel.addEventListener('click', () => {
       document.body.removeChild(overlay);
     });
@@ -179,5 +150,4 @@ document.addEventListener('DOMContentLoaded', function() {
     overlay.appendChild(modal);
     document.body.appendChild(overlay);
   }
->>>>>>> Stashed changes
 });
