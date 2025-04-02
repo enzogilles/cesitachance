@@ -181,7 +181,7 @@ document.addEventListener("DOMContentLoaded", function () {
     notification.textContent = message;
     notification.style.position = "fixed";
     notification.style.top = "130px";
-    notification.style.left = "37%";
+    notification.style.left = "40%";
     notification.style.transform = "translateX(-50%)";
     notification.style.zIndex = "1000";
     document.body.appendChild(notification);
@@ -200,7 +200,9 @@ document.addEventListener("DOMContentLoaded", function () {
   const notif = urlParams.get("notif");
   
   if (notif === "1") {
-    showNotification("🔍 Résultat(s) de la recherche affiché(s)", "info", 5000);
+    showNotification("🔍 Wishlist affichée", "info", 5000);
+    urlParams.delete("notif");
+    window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
   }
   
 });
