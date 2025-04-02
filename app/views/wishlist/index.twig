@@ -10,8 +10,8 @@
 {% block content %}
 <main class="content">
 
-    {# Cas 1 : Étudiant connecté (wishlist perso) #}
-    {% if user.role == 'Étudiant' and wishlist is defined %}
+    {# Cas 1 : Étudiant ou Admin connecté (wishlist perso) #}
+    {% if user.role in ['Étudiant', 'Admin'] and wishlist is defined and student is not defined %}
         <h2>Ma Wishlist</h2>
         {% if wishlist is not empty %}
             <ul>
@@ -29,7 +29,7 @@
             <p>Votre wishlist est vide.</p>
         {% endif %}
 
-    {# Cas 2 : Admin/Pilote visualise un étudiant spécifique #}
+    {# Cas 2 : Admin/Pilote visualise un autre utilisateur (étudiant ou admin) #}
     {% elseif user.role in ['Admin', 'pilote'] and student is defined %}
         <h2>Wishlist de {{ student.prenom }} {{ student.nom }}</h2>
         {% if wishlist is not empty %}
@@ -43,31 +43,44 @@
         {% endif %}
         <p>
             <a href="{{ BASE_URL }}index.php?controller=wishlist&action=index" class="btn btn-back">
-                Retour à la liste des étudiants
+                Retour à la liste des utilisateurs
             </a>
         </p>
 
-    {# Cas 3 : Admin/Pilote visualise la liste des étudiants #}
+    {# Cas 3 : Admin/Pilote visualise la liste des utilisateurs #}
     {% elseif user.role in ['Admin', 'pilote'] and students is defined %}
-        <h3>Liste des étudiants</h3>
+        <h3>Liste des wishlists</h3>
+
             <form method="get" class="search-form" style="margin-bottom:20px" action="{{ BASE_URL }}index.php">
             <input type="hidden" name="controller" value="wishlist">
             <input type="hidden" name="action" value="search">
-            <input type="hidden" name="student_id" value="{{ student.id }}">
             <input type="hidden" name="notif" value="1">
-            <input type="text" name="motcle" placeholder="Rechercher une offre..." value="{{ motcle|default('') }}">
+        
+            <label for="student_id">Utilisateur :</label>
+            <select name="student_id">
+        <option value="">Tous les utilisateurs</option>
+        {% for s in allUsers %}
+            <option value="{{ s.id }}" {% if s.id == student_id %}selected{% endif %}>
+                {{ s.prenom }} {{ s.nom }} ({{ s.role }})
+            </option>
+        {% endfor %}
+    </select>
             <button type="submit" class="btn">Rechercher</button>
             <button type="reset" class="bouton-reset">Réinitialiser</button>
         </form>
         
 
-            
         {% if students is not empty %}
             <div class="table-container">
                 <ul class="students-list">
                     {% for student in students %}
                         <li class="student-item">
-                            <span>{{ student.nom|e }} {{ student.prenom|e }}</span>
+                            <span>
+                                {{ student.nom|e }} {{ student.prenom|e }}
+                                {% if student.role == 'Admin' %}
+                                    <em>(Admin)</em>
+                                {% endif %}
+                            </span>
                             <a class="btn-view" href="{{ BASE_URL }}index.php?controller=wishlist&action=view&student_id={{ student.id }}">
                                 Voir la wishlist
                             </a>
@@ -75,45 +88,43 @@
                     {% endfor %}
                 </ul>
 
-    <!-- Pagination -->
-    {% if totalPages is defined and totalPages > 1 %}
-    <div class="pagination">
-        {% if page > 1 %}
-            <a href="?controller=wishlist&action=index&page={{ page - 1 }}">Précédent</a>
-        {% endif %}
+                {% if totalPages is defined and totalPages > 1 %}
+                    <div class="pagination">
+                        {% if page > 1 %}
+                            <a href="?controller=wishlist&action=index&page={{ page - 1 }}">Précédent</a>
+                        {% endif %}
 
-        {% set window = 3 %}
-        {% if totalPages <= window %}
-            {% set start = 1 %}
-            {% set end = totalPages %}
-        {% else %}
-            {% set start = page - 1 %}
-            {% if start < 1 %}
-                {% set start = 1 %}
-            {% endif %}
-            {% set end = start + window - 1 %}
-            {% if end > totalPages %}
-                {% set end = totalPages %}
-                {% set start = end - window + 1 %}
-                {% if start < 1 %}
-                    {% set start = 1 %}
+                        {% set window = 3 %}
+                        {% if totalPages <= window %}
+                            {% set start = 1 %}
+                            {% set end = totalPages %}
+                        {% else %}
+                            {% set start = page - 1 %}
+                            {% if start < 1 %}
+                                {% set start = 1 %}
+                            {% endif %}
+                            {% set end = start + window - 1 %}
+                            {% if end > totalPages %}
+                                {% set end = totalPages %}
+                                {% set start = end - window + 1 %}
+                                {% if start < 1 %}
+                                    {% set start = 1 %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% for i in start..end %}
+                            <a href="?controller=wishlist&action=index&page={{ i }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+                        {% endfor %}
+
+                        {% if page < totalPages %}
+                            <a href="?controller=wishlist&action=index&page={{ page + 1 }}">Suivant</a>
+                        {% endif %}
+                    </div>
                 {% endif %}
-            {% endif %}
-        {% endif %}
-
-        {% for i in start..end %}
-            <a href="?controller=wishlist&action=index&page={{ i }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
-        {% endfor %}
-
-        {% if page < totalPages %}
-            <a href="?controller=wishlist&action=index&page={{ page + 1 }}">Suivant</a>
-        {% endif %}
-    </div>
-        </div>
-    {% endif %}
-        </div>
+            </div>
         {% else %}
-            <p>Aucun étudiant trouvé.</p>
+            <p>Aucun utilisateur trouvé.</p>
         {% endif %}
 
     {# Cas 4 : Aucun cas ne correspond #}

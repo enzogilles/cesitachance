@@ -34,22 +34,22 @@ class WishlistController extends BaseController
              $limit = 10;
              $offset = ($page - 1) * $limit;
      
-             // Compte total des étudiants pour la pagination
+             // Compte total des utilisateurs ciblés
              $stmt = $pdo->prepare("
                  SELECT COUNT(*) as total 
                  FROM user 
-                 WHERE role = 'Étudiant'
+                 WHERE role IN ('Étudiant', 'Admin')
              ");
              $stmt->execute();
              $count = $stmt->fetch(\PDO::FETCH_ASSOC);
              $total = $count['total'];
              $totalPages = ceil($total / $limit);
      
-             // Récupération des étudiants avec pagination
+             // Récupération paginée pour affichage
              $stmt = $pdo->prepare("
-                 SELECT id, nom, prenom, email
+                 SELECT id, nom, prenom, email, role
                  FROM user 
-                 WHERE role = 'Étudiant'
+                 WHERE role IN ('Étudiant', 'Admin')
                  ORDER BY nom, prenom
                  LIMIT ?, ?
              ");
@@ -58,17 +58,29 @@ class WishlistController extends BaseController
              $stmt->execute();
              $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
      
+             // Récupération de tous les utilisateurs pour le <select>
+             $stmtAll = $pdo->prepare("
+                 SELECT id, nom, prenom, role 
+                 FROM user 
+                 WHERE role IN ('Étudiant', 'Admin') 
+                 ORDER BY nom, prenom
+             ");
+             $stmtAll->execute();
+             $allUsers = $stmtAll->fetchAll(\PDO::FETCH_ASSOC);
+     
              $this->render('wishlist/index.twig', [
                  'students' => $students,
+                 'allUsers' => $allUsers,
                  'page' => $page,
                  'totalPages' => $totalPages,
-                 'user' => $_SESSION['user']
+                 'user' => $_SESSION['user'],
+                 'student_id' => $_GET['student_id'] ?? null,
              ]);
              return;
          }
      
-         // Si c'est un étudiant qui consulte sa propre wishlist
-         if ($_SESSION['user']['role'] === 'Étudiant') {
+         // Si c'est un étudiant ou un admin qui consulte sa propre wishlist
+         if (in_array($_SESSION['user']['role'], ['Étudiant', 'Admin'])) {
              $userId = $_SESSION['user']['id'];
              $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
              $limit = 10;
@@ -87,7 +99,6 @@ class WishlistController extends BaseController
              return;
          }
      }
-     
 
     /**
      * Vue pour qu'un Admin/pilote voie la wishlist d'un étudiant précis.
@@ -196,19 +207,26 @@ class WishlistController extends BaseController
      */
     public function search()
     {
-        $this->checkAuth(['Admin', 'pilote']);
-        
+        $this->checkAuth(['Admin']);
+    
         $motcle = isset($_GET['motcle']) ? trim($_GET['motcle']) : '';
-        $studentId = isset($_GET['student_id']) ? (int)$_GET['student_id'] : 0;
+        $studentId = isset($_GET['student_id']) && $_GET['student_id'] !== '' ? (int)$_GET['student_id'] : null;
         $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
     
-        $result = Wishlist::searchByStudent($studentId, $motcle, $limit, $offset);
-        $wishlist = $result['wishlist'];
-        $total = $result['total'];
-        $totalPages = ceil($total / $limit);
-        $student = Utilisateur::findById($studentId);
+        $wishlist = [];
+        $student = null;
+        $total = 0;
+        $totalPages = 0;
+    
+        if ($studentId !== null) {
+            $result = Wishlist::searchByStudent($studentId, $motcle, $limit, $offset);
+            $wishlist = $result['wishlist'];
+            $total = $result['total'];
+            $totalPages = ceil($total / $limit);
+            $student = Utilisateur::findById($studentId);
+        }
     
         $this->render('wishlist/index.twig', [
             'wishlist' => $wishlist,
@@ -217,8 +235,10 @@ class WishlistController extends BaseController
             'totalPages' => $totalPages,
             'student' => $student,
             'user' => $_SESSION['user'],
-            'notif' => '1'
+            'notif' => '1',
+            'student_id' => $studentId 
         ]);
     }
+    
     
 }
