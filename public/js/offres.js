@@ -18,13 +18,17 @@ document.addEventListener("DOMContentLoaded", function () {
     }, duration);
   }
 
-  if (resetButton && searchForm && window.location.pathname.includes("offre")) {
+  if (
+    resetButton &&
+    searchForm &&
+    searchForm.action.includes("/offre/search") 
+  ) {
     resetButton.addEventListener("click", function (e) {
       e.preventDefault();
       window.location.href = BASE_URL + "offre/index";
     });
   }
-
+  
   const urlParams = new URLSearchParams(window.location.search);
   const notif = urlParams.get("notif");
 

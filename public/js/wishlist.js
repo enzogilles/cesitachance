@@ -168,7 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
   const searchForm = document.querySelector(".search-form");
   const resetButton = document.querySelector(".search-form .bouton-reset");
 
-  if (resetButton) {
+  if (resetButton && window.location.pathname.includes("/wishlist")) {
     resetButton.addEventListener("click", function (e) {
       e.preventDefault();
       window.location.href = BASE_URL + "wishlist";
