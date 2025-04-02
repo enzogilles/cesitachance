@@ -1,0 +1,83 @@
+{% extends "layout/base.twig" %}
+{% block title %}Liste des Offres{% endblock %}
+{% block content %}
+<section class="content">
+    <h2>Liste des Offres</h2>
+
+    <!-- Formulaire de recherche -->
+    <form class="search-form" method="GET" action="{{ url('offre', 'search') }}">
+        <input type="hidden" name="notif" value="1">
+        <label for="motcle">Mot-clé :</label>
+        <input type="text" id="motcle" name="motcle" value="{{ motcle is defined ? motcle|e : '' }}" required>
+        <button type="submit" class="btn">Rechercher</button>
+        <button type="reset" class="bouton-reset">Réinitialiser</button>
+    </form>
+
+    <div class="offers-container">
+        {% if offres is not empty %}
+            {% for offre in offres %}
+                <div class="offer-card">
+                    <h4>{{ offre.titre|e }} - {{ offre.entreprise|e }}</h4>
+                    <p>Rémunération : {{ offre.remuneration|e }}€</p>
+                    <p>{{ offre.description is defined ? offre.description|e : '' }}</p>
+                    
+                    <div class="offer-buttons">
+                        <a href="{{ url('offre', 'detail', {'id': offre.id}) }}" class="btn-voir">Voir</a>
+                        {% if user is defined and user.role == 'Étudiant' %}
+                            <button class="btn btn-add-wishlist" style="display:inline;" data-offre-id="{{ offre.id }}" data-offre-title="{{ offre.titre|e('js') }} - {{ offre.entreprise|e('js') }}">Ajouter à la Wishlist</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p style="text-align: center; color: #777;">Aucune offre trouvée.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pagination -->
+    {% if totalPages is defined and totalPages > 0 %}
+        <div class="pagination">
+            {% if page > 1 %}
+                <a href="{{ url('offre', (motcle is not empty ? 'search' : 'index'), {'page': page - 1, 'motcle': motcle, 'competences': competences}) }}">Précédent</a>
+            {% endif %}
+
+            {% set window = 3 %}
+            {% if totalPages <= window %}
+                {% set start = 1 %}
+                {% set end = totalPages %}
+            {% else %}
+                {% set start = page - 1 %}
+                {% if start < 1 %}
+                    {% set start = 1 %}
+                {% endif %}
+                {% set end = start + window - 1 %}
+                {% if end > totalPages %}
+                    {% set end = totalPages %}
+                    {% set start = end - window + 1 %}
+                    {% if start < 1 %}
+                        {% set start = 1 %}
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+            {% for i in start..end %}
+                <a href="{{ url('offre', (motcle is not empty ? 'search' : 'index'), {'page': i, 'motcle': motcle, 'competences': competences}) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+            {% endfor %}
+
+            {% if page < totalPages %}
+                <a href="{{ url('offre', (motcle is not empty ? 'search' : 'index'), {'page': page + 1, 'motcle': motcle, 'competences': competences}) }}">Suivant</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</section>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+
+<script src="{{ BASE_URL }}public/js/offres.js"></script>
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
+
+{% endblock %}

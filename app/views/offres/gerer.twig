@@ -1,0 +1,91 @@
+{% extends "layout/base.twig" %}
+{% block title %}Gérer les Offres{% endblock %}
+{% block content %}
+<section class="content">
+  <h2>Gérer les Offres</h2>
+
+  <div class="create-offer-button">
+    <a href="{{ url('offre', 'create') }}" class="btn btn-create">➕ Créer une Offre</a>
+  </div>
+
+  <div class="table-responsive">
+    <table class="styled-table offres-table">
+      <thead>
+        <tr>
+          <th>Titre</th>
+          <th>Entreprise</th>
+          <th>Rémunération</th>
+          <th>Début</th>
+          <th>Fin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for offre in offres %}
+          <tr>
+            <td data-label="Titre">{{ offre.titre|e }}</td>
+            <td data-label="Entreprise">{{ offre.entreprise|e }}</td>
+            <td data-label="Rémunération">{{ offre.remuneration|e }}€</td>
+            <td data-label="Début">{{ offre.date_debut|e }}</td>
+            <td data-label="Fin">{{ offre.date_fin|e }}</td>
+            <td data-label="Actions">
+              <div class="offer-buttons">
+                <a href="{{ url('offre', 'modifier', {'id': offre.id}) }}" 
+                  class="btn-modifier"
+                  data-id="{{ offre.id }}">
+                  Modifier
+                </a>
+                <a href="#" 
+                  class="btn-supprimer"
+                  data-id="{{ offre.id }}">
+                  Supprimer
+                </a>
+              </div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  
+  {% if totalPages > 1 %}
+  <div class="pagination">
+    {% if page > 1 %}
+      <a href="{{ url('offre', 'gererOffres', {'page': page - 1}) }}">Précédent</a>
+    {% endif %}
+
+    {% set window = 3 %}
+    {% if totalPages <= window %}
+      {% set start = 1 %}
+      {% set end = totalPages %}
+    {% else %}
+      {% set start = page - 1 %}
+      {% if start < 1 %}
+        {% set start = 1 %}
+      {% endif %}
+      {% set end = start + window - 1 %}
+      {% if end > totalPages %}
+        {% set end = totalPages %}
+        {% set start = end - window + 1 %}
+        {% if start < 1 %}
+          {% set start = 1 %}
+        {% endif %}
+      {% endif %}
+    {% endif %}
+
+    {% for i in start..end %}
+      <a href="{{ url('offre', 'gererOffres', {'page': i}) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+    {% endfor %}
+
+    {% if page < totalPages %}
+      <a href="{{ url('offre', 'gererOffres', {'page': page + 1}) }}">Suivant</a>
+    {% endif %}
+  </div>
+  {% endif %}
+</section>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+<script src="{{ BASE_URL }}public/js/gerer-offres.js"></script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{% extends "layout/base.twig" %}
+{% block title %}Gestion des Utilisateurs{% endblock %}
+
+{% block content %}
+<main class="content">
+    <h2>Gestion des Utilisateurs</h2>
+    {# Vérification du rôle #}
+    {% if user is not defined or user.role != 'Admin' %}
+        <p>Accès refusé</p>
+    {% else %}
+        <div class="dashboard-actions">
+            <ul>
+                <li><a href="#recherche" class="btn-login">Rechercher un Utilisateur</a></li>
+                <li><a href="#creer" class="btn-login">Créer un Utilisateur</a></li>
+                <li><a href="#resultat" class="btn-login">Modifier un Utilisateur</a></li>
+                <li><a href="#resultat" class="btn-login">Supprimer un Utilisateur</a></li>
+                <li><a href="#statistiques" class="btn-login">Statistiques</a></li>
+            </ul>
+        </div>
+
+        {# Formulaire de recherche #}
+        <div id="recherche" style="margin-top: 40px;">
+            <h3>Rechercher un Utilisateur</h3>
+            <h5> Vous pourrez modifier ou supprimer cet utilsateur. </h5>
+            <form class="search-form" action="{{ url('gestionutilisateurs', 'search') }}" method="POST">
+                <label for="search-user">Nom, Prénom ou Email :</label>
+                <input type="text" id="search-user" name="search_query" required>
+
+                <button type="submit" class="btn">Rechercher</button>
+                {# Bouton reset (pour ré-initialiser l'affichage) #}
+                <button type="button" class="bouton-reset">Réinitialiser</button>
+            </form>
+        </div>
+        <hr>
+
+        {# Résultat de la recherche : si on a un utilisateur trouvé #}
+        {% if search_result is defined and search_result is not empty %}
+        <div id="resultat">
+            <h3>Résultat de la recherche :</h3>
+            <p>Nom : {{ search_result.nom }}</p>
+            <p>Prénom : {{ search_result.prenom }}</p>
+            <p>Email : {{ search_result.email }}</p>
+            <p>Rôle : {{ search_result.role }}</p>
+    
+            <h3>Modifier cet utilisateur</h3>
+            <form action="{{ url('gestionutilisateurs', 'update') }}" method="POST">
+                <input type="hidden" name="id" value="{{ search_result.id }}">
+                <label>Nouveau Nom :</label>
+                <input type="text" name="nom" value="{{ search_result.nom|e }}">
+    
+                <label>Nouveau Prénom :</label>
+                <input type="text" name="prenom" value="{{ search_result.prenom|e }}">
+    
+                <label>Nouvel Email :</label>
+                <input type="email" name="email" value="{{ search_result.email|e }}">
+    
+                <label>Nouveau Rôle :</label>
+                <select name="role">
+                    <option value="Etudiant" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
+                    <option value="pilote" {% if search_result.role == 'pilote' %}selected{% endif %}>Pilote</option>
+                    <option value="Admin" {% if search_result.role == 'Admin' %}selected{% endif %}>Administrateur</option>
+                </select>
+                <button type="submit" class="btn-login">Modifier</button>
+            </form>
+    
+            {% if user.id != search_result.id %}
+                <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
+                <form action="{{ url('gestionutilisateurs', 'delete') }}" method="POST">
+                    <input type="hidden" name="id" value="{{ search_result.id }}">
+                    <button type="submit" class="btn-supprimer">Supprimer</button>
+                </form>
+            {% else %}
+                <h3 style="margin-top:10px;">Suppression non autorisée</h3>
+                <p style="color: darkred;">Vous ne pouvez pas supprimer votre propre compte.</p>
+            {% endif %}
+        </div>
+        {% elseif search_result is defined and search_result is empty %}
+        <div id="resultat">
+            <p>Aucun utilisateur trouvé.</p>
+        </div>
+        {% endif %}
+    
+        {# Formulaire de création d'un nouvel utilisateur #}
+        <div id="creer" style="margin-top: 40px;">
+            <h3>Créer un Utilisateur</h3>
+            <form action="{{ url('gestionutilisateurs', 'create') }}" method="POST">
+                <label for="nom-create-user">Nom :</label>
+                <input type="text" id="nom-create-user" name="nom" required>
+                
+                <label for="prenom-create-user">Prénom :</label>
+                <input type="text" id="prenom-create-user" name="prenom" required>
+                
+                <label for="email-create-user">Email :</label>
+                <input type="email" id="email-create-user" name="email" required>
+                
+                <label for="role-create-user">Rôle :</label>
+                <select id="role-create-user" name="role" required>
+                    <option value="Etudiant">Étudiant</option>
+                    <option value="pilote">Pilote</option>
+                    <option value="Admin">Administrateur</option>
+                </select>
+                
+                <label for="password-create-user">Mot de passe :</label>
+                <input type="password" id="password-create-user" name="password" required>
+                
+                <button type="submit" class="btn-login">Créer</button>
+            </form>
+        </div>
+
+        {# Statistiques globales #}
+        <div id="statistiques" style="margin-top: 40px;">
+            <h3>Statistiques</h3>
+            <p>Nombre total d'utilisateurs : {{ stats.total_users|default('N/A') }}</p>
+            <p>Nombre d'étudiants : {{ stats.total_etudiants|default('N/A') }}</p>
+            <p>Nombre de pilotes : {{ stats.total_pilotes|default('N/A') }}</p>
+            <p>Nombre d'administrateurs : {{ stats.total_admins|default('N/A') }}</p>
+        </div>
+    {% endif %}
+</main>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+<script src="{{ BASE_URL }}public/js/gestion-etudiant.js"></script>
+<script src="{{ BASE_URL }}public/js/candidatures.js"></script>
+{% endblock %}
+
+

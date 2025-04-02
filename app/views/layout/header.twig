@@ -1,0 +1,57 @@
+{# On suppose que la variable "user" et "controller" sont passées par le contrôleur #}
+<header>
+    <div class="header-logo">
+    {% if controller is defined and controller == 'home' %}
+        <h1>CESI Ta Chance</h1>
+    {% else %}
+        <a href="{{ url('home', 'index') }}">
+            <img src="{{ BASE_URL }}public/images/logo.png" alt="Logo">
+        </a>
+    {% endif %}
+</div>
+    
+    <div class="header-controls">
+        <div id="user-menu">
+            {% if user %}
+                <div id="user-icon" class="dropdown">
+                    <img src="{{ BASE_URL }}public/images/logo_deco.png" alt="Déconnexion" class="user-logo">
+                    <div class="dropdown-menu">
+                        <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
+                        <form action="{{ url('utilisateur', 'logout') }}" method="POST">
+                            <button type="submit">Déconnexion</button>
+                        </form>
+                    </div>
+                </div>
+            {% else %}
+                <a href="{{ url('utilisateur', 'connexion') }}" id="login-btn" class="btn-login">Connexion</a>
+            {% endif %}
+        </div>
+        
+        <div class="burger-menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+
+    <nav>
+        <a href="{{ url('home', 'index') }}">Accueil</a>
+        <a href="{{ url('offre', 'index') }}">Offres</a>
+        <a href="{{ url('entreprise', 'index') }}">Entreprises</a>
+        {% if user %}
+            <a href="{{ url('candidature', 'index') }}">Candidatures</a>
+        {% endif %}
+        {% if user is defined and user.role == 'Étudiant' %}
+            <a href="{{ url('wishlist', 'index') }}">Ma Wishlist</a>
+        {% elseif user is defined and user.role == 'Admin' %}
+            <a href="{{ url('wishlist', 'index') }}">Wishlists</a>
+        {% endif %}
+
+        <a href="{{ url('contact', 'index') }}">Contact</a>
+        {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
+            <a href="{{ url('dashboard', 'index') }}">Dashboard</a>
+        {% endif %}
+    </nav>
+
+    <script src="{{ BASE_URL }}public/js/burger-menu.js"></script>
+</header>

@@ -1,0 +1,69 @@
+{% extends "layout/base.twig" %}
+{% block title %}Vos Candidatures{% endblock %}
+{% block content %}
+<section class="content">
+    {% if userRole in ['Admin', 'pilote'] %}
+        <h3>Candidatures des Étudiants</h3>
+    {% elseif userRole|lower matches '/^(etudiant|étudiant)$/' %}
+        <h3>Mes Candidatures</h3>
+    {% endif %}
+    <table class="styled-table candidatures-table">
+        <thead>
+            <tr>
+                <th>Entreprise</th>
+                <th>Offre</th>
+                {% if userRole in ['Admin', 'pilote'] %}
+                    <th>Élève</th>
+                {% endif %}
+                <th>Date</th>
+                <th>Statut</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if candidatures is not empty %}
+                {% for candidature in candidatures %}
+                    {% if candidature.statut == 1 %}
+                        {% set statut_class = 'accepted' %}
+                        {% set statut_label = 'Acceptée' %}
+                    {% elseif candidature.statut == 2 %}
+                        {% set statut_class = 'refused' %}
+                        {% set statut_label = 'Refusée' %}
+                    {% else %}
+                        {% set statut_class = 'pending' %}
+                        {% set statut_label = 'En attente' %}
+                    {% endif %}
+                    <tr data-id="{{ candidature.id }}">
+                        <td data-label="Entreprise">{{ candidature.entreprise|default('Non disponible')|e }}</td>
+                        <td data-label="Offre">{{ candidature.offre|default('Non disponible')|e }}</td>
+                        {% if userRole in ['Admin', 'pilote'] %}
+                            <td data-label="Élève">{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
+                        {% endif %}
+                        <td data-label="Date">{{ candidature.date_soumission }}</td>
+                        <td data-label="Statut" class="status {{ statut_class }}">
+                            {{ statut_label }}
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                {% set colSpanValue = (userRole in ['Admin', 'pilote']) ? 5 : 4 %}
+                <tr>
+                    <td colspan="{{ colSpanValue }}" style="text-align:center;">
+                        Aucune candidature en cours
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    {% if userRole == 'Admin' %}
+        <p>Cliquez sur le statut pour modifier l'état de la candidature.</p>
+    {% endif %}
+</section>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+{% if userRole == 'Admin' %}
+    <script src="{{ BASE_URL }}public/js/candidatures.js"></script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "layout/base.twig" %}
+{% block title %}Détails de l'Entreprise{% endblock %}
+{% block content %}
+<section class="content">
+    <h3>Détails de l'Entreprise</h3>
+    {% if entreprise is defined %}
+        <p>Nom: {{ entreprise.nom|e }}</p>
+        <p>Secteur: {{ entreprise.secteur|e }}</p>
+        <p>Ville: {{ entreprise.ville|e }}</p>
+        {% if entreprise.description is not empty %}
+            <p>Description: {{ entreprise.description|e|nl2br }}</p>
+        {% endif %}
+        {% if entreprise.email is not empty %}
+            <p>Email de contact: {{ entreprise.email|e }}</p>
+        {% endif %}
+        {% if entreprise.telephone is not empty %}
+            <p>Téléphone: {{ entreprise.telephone|e }}</p>
+        {% endif %}
+        <p>Nombre de stagiaires ayant postulé: {{ entreprise.nb_stagiaires|default(0) }}</p>
+        {% set moy = entreprise.moyenne_eval|default(null) %}
+        {% set moyenneAffiche = moy ? moy|round(2) : 'N/A' %}
+        <p>Moyenne des évaluations: {{ moyenneAffiche }} / 5</p>
+    {% else %}
+        <p>Entreprise introuvable.</p>
+    {% endif %}
+    {% if user is not defined or user.id is not defined %}
+        <p>Connectez-vous pour évaluer cette entreprise.</p>
+    {% else %}
+        <h3>Évaluer cette entreprise</h3>
+        <form action="{{ url('entreprise', 'evaluer', {'id': entreprise.id}) }}" method="POST">
+            <label for="note">Note (1 à 5) :</label>
+            <input type="number" id="note" name="note" min="1" max="5" required>
+            <br>
+            <label for="commentaire">Commentaire :</label>
+            <textarea id="commentaire" name="commentaire"></textarea>
+            <br>
+            <button type="submit" class="btn">Envoyer l'évaluation</button>
+            <button type="reset" class="bouton-reset">Réinitialiser</button>
+        </form>
+    {% endif %}
+
+    <div class="back-button-container">
+        <a href="{{ url('entreprise', 'index') }}" class="btn btn-back">⬅ Retour aux Entreprises</a>
+    </div>
+</section>
+{% endblock %}

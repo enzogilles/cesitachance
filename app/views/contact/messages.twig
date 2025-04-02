@@ -1,0 +1,33 @@
+{% extends "layout/base.twig" %}
+{% block title %}Messages reçus{% endblock %}
+{% block content %}
+<section class="content">
+    <h3>Messages reçus</h3>
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Email</th>
+                <th>Message</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if messages is not empty %}
+                {% for message in messages %}
+                    <tr>
+                        <td>{{ message.nom|e }}</td>
+                        <td>{{ message.email|e }}</td>
+                        <td>{{ message.message|e|nl2br }}</td>
+                        <td>{{ message.date_envoi|e }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align:center;">Aucun message reçu</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</section>
+{% endblock %}
