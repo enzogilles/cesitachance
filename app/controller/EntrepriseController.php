@@ -83,31 +83,24 @@ class EntrepriseController extends BaseController
 
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);
-
+    
         $id = $_GET['id'] ?? null;
+    
+        // Préserver les filtres si présents
+        $redirectParams = ['notif' => 'deleted'];
+        foreach (['nom', 'ville', 'secteur', 'page'] as $param) {
+            if (!empty($_GET[$param])) {
+                $redirectParams[$param] = $_GET[$param];
+            }
+        }
+    
         if ($id) {
             Entreprise::delete($id);
-            $this->redirect('entreprise', 'index', ['notif' => 'deleted']);
         }
+    
+        $this->redirect('entreprise', 'index', $redirectParams);
     }
-
-    public function evaluer($id) {
-        $this->checkAuth(['Etudiant']);
-
-        $entreprise = Entreprise::findById($id);
-        if (!$entreprise) {
-            die("Entreprise introuvable.");
-        }
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $_SESSION['message'] = "Évaluation enregistrée avec succès !";
-            $this->redirect('entreprise', 'details', ['id' => $id]);
-        }
-
-        $this->render('entreprises/evaluer.twig', [
-            'entreprise' => $entreprise
-        ]);
-    }
+    
 
     public function details($id) {
         $entrepriseData = Entreprise::findById($id);
@@ -121,19 +114,28 @@ class EntrepriseController extends BaseController
     }
 
     private function getActionsForEntreprise($entreprise) {
+        $id = $entreprise['id'];
+        $params = ['id' => $id];
+    
+        foreach (['nom', 'ville', 'secteur', 'page'] as $param) {
+            if (!empty($_GET[$param])) {
+                $params[$param] = $_GET[$param];
+            }
+        }
+    
         $actions = '';
-
-        $actions .= '<a href="' . $this->generateUrl('entreprise', 'details', ['id' => $entreprise['id']]) . '" class="btn btn-voir">Détails</a>';
-
+        $actions .= '<a href="' . $this->generateUrl('entreprise', 'details', ['id' => $id]) . '" class="btn btn-voir">Détails</a>';
+    
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'modifier', ['id' => $entreprise['id']]) . '" class="btn btn-modifier">Modifier</a>';
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', ['id' => $entreprise['id']]) . '" class="btn btn-supprimer">Supprimer</a>';
+            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'modifier', ['id' => $id]) . '" class="btn btn-modifier">Modifier</a>';
+            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', $params) . '" class="btn btn-supprimer">Supprimer</a>';
         }
-
+    
         if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Etudiant') {
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $entreprise['id']]) . '" class="btn btn-evaluate">Évaluer</a>';
+            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $id]) . '" class="btn btn-evaluate">Évaluer</a>';
         }
-
+    
         return $actions;
     }
+    
 }
