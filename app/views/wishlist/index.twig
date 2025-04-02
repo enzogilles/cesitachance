@@ -34,17 +34,16 @@
         <h2>Wishlist de {{ student.prenom }} {{ student.nom }}</h2>
         {% if wishlist is not empty %}
         <ul class="wishlist-list">
-            {% for item in wishlist %}
-                <li>
-                    {{ item.titre|e }} - {{ item.entreprise|e }}
-                    <form action="{{ url('wishlist', 'remove') }}" method="POST">
-                        <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+        {% for item in wishlist %}
+            <li style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span style="flex: 1;">{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+                <form action="{{ url('wishlist', 'remove') }}" method="POST">
+                    <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
                     <button type="button" class="btn btn-delete" data-id="{{ item.wishlist_id }}">Supprimer</button>
-
-                    </form>
-                </li>
-            {% endfor %}
-        </ul>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
         {% else %}
             <p>La wishlist est vide.</p>
         {% endif %}
@@ -56,41 +55,46 @@
 
     {# Cas 3 : Admin/Pilote visualise la liste des utilisateurs #}
     {% elseif user.role in ['Admin', 'pilote'] and students is defined %}
-        <h3>Liste des wishlists</h3>
+    <h3>Liste des wishlists</h3>
 
-        <form method="get" class="search-form" style="margin-bottom:20px" action="{{ url('wishlist', 'search') }}">
-            <input type="hidden" name="notif" value="1">
+    <form method="get" class="search-form" style="margin-bottom:20px" action="{{ url('wishlist', 'search') }}">
+        <input type="hidden" name="notif" value="1">
+        <label for="student_id">Utilisateur :</label>
+        <select name="student_id">
+            <option value="">Tous les utilisateurs</option>
+            {% for s in allUsers %}
+                <option value="{{ s.id }}" {% if s.id == student_id %}selected{% endif %}>
+                    {{ s.prenom }} {{ s.nom }} ({{ s.role }})
+                </option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn">Rechercher</button>
+        <button type="reset" class="bouton-reset">Réinitialiser</button>
+    </form>
 
-            <label for="student_id">Utilisateur :</label>
-            <select name="student_id">
-                <option value="">Tous les utilisateurs</option>
-                {% for s in allUsers %}
-                    <option value="{{ s.id }}" {% if s.id == student_id %}selected{% endif %}>
-                        {{ s.prenom }} {{ s.nom }} ({{ s.role }})
-                    </option>
+    <p style="margin-bottom: 15px;">
+        <a class="btn-voir" href="{{ url('wishlist', 'view', {'student_id': user.id}) }}">
+            Voir ma propre wishlist
+        </a>
+    </p>
+
+    {% if students is not empty %}
+        <div class="table-container">
+            <ul class="students-list">
+                {% for student in students %}
+                    <li class="student-item">
+                        <span>
+                            {{ student.nom|e }} {{ student.prenom|e }}
+                            {% if student.role == 'Admin' %}
+                                <em>(Admin)</em>
+                            {% endif %}
+                        </span>
+                        <a class="btn-view" href="{{ url('wishlist', 'view', {'student_id': student.id}) }}">
+                            Voir la wishlist
+                        </a>
+                    </li>
                 {% endfor %}
-            </select>
-            <button type="submit" class="btn">Rechercher</button>
-            <button type="reset" class="bouton-reset">Réinitialiser</button>
-        </form>
-
-        {% if students is not empty %}
-            <div class="table-container">
-                <ul class="students-list">
-                    {% for student in students %}
-                        <li class="student-item">
-                            <span>
-                                {{ student.nom|e }} {{ student.prenom|e }}
-                                {% if student.role == 'Admin' %}
-                                    <em>(Admin)</em>
-                                {% endif %}
-                            </span>
-                            <a class="btn-view" href="{{ url('wishlist', 'view', {'student_id': student.id}) }}">
-                                Voir la wishlist
-                            </a>
-                        </li>
-                    {% endfor %}
-                </ul>
+            </ul>
 
                 {% if totalPages is defined and totalPages > 1 %}
                     <div class="pagination">

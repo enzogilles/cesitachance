@@ -23,7 +23,7 @@
                     
                     <div class="offer-buttons">
                         <a href="{{ url('offre', 'detail', {'id': offre.id}) }}" class="btn-voir">Voir</a>
-                        {% if user is defined and user.role == 'Étudiant' %}
+                        {% if user is defined and user.role != 'pilote' %}
                             <button class="btn btn-add-wishlist" style="display:inline;" data-offre-id="{{ offre.id }}" data-offre-title="{{ offre.titre|e('js') }} - {{ offre.entreprise|e('js') }}">Ajouter à la Wishlist</button>
                             </form>
                         {% endif %}
