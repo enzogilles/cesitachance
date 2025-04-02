@@ -14,7 +14,7 @@
             <div class="offer-card">
                 <h4>{{ offre.titre|e }} - {{ offre.entreprise|e }}</h4>
                 <div class="offer-buttons">
-                    <a href="{{ url('offre', 'detail', {'id': offre.id}) }}" class="btn-voir">Voir</a>
+                    <a href="{{ BASE_URL }}index.php?controller=offre&action=detail&id={{ offre.id }}" class="btn-voir">Voir</a>
                 </div>
             </div>
         {% endfor %}

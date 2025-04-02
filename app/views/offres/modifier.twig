@@ -10,7 +10,7 @@
     {% if success is defined %}
         <p style="color: green;">{{ success|e }}</p>
     {% endif %}
-    <form method="POST" action="{{ url('offre', 'modifier', {'id': offre.id}) }}">
+    <form method="POST" action="{{ BASE_URL }}index.php?controller=offre&action=modifier&id={{ offre.id }}">
         <label for="titre">Titre :</label>
         <input type="text" id="titre" name="titre" value="{{ offre.titre|e }}" required>
         <label for="description">Description :</label>
@@ -25,13 +25,6 @@
         <textarea id="competences" name="competences">{{ offre.competences|default('')|e }}</textarea>
         <button type="submit" class="btn btn-modifier">Modifier l'Offre</button>
     </form>
-<<<<<<< Updated upstream
-=======
-
-    <div class="back-button-container">
-        <a href="{{ url('offre', 'gererOffres') }}" class="btn btn-back">⬅ Retour à la gestion</a>
-    </div>
->>>>>>> Stashed changes
 </section>
 {% endblock %}
 =======

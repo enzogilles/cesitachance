@@ -18,7 +18,6 @@ class EntrepriseController extends BaseController
      * - Boutons conditionnels selon le rôle (Admin/Pilote)
      */
     public function index() {
-<<<<<<< Updated upstream
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
@@ -86,36 +85,6 @@ class EntrepriseController extends BaseController
 
         // Rendu de la vue avec Twig
         $this->render('entreprises/index.twig', [
-=======
-        // Récupération des paramètres de recherche
-        $nom = isset($_GET['nom']) ? $_GET['nom'] : '';
-        $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
-        $secteur = isset($_GET['secteur']) ? $_GET['secteur'] : '';
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        
-        // Nombre d'éléments par page
-        $limit = 10;
-        $offset = ($page - 1) * $limit;
-        
-        // Récupération des entreprises
-        $entreprises = Entreprise::search($nom, $ville, $secteur, $limit, $offset);
-        
-        // Ajout des actions pour chaque entreprise
-        foreach ($entreprises as &$entreprise) {
-            $entreprise['actions'] = $this->getActionsForEntreprise($entreprise);
-        }
-        unset($entreprise);
-        
-        $totalEntreprises = Entreprise::countAll($nom, $ville, $secteur);
-        $totalPages = ceil($totalEntreprises / $limit);
-        
-        // Récupération de tous les secteurs distincts pour le menu déroulant
-        $entrepriseModel = new Entreprise();
-        $secteurs = $entrepriseModel->getAllSecteurs();
-        
-        // Rendu du template
-        echo $this->render('entreprises/index.twig', [
->>>>>>> Stashed changes
             'entreprises' => $entreprises,
             'page' => $page,
             'totalPages' => $totalPages,
@@ -158,13 +127,9 @@ class EntrepriseController extends BaseController
                 $entreprise->email = $email;
                 $entreprise->telephone = $telephone;
                 $entreprise->save();
-<<<<<<< Updated upstream
 
                 header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index");
                 exit;
-=======
-                $this->redirect('entreprise', 'index', ['notif' => 'created']);
->>>>>>> Stashed changes
             }
         }
 
@@ -191,7 +156,7 @@ class EntrepriseController extends BaseController
         $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$entrepriseData) {
-            $this->redirect('entreprise', 'index', ['error' => 'not_found']);
+            die("Entreprise introuvable.");
         }
 
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -203,16 +168,11 @@ class EntrepriseController extends BaseController
             $email = trim($_POST["email"]);
             $telephone = trim($_POST["telephone"]);
 
-<<<<<<< Updated upstream
             $stmt = $pdo->prepare("UPDATE entreprise SET nom = ?, ville = ?, secteur = ?, taille = ?, description = ?, email = ?, telephone = ? WHERE id = ?");
             $stmt->execute([$nom, $ville, $secteur, $taille, $description, $email, $telephone, $id]);
 
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index");
             exit;
-=======
-            $entreprise->save();
-            $this->redirect('entreprise', 'index', ['notif' => 'updated']);
->>>>>>> Stashed changes
         }
 
         $this->render('entreprises/modifier.twig', [
@@ -233,7 +193,6 @@ class EntrepriseController extends BaseController
             exit;
         }
 
-<<<<<<< Updated upstream
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
             $pdo = Database::getInstance();
@@ -242,14 +201,6 @@ class EntrepriseController extends BaseController
 
             header("Location: " . BASE_URL . "index.php?controller=entreprise&action=index");
             exit;
-=======
-        $id = $_GET['id'] ?? null;
-        if ($id) {
-            Entreprise::delete($id);
-            $this->redirect('entreprise', 'index', ['notif' => 'deleted']);
-        } else {
-            $this->redirect('entreprise', 'index', ['error' => 'missing_id']);
->>>>>>> Stashed changes
         }
     }
 
@@ -272,7 +223,7 @@ class EntrepriseController extends BaseController
         $entreprise = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$entreprise) {
-            $this->redirect('entreprise', 'index', ['error' => 'not_found']);
+            die("Entreprise introuvable.");
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -284,7 +235,8 @@ class EntrepriseController extends BaseController
             $stmtEval->execute([$id, $user_id, $note, $commentaire]);
 
             $_SESSION['message'] = "Évaluation enregistrée avec succès !";
-            $this->redirect('entreprise', 'details', ['id' => $id]);
+            header("Location: " . BASE_URL . "index.php?controller=entreprise&action=details&id=" . $id);
+            exit;
         }
 
         $this->render('entreprises/evaluer.twig', [
@@ -306,38 +258,11 @@ class EntrepriseController extends BaseController
         $entrepriseData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$entrepriseData) {
-            $this->redirect('entreprise', 'index', ['error' => 'not_found']);
+            die("Entreprise introuvable.");
         }
 
         $this->render('entreprises/details.twig', [
             'entreprise' => $entrepriseData
         ]);
     }
-<<<<<<< Updated upstream
 }
-=======
-
-    /**
-     * Génère les actions disponibles pour une entreprise.
-     */
-    private function getActionsForEntreprise($entreprise) {
-        $actions = '';
-
-        // Bouton de détails pour tous les utilisateurs
-        $actions .= '<a href="' . $this->generateUrl('entreprise', 'details', ['id' => $entreprise['id']]) . '" class="btn-voir">Détails</a>';
-
-        // Actions supplémentaires pour Admin et pilote
-        if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'modifier', ['id' => $entreprise['id']]) . '" class="btn-modifier">Modifier</a>';
-            $actions .= ' <a href="#" class="btn-supprimer" data-id="' . $entreprise['id'] . '">Supprimer</a>';
-        }
-
-        // Action d'évaluation pour les étudiants
-        if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Etudiant') {
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $entreprise['id']]) . '" class="btn-evaluate">Évaluer</a>';
-        }
-
-        return $actions;
-    }
-}
->>>>>>> Stashed changes

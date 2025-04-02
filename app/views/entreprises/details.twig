@@ -25,7 +25,7 @@
         <p>Entreprise introuvable.</p>
     {% endif %}
     <h3>Évaluer cette entreprise</h3>
-    <form action="{{ url('entreprise', 'evaluer', {'id': entreprise.id}) }}" method="POST">
+    <form action="{{ BASE_URL }}index.php?controller=entreprise&action=evaluer&id={{ entreprise.id }}" method="POST">
         <label for="note">Note (1 à 5) :</label>
         <input type="number" id="note" name="note" min="1" max="5" required>
         <br>
@@ -34,14 +34,6 @@
         <br>
         <button type="submit" class="btn">Envoyer l'évaluation</button>
     </form>
-<<<<<<< Updated upstream
-=======
-{% endif %}
-
-        <div class="back-button-container">
-        <a href="{{ url('entreprise', 'index') }}" class="btn btn-back">⬅ Retour aux Entreprises</a>
-    </div>
->>>>>>> Stashed changes
 </section>
 {% endblock %}
 =======

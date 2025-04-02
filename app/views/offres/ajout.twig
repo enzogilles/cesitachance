@@ -10,7 +10,7 @@
     {% if error is defined %}
         <p class="error-message">{{ error }}</p>
     {% endif %}
-    <form action="{{ url('offre', 'ajout') }}" method="POST">
+    <form action="{{ BASE_URL }}offres/ajout.php" method="POST">
         <label for="titre">Titre :</label>
         <input type="text" id="titre" name="titre" required>
         <label for="description">Description :</label>
@@ -25,12 +25,6 @@
         <input type="date" id="date_fin" name="date_fin" required>
         <button type="submit" class="btn">Publier l'offre</button>
     </form>
-<<<<<<< Updated upstream
-=======
-    <div class="back-button-container">
-        <a href="{{ url('offre', 'index') }}" class="btn btn-back">⬅ Retour aux Offres</a>
-    </div>
->>>>>>> Stashed changes
 </section>
 {% endblock %}
 =======
