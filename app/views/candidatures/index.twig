@@ -34,7 +34,8 @@
                     {% endif %}
                     <tr data-id="{{ candidature.id }}">
                         <td data-label="Entreprise">{{ candidature.entreprise|default('Non disponible')|e }}</td>
-                    <td data-label="Offre">{{ candidature.offre|default('Non disponible')|e }}</td>
+                        <td data-label="Offre">{{ candidature.offre|default('Non disponible')|e }}</td>
+
                         {% if userRole in ['Admin', 'pilote'] %}
                             <td data-label="Élève">{{ candidature.user_nom ~ ' ' ~ candidature.user_prenom }}</td>
                         {% endif %}
@@ -63,6 +64,8 @@
   const BASE_URL = "{{ BASE_URL }}";
 </script>
 
+
+<script src="{{ BASE_URL }}public/js/envoi-candidature.js"></script>
 {% if userRole == 'Admin' %}
     <script src="{{ BASE_URL }}public/js/candidatures.js"></script>
 {% endif %}

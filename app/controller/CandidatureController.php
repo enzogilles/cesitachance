@@ -82,8 +82,7 @@ class CandidatureController extends BaseController {
             $candidature->statut = 'en attente';
             $candidature->save();
 
-            // Redirection avec URL propre
-            $this->redirect('offre', 'detail', ['id' => $offreId, 'success' => 1]);
+            $this->redirect('candidature', 'index', ['success' => 1]);
         }
     }
 
