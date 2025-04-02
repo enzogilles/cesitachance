@@ -3,12 +3,12 @@
 {% block content %}
 <section class="content">
     <h2>Statistiques Étudiant</h2>
-    <p><strong>Nom :</strong> {{ etudiant.nom|e }}</p>
-    <p><strong>Prénom :</strong> {{ etudiant.prenom|e }}</p>
-    <p><strong>Email :</strong> {{ etudiant.email|e }}</p>
+    <p>Nom : {{ etudiant.nom|e }}</p>
+    <p>Prénom : {{ etudiant.prenom|e }}</p>
+    <p>Email : {{ etudiant.email|e }}</p>
     <hr>
-    <p><strong>Nombre de candidatures envoyées :</strong> {{ nbCandidatures }}</p>
-    <p><strong>Nombre d'offres en wishlist :</strong> {{ nbWishlist }}</p>
+    <p>Nombre de candidatures envoyées : {{ nbCandidatures }}</p>
+    <p>Nombre d'offres en wishlist : {{ nbWishlist }}</p>
     <div style="margin-top:20px;">
         <a class="btn" href="{{ url('gestionutilisateurs', 'index') }}">Retour à la liste des utilisateurs</a>
     </div>

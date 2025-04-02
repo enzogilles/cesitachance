@@ -16,7 +16,7 @@
                 <div id="user-icon" class="dropdown">
                     <img src="{{ BASE_URL }}public/images/logo_deco.png" alt="Déconnexion" class="user-logo">
                     <div class="dropdown-menu">
-                        <p>Bienvenue, <strong>{{ user.prenom|e }}</strong></p>
+                        <p>Bienvenue, {{ user.prenom|e }}</p>
                         <form action="{{ url('utilisateur', 'logout') }}" method="POST">
                             <button type="submit">Déconnexion</button>
                         </form>
