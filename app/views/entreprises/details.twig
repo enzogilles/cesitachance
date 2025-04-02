@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {% extends "layout/base.twig" %}
 {% block title %}Détails de l'Entreprise{% endblock %}
 {% block content %}
@@ -43,3 +44,50 @@
 >>>>>>> Stashed changes
 </section>
 {% endblock %}
+=======
+{% extends "layout/base.twig" %}
+{% block title %}Détails de l'Entreprise{% endblock %}
+{% block content %}
+<section class="content">
+    <h3>Détails de l'Entreprise</h3>
+    {% if entreprise is defined %}
+        <p><strong>Nom:</strong> {{ entreprise.nom|e }}</p>
+        <p><strong>Secteur:</strong> {{ entreprise.secteur|e }}</p>
+        <p><strong>Ville:</strong> {{ entreprise.ville|e }}</p>
+        {% if entreprise.description is not empty %}
+            <p><strong>Description:</strong> {{ entreprise.description|e|nl2br }}</p>
+        {% endif %}
+        {% if entreprise.email is not empty %}
+            <p><strong>Email de contact:</strong> {{ entreprise.email|e }}</p>
+        {% endif %}
+        {% if entreprise.telephone is not empty %}
+            <p><strong>Téléphone:</strong> {{ entreprise.telephone|e }}</p>
+        {% endif %}
+        <p><strong>Nombre de stagiaires ayant postulé:</strong> {{ entreprise.nb_stagiaires|default(0) }}</p>
+        {% set moy = entreprise.moyenne_eval|default(null) %}
+        {% set moyenneAffiche = moy ? moy|round(2) : 'N/A' %}
+        <p><strong>Moyenne des évaluations:</strong> {{ moyenneAffiche }} / 5</p>
+    {% else %}
+        <p>Entreprise introuvable.</p>
+    {% endif %}
+    <h3>Évaluer cette entreprise</h3>
+    <form action="{{ url('entreprise', 'evaluer', {'id': entreprise.id}) }}" method="POST">
+        <label for="note">Note (1 à 5) :</label>
+        <input type="number" id="note" name="note" min="1" max="5" required>
+        <br>
+        <label for="commentaire">Commentaire :</label>
+        <textarea id="commentaire" name="commentaire"></textarea>
+        <br>
+        <button type="submit" class="btn">Envoyer l'évaluation</button>
+    </form>
+<<<<<<< Updated upstream
+=======
+{% endif %}
+
+        <div class="back-button-container">
+        <a href="{{ url('entreprise', 'index') }}" class="btn btn-back">⬅ Retour aux Entreprises</a>
+    </div>
+>>>>>>> Stashed changes
+</section>
+{% endblock %}
+>>>>>>> b170562517c999ebafcfe1964b36d4502144dd48
