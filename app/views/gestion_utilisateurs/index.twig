@@ -47,7 +47,12 @@
             <p>Email : {{ search_result.email }}</p>
             <p>Rôle : {{ search_result.role }}</p>
     
+            {% if user is not defined or user.role == 'Admin' %}    
             <h3>Modifier cet utilisateur</h3>
+            {% endif %}
+            {% if user is not defined or user.role == 'pilote' %}
+    <h3 style="margin-top:10px;">Modifier cet étudiant</h3>
+{% endif %}
             <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=update" method="POST">
                 <input type="hidden" name="id" value="{{ search_result.id }}">
                 <label>Nouveau Nom :</label>
@@ -69,7 +74,12 @@
             </form>
     
             {% if user.id != search_result.id %}
+            {% if user is not defined or user.role == 'Admin' %}
     <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
+{% endif %}
+{% if user is not defined or user.role == 'pilote' %}
+    <h3 style="margin-top:10px;">Supprimer cet étudiant</h3>
+{% endif %}
     <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=delete" method="POST">
         <input type="hidden" name="id" value="{{ search_result.id }}">
         <button type="submit" class="btn-supprimer">Supprimer</button>
@@ -88,7 +98,12 @@
     
         {# Formulaire de création d'un nouvel utilisateur #}
         <div id="creer" style="margin-top: 40px;">
+        {% if user is not defined or user.role == 'Admin' %}
             <h3>Créer un Utilisateur</h3>
+            {% endif %}
+            {% if user is not defined or user.role == 'pilote' %}
+        <h3>Créer un Étudiant</h3>
+        {% endif %}    
             <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create" method="POST">
                 <label for="nom-create-user">Nom :</label>
                 <input type="text" id="nom-create-user" name="nom" required>
