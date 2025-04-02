@@ -1,161 +1,138 @@
 {% extends "layout/base.twig" %}
-{% block title %}Gestion des Utilisateurs{% endblock %}
+{% block title %}
+    {% if student is defined %}
+        Wishlist de {{ student.prenom }} {{ student.nom }}
+    {% else %}
+        Ma Wishlist
+    {% endif %}
+{% endblock %}
 
 {% block content %}
 <main class="content">
-    <h2>Gestion des Utilisateurs</h2>
-    {# DEBUG INFO - À retirer après test #}
-    <div style="background: #f0f0f0; padding: 10px; margin: 10px 0;">
-        Session Info:
-        {% if user is defined %}
-            <pre>
-            Role: {{ user.role }}
-            ID: {{ user.id }}
-            Nom: {{ user.nom }}
-            Prénom: {{ user.prenom }}
-            </pre>
-        {% else %}
-            <pre>User non défini dans le template</pre>
-        {% endif %}
-    </div>
-    {# Vérification du rôle #}
-    {% if user.role == 'Admin' or user.role == 'pilote' %}
-        <p>Accès refusé</p>
-    {% else %}
-        <div class="dashboard-actions">
+
+    {# Cas 1 : Étudiant ou Admin connecté (wishlist perso) #}
+    {% if user.role in ['Étudiant', 'Admin'] and wishlist is defined and student is not defined %}
+        <h2>Ma Wishlist</h2>
+        {% if wishlist is not empty %}
             <ul>
-                <li><a href="#recherche" class="btn-login">Rechercher un Utilisateur</a></li>
-                {% if user.role == 'Admin' %}
-                    <li><a href="#creer" class="btn-login">Créer un Utilisateur</a></li>
-                {% endif %}
-                <li><a href="#resultat" class="btn-login">Modifier un Utilisateur</a></li>
-                <li><a href="#resultat" class="btn-login">Supprimer un Utilisateur</a></li>
-                <li><a href="#statistiques" class="btn-login">Statistiques</a></li>
+                {% for item in wishlist %}
+                    <li>
+                        {{ item.titre|e }} - {{ item.entreprise|e }}
+                        <form action="{{ url('wishlist', 'remove') }}" method="POST">
+                            <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+                            <button type="submit" class="btn">Supprimer</button>
+                        </form>
+                    </li>
+                {% endfor %}
             </ul>
-        </div>
+        {% else %}
+            <p>Votre wishlist est vide.</p>
+        {% endif %}
 
-        {# Formulaire de recherche #}
-        <div id="recherche" style="margin-top: 40px;">
-            <h3>Rechercher un Utilisateur</h3>
-            {% if user.role == 'pilote' %}
-                <h5>Vous pouvez rechercher uniquement les comptes étudiants.</h5>
-            {% else %}
-                <h5>Vous pourrez modifier ou supprimer cet utilisateur.</h5>
-            {% endif %}
-            <form class="search-form" action="{{ url('gestionutilisateurs', 'search') }}" method="POST">
-                <label for="search-user">Nom, Prénom ou Email :</label>
-                <input type="text" id="search-user" name="search_query" required>
-                {% if user.role == 'pilote' %}
-                    <input type="hidden" name="role_filter" value="Etudiant">
-                {% endif %}
-                <button type="submit" class="btn">Rechercher</button>
-                <button type="button" class="bouton-reset">Réinitialiser</button>
-            </form>
-        </div>
-        <hr>
+    {# Cas 2 : Admin/Pilote visualise un autre utilisateur (étudiant ou admin) #}
+    {% elseif user.role in ['Admin', 'pilote'] and student is defined %}
+        <h2>Wishlist de {{ student.prenom }} {{ student.nom }}</h2>
+        {% if wishlist is not empty %}
+            <ul>
+                {% for item in wishlist %}
+                    <li>{{ item.titre|e }} - {{ item.entreprise|e }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>La wishlist est vide.</p>
+        {% endif %}
+        <p>
+            <a href="{{ url('wishlist', 'index') }}" class="btn btn-back">
+                Retour à la liste des utilisateurs
+            </a>
+        </p>
 
-        {# Résultat de la recherche #}
-        {% if search_result is defined and search_result is not empty %}
-            {% if user.role == 'pilote' and search_result.role != 'Etudiant' %}
-                <div id="resultat">
-                    <p>Vous ne pouvez consulter que les comptes étudiants.</p>
-                </div>
-            {% else %}
-                <div id="resultat">
-                    <h3>Résultat de la recherche :</h3>
-                    <p>Nom : {{ search_result.nom }}</p>
-                    <p>Prénom : {{ search_result.prenom }}</p>
-                    <p>Email : {{ search_result.email }}</p>
-                    <p>Rôle : {{ search_result.role }}</p>
-            
-                    <h3>Modifier cet utilisateur</h3>
-                    <form action="{{ url('gestionutilisateurs', 'update') }}" method="POST">
-                        <input type="hidden" name="id" value="{{ search_result.id }}">
-                        <label>Nouveau Nom :</label>
-                        <input type="text" name="nom" value="{{ search_result.nom|e }}">
-            
-                        <label>Nouveau Prénom :</label>
-                        <input type="text" name="prenom" value="{{ search_result.prenom|e }}">
-            
-                        <label>Nouvel Email :</label>
-                        <input type="email" name="email" value="{{ search_result.email|e }}">
-            
-                        <label>Nouveau Rôle :</label>
-                        <select name="role" {% if user.role == 'pilote' %}disabled{% endif %}>
-                            <option value="Etudiant" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
-                            {% if user.role == 'Admin' %}
-                                <option value="pilote" {% if search_result.role == 'pilote' %}selected{% endif %}>Pilote</option>
-                                <option value="Admin" {% if search_result.role == 'Admin' %}selected{% endif %}>Administrateur</option>
-                            {% endif %}
-                        </select>
-                        <button type="submit" class="btn-login">Modifier</button>
-                    </form>
-            
-                    {% if user.id != search_result.id %}
-                        <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
-                        {% if user.role == 'pilote' and search_result.role != 'Etudiant' %}
-                            <p style="color: darkred;">Vous ne pouvez supprimer que les comptes étudiants.</p>
-                        {% else %}
-                            <form action="{{ url('gestionutilisateurs', 'delete') }}" method="POST">
-                                <input type="hidden" name="id" value="{{ search_result.id }}">
-                                <button type="submit" class="btn-supprimer">Supprimer</button>
-                            </form>
+    {# Cas 3 : Admin/Pilote visualise la liste des utilisateurs #}
+    {% elseif user.role in ['Admin', 'pilote'] and students is defined %}
+        <h3>Liste des wishlists</h3>
+
+        <form method="get" class="search-form" style="margin-bottom:20px" action="{{ url('wishlist', 'search') }}">
+            <input type="hidden" name="notif" value="1">
+
+            <label for="student_id">Utilisateur :</label>
+            <select name="student_id">
+                <option value="">Tous les utilisateurs</option>
+                {% for s in allUsers %}
+                    <option value="{{ s.id }}" {% if s.id == student_id %}selected{% endif %}>
+                        {{ s.prenom }} {{ s.nom }} ({{ s.role }})
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">Rechercher</button>
+            <button type="reset" class="bouton-reset">Réinitialiser</button>
+        </form>
+
+        {% if students is not empty %}
+            <div class="table-container">
+                <ul class="students-list">
+                    {% for student in students %}
+                        <li class="student-item">
+                            <span>
+                                {{ student.nom|e }} {{ student.prenom|e }}
+                                {% if student.role == 'Admin' %}
+                                    <em>(Admin)</em>
+                                {% endif %}
+                            </span>
+                            <a class="btn-view" href="{{ url('wishlist', 'view', {'student_id': student.id}) }}">
+                                Voir la wishlist
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {% if totalPages is defined and totalPages > 1 %}
+                    <div class="pagination">
+                        {% if page > 1 %}
+                            <a href="{{ url('wishlist', 'index', {'page': page - 1}) }}">Précédent</a>
                         {% endif %}
-                    {% else %}
-                        <h3 style="margin-top:10px;">Suppression non autorisée</h3>
-                        <p style="color: darkred;">Vous ne pouvez pas supprimer votre propre compte.</p>
-                    {% endif %}
-                </div>
-            {% endif %}
-        {% elseif search_result is defined and search_result is empty %}
-            <div id="resultat">
-                <p>Aucun utilisateur trouvé.</p>
+
+                        {% set window = 3 %}
+                        {% if totalPages <= window %}
+                            {% set start = 1 %}
+                            {% set end = totalPages %}
+                        {% else %}
+                            {% set start = page - 1 %}
+                            {% if start < 1 %}
+                                {% set start = 1 %}
+                            {% endif %}
+                            {% set end = start + window - 1 %}
+                            {% if end > totalPages %}
+                                {% set end = totalPages %}
+                                {% set start = end - window + 1 %}
+                                {% if start < 1 %}
+                                    {% set start = 1 %}
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% for i in start..end %}
+                            <a href="{{ url('wishlist', 'index', {'page': i}) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+                        {% endfor %}
+
+                        {% if page < totalPages %}
+                            <a href="{{ url('wishlist', 'index', {'page': page + 1}) }}">Suivant</a>
+                        {% endif %}
+                    </div>
+                {% endif %}
             </div>
-        {% endif %}
-    
-        {# Formulaire de création - Admin uniquement #}
-        {% if user.role == 'Admin' %}
-            <div id="creer" style="margin-top: 40px;">
-                <h3>Créer un Utilisateur</h3>
-                <form action="{{ url('gestionutilisateurs', 'create') }}" method="POST">
-                    <label for="nom-create-user">Nom :</label>
-                    <input type="text" id="nom-create-user" name="nom" required>
-                    
-                    <label for="prenom-create-user">Prénom :</label>
-                    <input type="text" id="prenom-create-user" name="prenom" required>
-                    
-                    <label for="email-create-user">Email :</label>
-                    <input type="email" id="email-create-user" name="email" required>
-                    
-                    <label for="role-create-user">Rôle :</label>
-                    <select id="role-create-user" name="role" required>
-                        <option value="Etudiant">Étudiant</option>
-                        <option value="pilote">Pilote</option>
-                        <option value="Admin">Administrateur</option>
-                    </select>
-                    
-                    <label for="password-create-user">Mot de passe :</label>
-                    <input type="password" id="password-create-user" name="password" required>
-                    
-                    <button type="submit" class="btn-login">Créer</button>
-                </form>
-            </div>
+        {% else %}
+            <p>Aucun utilisateur trouvé.</p>
         {% endif %}
 
-        {# Statistiques globales - Visible pour tous #}
-        <div id="statistiques" style="margin-top: 40px;">
-            <h3>Statistiques</h3>
-            <p>Nombre total d'utilisateurs : {{ stats.total_users|default('N/A') }}</p>
-            <p>Nombre d'étudiants : {{ stats.total_etudiants|default('N/A') }}</p>
-            <p>Nombre de pilotes : {{ stats.total_pilotes|default('N/A') }}</p>
-            <p>Nombre d'administrateurs : {{ stats.total_admins|default('N/A') }}</p>
-        </div>
+    {# Cas 4 : Aucun cas ne correspond #}
+    {% else %}
+        <p>Rien à afficher.</p>
     {% endif %}
+
 </main>
 
 <script>
   const BASE_URL = "{{ BASE_URL }}";
 </script>
-<script src="{{ BASE_URL }}public/js/gestion-etudiant.js"></script>
-<script src="{{ BASE_URL }}public/js/candidatures.js"></script>
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
 {% endblock %}
