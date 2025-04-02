@@ -1,0 +1,46 @@
+{% extends "layout/base.twig" %}
+{% block title %}Modifier l'Entreprise{% endblock %}
+{% block content %}
+<section class="content">
+    <h3>Modifier une Entreprise</h3>
+    <form action="{{ url('entreprise', 'modifier', {'id': entreprise.id}) }}" method="POST">
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" value="{{ entreprise.nom|e }}" required>
+        <label for="ville">Ville :</label>
+        <input type="text" id="ville" name="ville" value="{{ entreprise.ville|e }}" required>
+        <label for="secteur">Secteur :</label>
+<<<<<<< Updated upstream
+        <input type="text" id="secteur" name="secteur" value="{{ entreprise.secteur|e }}" required>
+=======
+        <select id="secteur" name="secteur">
+            <option value="">Tous les secteurs</option>
+            {% for secteurOption in secteurs %}
+                <option value="{{ secteurOption|e }}" {% if entreprise.secteur is defined and entreprise.secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
+            {% endfor %}
+        </select>
+>>>>>>> Stashed changes
+        <label for="taille">Taille :</label>
+        <input type="text" id="taille" name="taille" value="{{ entreprise.taille|e }}" required>
+        <label for="description">Description :</label>
+        <textarea id="description" name="description">{{ entreprise.description|e }}</textarea>
+        <label for="email">Email de contact :</label>
+        <input type="email" id="email" name="email" value="{{ entreprise.email|e }}">
+        <label for="telephone">Téléphone de contact :</label>
+        <input type="text" id="telephone" name="telephone" value="{{ entreprise.telephone|e }}">
+        <button type="submit" class="btn">Modifier</button>
+    </form>
+<<<<<<< Updated upstream
+</section>
+=======
+    <div class="back-button-container">
+        <a href="{{ url('entreprise', 'index') }}" class="btn btn-back">⬅ Retour aux Entreprises</a>
+    </div>
+</section>
+
+<script>
+    const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+<script src="{{ BASE_URL }}public/js/entreprises.js"></script>
+>>>>>>> Stashed changes
+{% endblock %}

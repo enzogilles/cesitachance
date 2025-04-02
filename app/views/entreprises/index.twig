@@ -1,0 +1,105 @@
+{% extends "layout/base.twig" %}
+{% block title %}Entreprises Proposant des Stages{% endblock %}
+{% block content %}
+
+<section class="content">
+
+    <h3>Entreprises proposant des stages</h3>
+<<<<<<< Updated upstream
+=======
+
+    {# Formulaire de recherche #}
+    <form class="search-form" method="GET" action="{{ url('entreprise', 'index') }}">
+        <input type="hidden" name="notif" value="1">
+
+        <label for="nom">Nom :</label>
+        <input type="text" id="nom" name="nom" value="{{ nom is defined ? nom|e : '' }}" placeholder="Nom de l'entreprise">
+
+        <label for="ville">Ville :</label>
+        <input type="text" id="ville" name="ville" value="{{ ville is defined ? ville|e : '' }}" placeholder="Ville">
+
+        <label for="secteur">Secteur :</label>
+        <select id="secteur" name="secteur">
+            <option value="">Tous les secteurs</option>
+            {% for secteurOption in secteurs %}
+                <option value="{{ secteurOption|e }}" {% if secteur is defined and secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="btn">Rechercher</button>
+        <button type="reset" class="bouton-reset">Réinitialiser</button>
+    </form>
+
+    {% if user is defined and (user.role == 'Admin' or user.role == 'pilote') %}
+        <div class="create-offer-button">
+            <a href="{{ url('entreprise', 'creer') }}" class="btn btn-create">➕ Créer une entreprise</a>
+        </div>
+    {% endif %}
+
+>>>>>>> Stashed changes
+    {% if entreprises is defined and entreprises is not empty %}
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Ville</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entreprise in entreprises %}
+                    <tr>
+                        <td>{{ entreprise.nom|e }}</td>
+                        <td>{{ entreprise.ville|e }}</td>
+                        {# On affiche simplement la clé "actions" que le contrôleur a préparée #}
+                        <td>{{ entreprise.actions|raw }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+<<<<<<< Updated upstream
+        {# Ta pagination, inchangée #}
+        ...
+=======
+        {# Pagination #}
+        {% if totalPages is defined and totalPages > 0 %}
+            <div class="pagination">
+                {% if page > 1 %}
+                    <a href="{{ url('entreprise', 'index', {'page': page - 1, 'nom': nom, 'ville': ville, 'secteur': secteur}) }}">Précédent</a>
+                {% endif %}
+
+                {% set window = 3 %}
+                {% if totalPages <= window %}
+                    {% set start = 1 %}
+                    {% set end = totalPages %}
+                {% else %}
+                    {% set start = page - 1 %}
+                    {% if start < 1 %}
+                        {% set start = 1 %}
+                    {% endif %}
+                    {% set end = start + window - 1 %}
+                    {% if end > totalPages %}
+                        {% set end = totalPages %}
+                        {% set start = end - window + 1 %}
+                        {% if start < 1 %}
+                            {% set start = 1 %}
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+
+                {% for i in start..end %}
+                    <a href="{{ url('entreprise', 'index', {'page': i, 'nom': nom, 'ville': ville, 'secteur': secteur}) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+                {% endfor %}
+
+                {% if page < totalPages %}
+                    <a href="{{ url('entreprise', 'index', {'page': page + 1, 'nom': nom, 'ville': ville, 'secteur': secteur}) }}">Suivant</a>
+                {% endif %}
+            </div>
+        {% endif %}
+>>>>>>> Stashed changes
+    {% else %}
+        <p>Aucune entreprise trouvée.</p>
+    {% endif %}
+</section>
+{% endblock %}

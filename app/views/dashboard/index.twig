@@ -1,0 +1,26 @@
+{% extends "layout/base.twig" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<main class="content">
+    <h2>Dashboard</h2>
+    {% if user is defined %}
+        <p class="welcome-message">Bonjour, {{ user.prenom|e }} !</p>
+    {% endif %}
+    <div class="dashboard-actions">
+        <ul>
+            {% if user.role == 'Admin' %}
+                <li><a href="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=index">Gérer les utilisateurs</a></li>
+            {% endif %}
+            {% if user.role == 'Admin' or user.role == 'pilote' %}
+<<<<<<< Updated upstream
+                <li><a href="{{ BASE_URL }}index.php?controller=offre&action=gererOffres">Gérer les Offres</a></li>
+=======
+                <li><a href="{{ url('gestionutilisateurs', 'index') }}">Gérer les utilisateurs</a></li>
+                <li><a href="{{ url('offre', 'gererOffres') }}">Gérer les Offres</a></li>
+>>>>>>> Stashed changes
+            {% endif %}
+            <li><a href="{{ url('offre', 'index') }}">Voir les offres de stage</a></li>
+        </ul>
+    </div>
+</main>
+{% endblock %}
