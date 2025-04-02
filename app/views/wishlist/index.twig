@@ -14,19 +14,18 @@
     {% if user.role in ['Étudiant', 'Admin'] and wishlist is defined and student is not defined %}
         <h2>Ma Wishlist</h2>
         {% if wishlist is not empty %}
-            <ul class="wishlist-list">
-                {% for item in wishlist %}
-                    <li>
-                        {{ item.titre|e }} - {{ item.entreprise|e }}
-                        <form action="{{ url('wishlist', 'remove') }}" method="POST">
-                            <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
-                        <button type="button" class="btn btn-delete" data-id="{{ item.wishlist_id }}">Supprimer</button>
-
-                        </form>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
+        <ul class="wishlist-list">
+        {% for item in wishlist %}
+            <li style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <span style="flex: 1;">{{ item.titre|e }} - {{ item.entreprise|e }}</span>
+                <form action="{{ url('wishlist', 'remove') }}" method="POST">
+                    <input type="hidden" name="wishlist_id" value="{{ item.wishlist_id }}">
+                    <button type="button" class="btn btn-delete" data-id="{{ item.wishlist_id }}">Supprimer</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>    
+           {% else %}
             <p>Votre wishlist est vide.</p>
         {% endif %}
 
