@@ -13,7 +13,7 @@
     <p>Date de fin : {{ offre.date_fin is defined ? offre.date_fin|e : 'Non précisée' }}</p>
     <p>Description : {{ offre.description is defined ? offre.description|e|nl2br : 'Aucune description' }}</p>
     <div class="offer-buttons">
-        {% if userRole == 'Étudiant' %}
+    {% if userRole != 'pilote' %}
             <form action="{{ BASE_URL }}index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
                 <input type="hidden" name="offre_id" value="{{ offre.id }}">
                 <button type="submit" class="btn btn-wishlist">Ajouter à la Wishlist</button>

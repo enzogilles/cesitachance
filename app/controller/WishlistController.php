@@ -15,58 +15,79 @@ class WishlistController extends BaseController
      * ou la liste des étudiants si Admin/pilote.
      */
 
-    public function index()
-    {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        if (!isset($_SESSION['user'])) {
-            header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
-            exit;
-        }
-
-        $pdo = \Database::getInstance();
-
-        // Si c'est un admin/pilote qui consulte la liste des étudiants
-        if (in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
-            $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
-            $limit = 10;
-            $offset = ($page - 1) * $limit;
-        
-            // Compte total des étudiants pour la pagination
-            $stmt = $pdo->prepare("
-                SELECT COUNT(*) as total 
-                FROM user 
-                WHERE role = 'Étudiant'
-            ");
-            $stmt->execute();
-            $count = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $total = $count['total'];
-            $totalPages = ceil($total / $limit);
-        
-            // Récupération des étudiants avec pagination
-            $stmt = $pdo->prepare("
-                SELECT id, nom, prenom, email
-                FROM user 
-                WHERE role = 'Étudiant'
-                ORDER BY nom, prenom
-                LIMIT ?, ?
-            ");
-            $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
-            $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
-            $stmt->execute();
-            $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-            $this->render('wishlist/index.twig', [
-                'students' => $students,
-                'page' => $page,
-                'totalPages' => $totalPages,
-                'user' => $_SESSION['user']
-            ]);
-            return;
-        }
-    }
+     public function index()
+     {
+         if (session_status() === PHP_SESSION_NONE) {
+             session_start();
+         }
+     
+         if (!isset($_SESSION['user'])) {
+             header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
+             exit;
+         }
+     
+         $pdo = \Database::getInstance();
+     
+         // Si c'est un admin/pilote qui consulte la liste des étudiants
+         if (in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+             $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+             $limit = 10;
+             $offset = ($page - 1) * $limit;
+     
+             // Compte total des étudiants pour la pagination
+             $stmt = $pdo->prepare("
+                 SELECT COUNT(*) as total 
+                 FROM user 
+                 WHERE role = 'Étudiant'
+             ");
+             $stmt->execute();
+             $count = $stmt->fetch(\PDO::FETCH_ASSOC);
+             $total = $count['total'];
+             $totalPages = ceil($total / $limit);
+     
+             // Récupération des étudiants avec pagination
+             $stmt = $pdo->prepare("
+                 SELECT id, nom, prenom, email
+                 FROM user 
+                 WHERE role = 'Étudiant'
+                 ORDER BY nom, prenom
+                 LIMIT ?, ?
+             ");
+             $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
+             $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
+             $stmt->execute();
+             $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+     
+             $this->render('wishlist/index.twig', [
+                 'students' => $students,
+                 'page' => $page,
+                 'totalPages' => $totalPages,
+                 'user' => $_SESSION['user']
+             ]);
+             return;
+         }
+     
+         // Si c'est un étudiant qui consulte sa propre wishlist
+         if ($_SESSION['user']['role'] === 'Étudiant') {
+             $userId = $_SESSION['user']['id'];
+             $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
+             $limit = 10;
+             $offset = ($page - 1) * $limit;
+     
+             $wishlist = Wishlist::findByUserIdWithRelationsPaginated($userId, $limit, $offset);
+             $total = Wishlist::countByUserId($userId);
+             $totalPages = ceil($total / $limit);
+     
+             $this->render('wishlist/index.twig', [
+                 'wishlist' => $wishlist,
+                 'user' => $_SESSION['user'],
+                 'page' => $page,
+                 'totalPages' => $totalPages
+             ]);
+             return;
+         }
+     }
+     
 
     /**
      * Vue pour qu'un Admin/pilote voie la wishlist d'un étudiant précis.

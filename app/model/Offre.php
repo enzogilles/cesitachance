@@ -263,7 +263,7 @@ class Offre extends BaseModel
             $stmt->bindParam(':limit', $limit, \PDO::PARAM_INT);
             $stmt->bindParam(':offset', $offset, \PDO::PARAM_INT);
             $stmt->execute();
-            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
             throw new \Exception("Erreur lors de la récupération des offres paginées : " . $e->getMessage());
         }
