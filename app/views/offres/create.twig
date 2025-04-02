@@ -7,7 +7,7 @@
     {% if error is defined %}
         <p class="error-message">{{ error|e }}</p>
     {% endif %}
-    <form method="POST" action="{{ BASE_URL }}index.php?controller=offre&action=create">
+    <form method="POST" action="{{ url('offre', 'create') }}">
         <label for="titre">Titre :</label>
         <input type="text" id="titre" name="titre" required>
         <label for="description">Description :</label>
@@ -24,5 +24,19 @@
         <textarea id="competences" name="competences"></textarea>
         <button type="submit" class="btn">Créer l'offre</button>
     </form>
+<<<<<<< Updated upstream
 </section>
+{% endblock %}
+=======
+    
+    <div class="back-button-container">
+        <a href="{{ url('offre', 'gererOffres') }}" class="btn btn-back">⬅ Retour à la gestion</a>
+    </div>
+</section>
+
+<script>
+    const BASE_URL = "{{ BASE_URL }}";
+</script>
+  
+<script src="{{ BASE_URL }}public/js/gerer-offres.js"></script>
 {% endblock %}

@@ -22,23 +22,13 @@
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}Mon Site{% endblock %}</title>
-<<<<<<< Updated upstream
     <link rel="stylesheet" type="text/css" href="{{ BASE_URL }}styles/styles.css">
-=======
-    <link rel="icon" type="image/png" href="{{ BASE_URL }}public/images/logo.png">
-    <link rel="stylesheet" href="{{ BASE_URL }}public/styles/styles.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
->>>>>>> Stashed changes
 </head>
 <body>
 
     {% include "layout/header.twig" %}
     {% block content %}{% endblock %}
     {% include "layout/footer.twig" %}
-<<<<<<< Updated upstream
-</body>
-</html>
-=======
 
     {# Script de déconnexion automatique si "Rester connecté" n'est pas activé #}
     {% if session.remember is not defined or not session.remember %}
@@ -81,5 +71,4 @@
 </html>
 
 
->>>>>>> Stashed changes
 >>>>>>> b170562517c999ebafcfe1964b36d4502144dd48
