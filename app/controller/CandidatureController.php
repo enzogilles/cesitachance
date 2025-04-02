@@ -52,7 +52,33 @@ class CandidatureController extends BaseController {
             }
 
     /**
+<<<<<<< Updated upstream
      * Postuler à une offre avec CV et lettre de motivation.
+=======
+     * Affiche le formulaire pour postuler à une offre
+     */
+    public function postuler_form() {
+        // Vérifie connexion
+        $this->checkAuth(['Étudiant']);
+        
+        $offreId = isset($_GET['offre_id']) ? $_GET['offre_id'] : null;
+        
+        if (!$offreId) {
+            $this->redirect('offre', 'index');
+        }
+        
+        // Charger les détails de l'offre
+        // Code pour récupérer l'offre...
+        
+        $this->render('candidatures/postuler.twig', [
+            'offre_id' => $offreId
+        ]);
+    }
+
+    /**
+     * Postuler à une offre (avec upload CV, etc.)
+     * -> accessible à tout utilisateur connecté (par défaut).
+>>>>>>> Stashed changes
      */
     public function postuler() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -88,6 +114,7 @@ class CandidatureController extends BaseController {
             }
     
             $lettreMotivation = isset($_POST['lettre_motivation']) ? trim($_POST['lettre_motivation']) : '';
+<<<<<<< Updated upstream
     
             try {
                 $pdo = \Database::getInstance();
@@ -109,6 +136,21 @@ class CandidatureController extends BaseController {
             } catch (PDOException $e) {
                 die("Erreur lors de la candidature : " . $e->getMessage());
             }
+=======
+
+            // Création et sauvegarde de la candidature
+            $candidature = new Candidature();
+            $candidature->user_id = $userId;
+            $candidature->offre_id = $offreId;
+            $candidature->cv = 'public/uploads/' . $timestamp . "_" . $cvName;
+            $candidature->lettre = $lettreMotivation;
+            $candidature->date_soumission = $dateCandidature;
+            $candidature->statut = 'en attente';
+            $candidature->save();
+
+            // Redirection avec la nouvelle méthode
+            $this->redirect('offre', 'detail', ['id' => $offreId, 'success' => 1]);
+>>>>>>> Stashed changes
         }
     }
 
@@ -126,6 +168,7 @@ class CandidatureController extends BaseController {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $candidatureId = $_POST['candidature_id'];
             $nouveauStatut = $_POST['statut'];
+<<<<<<< Updated upstream
     
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
@@ -133,6 +176,14 @@ class CandidatureController extends BaseController {
     
             header("Location: " . BASE_URL . "index.php?controller=candidature&action=index");
             exit;
+=======
+
+            // Model
+            Candidature::updateStatus($candidatureId, $nouveauStatut);
+
+            // Redirection avec la nouvelle méthode
+            $this->redirect('candidature', 'index');
+>>>>>>> Stashed changes
         }
     }
 }

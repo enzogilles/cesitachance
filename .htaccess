@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 # Activer le moteur de réécriture
 RewriteEngine On
 
@@ -26,3 +27,23 @@ RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^(.*)$ public/index.php [QSA,L]
 
+=======
+# À placer dans le fichier .htaccess à la racine du projet
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /cesitachance-3/
+    
+    # Ne pas réécrire les URLs pour les fichiers et dossiers existants
+    RewriteCond %{REQUEST_FILENAME} -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -d
+    RewriteRule ^ - [L]
+    
+    # Ne pas réécrire les URLs pour le dossier public
+    RewriteRule ^public/ - [L]
+    
+    # Réécrire les URLs de la forme /controller/action/id
+    RewriteRule ^([^/]+)/?$ index.php?controller=$1&action=index [L,QSA]
+    RewriteRule ^([^/]+)/([^/]+)/?$ index.php?controller=$1&action=$2 [L,QSA]
+    RewriteRule ^([^/]+)/([^/]+)/([^/]+)/?$ index.php?controller=$1&action=$2&id=$3 [L,QSA]
+</IfModule>
+>>>>>>> Stashed changes

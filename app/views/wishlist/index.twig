@@ -1,5 +1,6 @@
 {% extends "layout/base.twig" %}
 {% block title %}Ma Wishlist{% endblock %}
+<<<<<<< Updated upstream
 {% block content %}
 <main class="content">
     <h2>Ma Wishlist</h2>
@@ -20,3 +21,73 @@
     {% endif %}
 </main>
 {% endblock %}
+=======
+
+{% block content %}
+<main class="content">
+    <h2>{% if user.role == 'Admin' %}Gestion des Wishlists{% else %}Ma Wishlist{% endif %}</h2>
+    
+    {% if user.role == 'Admin' %}
+        <!-- Formulaire de recherche pour l'admin -->
+        <form class="search-form" method="GET" action="{{ url('wishlist', 'search') }}">
+            <label for="etudiant_id">Rechercher la wishlist d'un étudiant :</label>
+            <select id="etudiant_id" name="etudiant_id" required>
+                <option value="">Sélectionnez un étudiant</option>
+                {% for etudiant in etudiants %}
+                    <option value="{{ etudiant.id }}" {% if etudiant_id is defined and etudiant_id == etudiant.id %}selected{% endif %}>
+                        {{ etudiant.nom }} {{ etudiant.prenom }}
+                    </option>
+                {% endfor %}
+            </select>
+            <button type="submit" class="btn">Rechercher</button>
+        </form>
+    {% endif %}
+    
+    {% if offres is defined and offres is not empty %}
+        <div class="offers-container">
+            {% for offre in offres %}
+                <div class="offer-card">
+                    <h4>{{ offre.titre|e }} - {{ offre.entreprise|e }}</h4>
+                    <p>Rémunération : {{ offre.remuneration|e }}€</p>
+                    <p>Du {{ offre.date_debut|e }} au {{ offre.date_fin|e }}</p>
+                    <div class="offer-buttons">
+                        <a href="{{ url('offre', 'detail', {'id': offre.id}) }}" class="btn-voir">Voir l'offre</a>
+                        <form action="{{ url('wishlist', 'remove') }}" method="POST" class="delete-form">
+                            <input type="hidden" name="wishlist_id" value="{{ offre.wishlist_id }}">
+                            {% if etudiant_id is defined %}
+                                <input type="hidden" name="etudiant_id" value="{{ etudiant_id }}">
+                            {% endif %}
+                            <button type="submit" class="btn-supprimer">Retirer</button>
+                        </form>
+                        {% if user.role == 'Étudiant' %}
+                            <a href="{{ url('candidature', 'postuler_form', {'offre_id': offre.id}) }}" class="btn-postuler">Postuler</a>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="info-message">
+            {% if user.role == 'Admin' and etudiant_id is not defined %}
+                Veuillez sélectionner un étudiant pour voir sa wishlist.
+            {% else %}
+                Aucune offre dans la wishlist.
+            {% endif %}
+        </p>
+    {% endif %}
+    
+    <div class="back-button-container">
+        {% if user.role == 'Admin' %}
+            <a href="{{ url('dashboard', 'index') }}" class="btn btn-back">⬅ Retour au Dashboard</a>
+        {% else %}
+            <a href="{{ url('offre', 'index') }}" class="btn btn-back">⬅ Voir toutes les offres</a>
+        {% endif %}
+    </div>
+</main>
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
+{% endblock %}
+>>>>>>> Stashed changes

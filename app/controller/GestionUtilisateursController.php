@@ -15,10 +15,16 @@ class GestionUtilisateursController extends BaseController
         if (session_status() === PHP_SESSION_NONE) {
             session_start();
         }
+<<<<<<< Updated upstream
         
         if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'Admin') {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
+=======
+
+        if (!isset($_SESSION['user'])) {
+            $this->redirect('utilisateur', 'connexion');
+>>>>>>> Stashed changes
         }
 
         $pdo = Database::getInstance();
@@ -89,8 +95,7 @@ class GestionUtilisateursController extends BaseController
                 $_SESSION["error"] = "Veuillez remplir tous les champs.";
             }
 
-            header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index");
-            exit;
+            $this->redirect('gestionutilisateurs', 'index');
         }
     }
 
@@ -114,6 +119,7 @@ class GestionUtilisateursController extends BaseController
             $email = trim($_POST["email"]) ?? null;
             $role = trim($_POST["role"]) ?? null;
 
+<<<<<<< Updated upstream
             $pdo = Database::getInstance();
             $sql = "UPDATE user SET ";
             $params = [];
@@ -133,6 +139,18 @@ class GestionUtilisateursController extends BaseController
             if ($role) {
                 $sql .= "role = ?, ";
                 $params[] = $role;
+=======
+            // Vérification supplémentaire pour les pilotes
+            if ($_SESSION['user']['role'] === 'pilote') {
+                // Vérifier que l'utilisateur à modifier est un étudiant
+                $user = Utilisateur::findById($id);
+                if (!$user || $user['role'] !== 'Etudiant') {
+                    $_SESSION["error"] = "Vous ne pouvez modifier que les comptes étudiants.";
+                    $this->redirect('gestionutilisateurs', 'index');
+                }
+                // Forcer le rôle étudiant pour les modifications par un pilote
+                $role = 'Etudiant';
+>>>>>>> Stashed changes
             }
 
             $sql = rtrim($sql, ", ") . " WHERE id = ?";
@@ -142,8 +160,7 @@ class GestionUtilisateursController extends BaseController
             $stmt->execute($params);
 
             $_SESSION["message"] = "Utilisateur modifié avec succès.";
-            header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index");
-            exit;
+            $this->redirect('gestionutilisateurs', 'index');
         }
     }
 
@@ -163,13 +180,28 @@ class GestionUtilisateursController extends BaseController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $id = $_POST["id"];
 
+<<<<<<< Updated upstream
             $pdo = Database::getInstance();
             $stmt = $pdo->prepare("DELETE FROM user WHERE id = ?");
             $stmt->execute([$id]);
+=======
+            // Vérification supplémentaire pour les pilotes
+            if ($_SESSION['user']['role'] === 'pilote') {
+                $user = Utilisateur::findById($id);
+                if (!$user || $user['role'] !== 'Etudiant') {
+                    $_SESSION["error"] = "Vous ne pouvez supprimer que les comptes étudiants.";
+                    $this->redirect('gestionutilisateurs', 'index');
+                }
+            }
+>>>>>>> Stashed changes
 
             $_SESSION["message"] = "Utilisateur supprimé avec succès.";
+<<<<<<< Updated upstream
             header("Location: " . BASE_URL . "index.php?controller=gestionutilisateurs&action=index");
             exit;
+=======
+            $this->redirect('gestionutilisateurs', 'index', ['notif' => 'deleted']);
+>>>>>>> Stashed changes
         }
     }
 
@@ -209,17 +241,21 @@ class GestionUtilisateursController extends BaseController
             ");
             $stats = $stmtStats->fetch(\PDO::FETCH_ASSOC);
 
+<<<<<<< Updated upstream
             $this->render('gestion_utilisateurs/index.twig', [
                 'search_result' => $search_result,
                 'stats' => $stats
             ]);
+=======
+            $this->redirect('gestionutilisateurs', 'index', ['notif' => 1]);
+>>>>>>> Stashed changes
         } else {
             echo "Veuillez utiliser le formulaire pour effectuer une recherche.";
         }
     }
 
     /**
-     * Consulter les statistiques d’un compte Étudiant -> réservé à Admin/Pilote.
+     * Consulter les statistiques d'un compte Étudiant -> réservé à Admin/Pilote.
      */
     public function statsEtudiant($id) {
         if (session_status() === PHP_SESSION_NONE) {
@@ -238,7 +274,8 @@ class GestionUtilisateursController extends BaseController
         $stmtUser->execute([$id]);
         $etudiant = $stmtUser->fetch(\PDO::FETCH_ASSOC);
         if (!$etudiant) {
-            die("Cet utilisateur n'est pas un étudiant ou n'existe pas.");
+            $_SESSION["error"] = "Cet utilisateur n'est pas un étudiant ou n'existe pas.";
+            $this->redirect('gestionutilisateurs', 'index');
         }
 
         // Comptage des candidatures
@@ -247,11 +284,30 @@ class GestionUtilisateursController extends BaseController
         $rowCandid = $stmtCandid->fetch(\PDO::FETCH_ASSOC);
         $nbCandidatures = $rowCandid['nb_candidatures'];
 
+<<<<<<< Updated upstream
         // Comptage de la wishlist
         $stmtWish = $pdo->prepare("SELECT COUNT(*) AS nb_wishlist FROM wishlist WHERE user_id = ?");
         $stmtWish->execute([$id]);
         $rowWish = $stmtWish->fetch(\PDO::FETCH_ASSOC);
         $nbWishlist = $rowWish['nb_wishlist'];
+=======
+            // Comptage des candidatures
+            $stmtCandid = $pdo->prepare("SELECT COUNT(*) AS nb_candidatures FROM candidature WHERE user_id = ?");
+            $stmtCandid->execute([$id]);
+            $rowCandid = $stmtCandid->fetch(PDO::FETCH_ASSOC);
+            $nbCandidatures = $rowCandid['nb_candidatures'];
+
+            // Comptage de la wishlist
+            $stmtWish = $pdo->prepare("SELECT COUNT(*) AS nb_wishlist FROM wishlist WHERE user_id = ?");
+            $stmtWish->execute([$id]);
+            $rowWish = $stmtWish->fetch(PDO::FETCH_ASSOC);
+            $nbWishlist = $rowWish['nb_wishlist'];
+
+        } catch (\PDOException $e) {
+            $_SESSION["error"] = "Erreur lors de la récupération des statistiques : " . $e->getMessage();
+            $this->redirect('gestionutilisateurs', 'index');
+        }
+>>>>>>> Stashed changes
 
         $this->render('gestion_utilisateurs/statsEtudiant.twig', [
             'etudiant' => $etudiant,

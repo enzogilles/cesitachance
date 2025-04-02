@@ -34,6 +34,7 @@ class OffreController extends BaseController {
         $limit = 10;
         $offset = ($page - 1) * $limit;
 
+<<<<<<< Updated upstream
         // Construction de la clause WHERE
         $sqlFilter = " WHERE 1=1 ";
         $params = [];
@@ -41,6 +42,23 @@ class OffreController extends BaseController {
             $sqlFilter .= " AND (o.titre LIKE ? OR o.description LIKE ?) ";
             $params[] = "%$motcle%";
             $params[] = "%$motcle%";
+=======
+        $result = Offre::search($motcle, $filtreCompetences, $limit, $offset);
+        $offres = $result['offres'];
+        $total = $result['total'];
+        $totalPages = ceil($total / $limit);
+
+        foreach ($offres as &$offre) {
+            $detailLink = '<a href="' . $this->generateUrl('offre', 'detail', ['id' => $offre['id']]) . '" class="btn-voir">Détails</a>';
+
+            if (!empty($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+                $modifyLink = ' <a href="' . $this->generateUrl('offre', 'modifier', ['id' => $offre['id']]) . '" class="btn-modifier">Modifier</a>';
+                $deleteLink = ' <a href="' . $this->generateUrl('offre', 'supprimer', ['id' => $offre['id']]) . '" class="btn-supprimer" data-id="' . $offre['id'] . '">Supprimer</a>';
+                $offre['actions'] = $detailLink . $modifyLink . $deleteLink;
+            } else {
+                $offre['actions'] = $detailLink;
+            }
+>>>>>>> Stashed changes
         }
         if ($filtreCompetences !== '') {
             $sqlFilter .= " AND o.competences LIKE ? ";
@@ -124,15 +142,18 @@ class OffreController extends BaseController {
         }
         
         if (!$id) {
-            die("Erreur : ID de l'offre manquant.");
+            $_SESSION["error"] = "Erreur : ID de l'offre manquant.";
+            $this->redirect('offre', 'index');
         }
         $offre = $this->offreModel->findById($id);
         if (!$offre) {
-            die("Erreur : Offre introuvable.");
+            $_SESSION["error"] = "Erreur : Offre introuvable.";
+            $this->redirect('offre', 'index');
         }
         $this->render('offres/detail.twig', ['offre' => $offre]);
     }
 
+<<<<<<< Updated upstream
     /**
      * Créer une nouvelle offre -> réservé Admin/Pilote.
      */
@@ -144,6 +165,36 @@ class OffreController extends BaseController {
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
+=======
+    public function create()
+    {
+        $this->checkAuth(['Admin', 'pilote']);
+    
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $offre = new Offre();
+            $offre->titre = trim($_POST['titre']);
+            $offre->description = trim($_POST['description']);
+            $offre->remuneration = trim($_POST['remuneration']);
+            $offre->date_debut = $_POST['date_debut'];
+            $offre->date_fin = $_POST['date_fin'];
+            $offre->entreprise_id = intval($_POST['entreprise_id']);
+            $offre->competences = trim($_POST['competences'] ?? '');
+    
+            if (
+                empty($offre->titre) || empty($offre->description) || empty($offre->remuneration) ||
+                empty($offre->date_debut) || empty($offre->date_fin) || empty($offre->entreprise_id)
+            ) {
+                $this->render('offres/create.twig', [
+                    'error' => 'Tous les champs obligatoires doivent être remplis.',
+                    'entreprises' => Entreprise::findAll()
+                ]);
+                return;
+            }
+    
+            $offre->save();
+
+            $this->redirect('offre', 'gererOffres', ['notif' => 'created']);
+>>>>>>> Stashed changes
         }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -192,7 +243,8 @@ class OffreController extends BaseController {
         }
 
         if (!$id) {
-            die("Erreur : ID manquant pour modifier une offre.");
+            $_SESSION["error"] = "Erreur : ID manquant pour modifier une offre.";
+            $this->redirect('offre', 'gererOffres');
         }
 
         $pdo = Database::getInstance();
@@ -208,9 +260,9 @@ class OffreController extends BaseController {
             if (empty($titre) || empty($description) || empty($remuneration) ||
                 empty($date_debut) || empty($date_fin)) {
                 $_SESSION["error"] = "Tous les champs sont requis.";
-                header("Location: " . BASE_URL . "index.php?controller=offre&action=modifier&id=" . $id);
-                exit;
+                $this->redirect('offre', 'modifier', ['id' => $id]);
             }
+<<<<<<< Updated upstream
 
             try {
                 $stmt = $pdo->prepare("
@@ -232,6 +284,21 @@ class OffreController extends BaseController {
                 header("Location: " . BASE_URL . "index.php?controller=offre&action=modifier&id=" . $id);
                 exit;
             }
+=======
+    
+            $offre = new Offre();
+            $offre->id = $id;
+            $offre->titre = $titre;
+            $offre->description = $description;
+            $offre->remuneration = $remuneration;
+            $offre->date_debut = $date_debut;
+            $offre->date_fin = $date_fin;
+            $offre->competences = $competences;
+            $offre->entreprise_id = $entreprise_id;
+            $offre->save();
+    
+            $this->redirect('offre', 'gererOffres', ['notif' => 'updated']);
+>>>>>>> Stashed changes
         }
 
         $stmt = $pdo->prepare("SELECT * FROM offre WHERE id = ?");
@@ -239,9 +306,11 @@ class OffreController extends BaseController {
         $offre = $stmt->fetch(\PDO::FETCH_ASSOC);
 
         if (!$offre) {
-            die("Erreur : Offre introuvable.");
+            $_SESSION["error"] = "Erreur : Offre introuvable.";
+            $this->redirect('offre', 'gererOffres');
         }
 
+<<<<<<< Updated upstream
         $this->render('offres/modifier.twig', ['offre' => $offre]);
     }
 
@@ -256,6 +325,18 @@ class OffreController extends BaseController {
         if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Admin','pilote'])) {
             header("Location: " . BASE_URL . "index.php?controller=home&action=index");
             exit;
+=======
+    public function supprimer() {
+        $this->checkAuth(['Admin', 'pilote']);
+    
+        $id = $_GET['id'] ?? null;
+        if ($id) {
+            Offre::deleteById($id);
+            $this->redirect('offre', 'gererOffres', ['notif' => 'deleted']);
+        } else {
+            $_SESSION["error"] = "Erreur : ID manquant pour supprimer une offre.";
+            $this->redirect('offre', 'gererOffres');
+>>>>>>> Stashed changes
         }
 
         if (!$id) {

@@ -26,19 +26,26 @@ class ContactController extends BaseController {
     
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             $_SESSION["error"] = "Méthode non autorisée.";
-            header("Location: " . BASE_URL . "index.php?controller=contact&action=index");
+            $this->redirect('contact', 'index');
             exit;
         }
+<<<<<<< Updated upstream
     
         $nom     = htmlspecialchars($_POST["nom"]);
         $email   = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+=======
+
+        $nom = htmlspecialchars($_POST["nom"]);
+        $email = filter_var($_POST["email"], FILTER_VALIDATE_EMAIL);
+>>>>>>> Stashed changes
         $message = htmlspecialchars($_POST["message"]);
     
         if (!$email) {
             $_SESSION["error"] = "Email invalide.";
-            header("Location: " . BASE_URL . "index.php?controller=contact&action=index");
+            $this->redirect('contact', 'index');
             exit;
         }
+<<<<<<< Updated upstream
     
         try {
             $pdo = Database::getInstance();
@@ -52,6 +59,18 @@ class ContactController extends BaseController {
     
         header("Location: " . BASE_URL . "index.php?controller=contact&action=index");
         exit;
+=======
+
+        try {
+            ContactMessage::create($nom, $email, $message);
+            $this->redirect('contact', 'index', ['notif' => 'sent']);
+            exit;
+        } catch (\PDOException $e) {
+            $_SESSION["error"] = "Erreur lors de l'enregistrement du message.";
+            $this->redirect('contact', 'index');
+            exit;
+        }
+>>>>>>> Stashed changes
     }
 
     /**

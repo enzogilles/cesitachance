@@ -18,11 +18,38 @@ class Wishlist extends BaseModel {
      * @param int $user_id
      * @return array
      */
+<<<<<<< Updated upstream
     public static function findByUserId($user_id) {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("SELECT * FROM wishlist WHERE user_id = ?");
         $stmt->execute([$user_id]);
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+=======
+    public static function findByUserIdWithRelations($userId)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("
+                SELECT w.id AS wishlist_id,
+                       o.id AS id,
+                       o.titre,
+                       o.date_debut,
+                       o.date_fin,
+                       o.remuneration,
+                       e.nom AS entreprise
+                FROM wishlist w
+                JOIN offre o ON w.offre_id = o.id
+                JOIN entreprise e ON o.entreprise_id = e.id
+                WHERE w.user_id = ?
+                ORDER BY w.id DESC
+            ");
+            $stmt->execute([$userId]);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            // Log error
+            return [];
+        }
+>>>>>>> Stashed changes
     }
 
     /**

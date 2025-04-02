@@ -6,7 +6,7 @@
     {% if error is defined %}
         <p style="color: red; text-align: center;">{{ error|e }}</p>
     {% endif %}
-    <form id="register-form" action="{{ BASE_URL }}index.php?controller=utilisateur&action=register" method="POST">
+    <form id="register-form" action="{{ url('utilisateur', 'register') }}" method="POST">
         <label for="nom">Nom :</label>
         <input type="text" id="nom" name="nom" required>
         <label for="prenom">Prénom :</label>
@@ -29,7 +29,7 @@
     </form>
     <div class="account-link">
         <p>Vous avez déjà un compte ?</p>
-        <a href="{{ BASE_URL }}index.php?controller=utilisateur&action=connexion" class="btn-login">Se connecter</a>
+        <a href="{{ url('utilisateur', 'connexion') }}" class="btn-login">Se connecter</a>
     </div>
 </section>
 {% endblock %}

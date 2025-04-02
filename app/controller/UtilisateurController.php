@@ -48,10 +48,16 @@ class UtilisateurController extends BaseController {
         // ✅ Repartir sur une nouvelle session propre (évite les résurrections de session)
         session_start();
         session_regenerate_id(true);
+<<<<<<< Updated upstream
     
         // Redirection
         header("Location: " . BASE_URL . "index.php?controller=home&action=index");
         exit();
+=======
+
+        // Redirection vers la page d'accueil avec la nouvelle méthode
+        $this->redirect('home', 'index');
+>>>>>>> Stashed changes
     }
     
     
@@ -96,10 +102,23 @@ class UtilisateurController extends BaseController {
                 "email" => $user["email"],
                 "role" => $user["role"]
             ];
+<<<<<<< Updated upstream
     
             // Redirection vers le dashboard
             header("Location: " . BASE_URL . "index.php?controller=dashboard&action=index");
             exit;
+=======
+
+            // Gestion de l'option "Rester connecté"
+            if (isset($_POST["remember"]) && $_POST["remember"] === "on") {
+                $_SESSION["remember"] = true;
+            } else {
+                $_SESSION["remember"] = false;
+            }
+
+            // Redirection vers le dashboard avec la nouvelle méthode
+            $this->redirect('dashboard', 'index');
+>>>>>>> Stashed changes
         }
     }
     
@@ -149,11 +168,18 @@ class UtilisateurController extends BaseController {
             }
     
             $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+<<<<<<< Updated upstream
     
             $stmt = $pdo->prepare("INSERT INTO user (nom, prenom, email, role, password) VALUES (?, ?, ?, ?, ?)");
             if ($stmt->execute([$nom, $prenom, $email, $role, $hashedPassword])) {
                 header("Location: " . BASE_URL . "index.php?controller=utilisateur&action=connexion");
                 exit();
+=======
+
+            $res = Utilisateur::createUser($nom, $prenom, $email, $role, $hashedPassword);
+            if ($res) {
+                $this->redirect('utilisateur', 'connexion');
+>>>>>>> Stashed changes
             } else {
                 $error = "Erreur lors de l'inscription.";
                 $this->render('utilisateurs/inscription.twig', ['error' => $error]);
@@ -201,13 +227,92 @@ class UtilisateurController extends BaseController {
             $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token, expiration) VALUES (?, ?, ?)");
             $stmt->execute([$user['id'], $token, $expiration]);
 
+<<<<<<< Updated upstream
             $resetLink = BASE_URL . "index.php?controller=utilisateur&action=changePassword&token=" . $token;
 
             mail($email, "Réinitialisation de votre mot de passe", "Cliquez sur ce lien pour réinitialiser votre mot de passe : " . $resetLink);
+=======
+            // Génération du lien de réinitialisation avec la nouvelle méthode
+            $resetLink = $this->generateUrl('utilisateur', 'changePassword', ['token' => $token]);
+            
+            // Envoi du mail
+            mail($email, "Réinitialisation de votre mot de passe", 
+                 "Cliquez sur ce lien pour réinitialiser votre mot de passe : " . $resetLink);
+>>>>>>> Stashed changes
 
             $message = "Un lien de réinitialisation a été envoyé à votre adresse email.";
             $this->render('utilisateurs/resetPassword.twig', ['message' => $message]);
-            exit;
+        }
+    }
+    
+    /**
+     * Affiche le formulaire de changement de mot de passe (avec token).
+     */
+    public function changePassword() {
+        $token = $_GET['token'] ?? '';
+        
+        if (empty($token)) {
+            $this->redirect('utilisateur', 'resetPassword', ['error' => 'token_missing']);
+        }
+        
+        // Vérifier la validité du token
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("SELECT user_id, expiration FROM password_resets WHERE token = ? AND expiration > NOW()");
+        $stmt->execute([$token]);
+        $reset = $stmt->fetch();
+        
+        if (!$reset) {
+            $this->redirect('utilisateur', 'resetPassword', ['error' => 'invalid_token']);
+        }
+        
+        $this->render('utilisateurs/changePassword.twig', ['token' => $token]);
+    }
+    
+    /**
+     * Traite le formulaire de changement de mot de passe.
+     */
+    public function updatePassword() {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $token = $_POST['token'] ?? '';
+            $password = $_POST['password'] ?? '';
+            $confirmPassword = $_POST['confirm_password'] ?? '';
+            
+            if (empty($token) || empty($password) || empty($confirmPassword)) {
+                $this->render('utilisateurs/changePassword.twig', [
+                    'token' => $token,
+                    'error' => 'Tous les champs sont requis.'
+                ]);
+                return;
+            }
+            
+            if ($password !== $confirmPassword) {
+                $this->render('utilisateurs/changePassword.twig', [
+                    'token' => $token,
+                    'error' => 'Les mots de passe ne correspondent pas.'
+                ]);
+                return;
+            }
+            
+            // Vérifier la validité du token
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT user_id FROM password_resets WHERE token = ? AND expiration > NOW()");
+            $stmt->execute([$token]);
+            $reset = $stmt->fetch();
+            
+            if (!$reset) {
+                $this->redirect('utilisateur', 'resetPassword', ['error' => 'invalid_token']);
+            }
+            
+            // Mettre à jour le mot de passe
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $updateStmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+            $updateStmt->execute([$hashedPassword, $reset['user_id']]);
+            
+            // Supprimer le token utilisé
+            $deleteStmt = $pdo->prepare("DELETE FROM password_resets WHERE token = ?");
+            $deleteStmt->execute([$token]);
+            
+            $this->redirect('utilisateur', 'connexion', ['notif' => 'password_updated']);
         }
     }
 }

@@ -4,10 +4,35 @@
 <section class="content">
     <h2>Liste des Offres</h2>
 
+    {% if user.role == 'Admin' or user.role == 'pilote' %}
+        <!-- Formulaire de recherche pour l'admin -->
+        <form class="search-form" method="GET" action="{{ url('wishlist', 'search') }}">
+            <label for="etudiant_id">Rechercher la wishlist d'un étudiant :</label>
+            <select id="etudiant_id" name="etudiant_id" required>
+                <option value="">Sélectionnez un étudiant</option>
+                {% if etudiants is defined and etudiants is not empty %}
+                    {% for etudiant in etudiants %}
+                        <option value="{{ etudiant.id }}" {% if etudiant_id is defined and etudiant_id == etudiant.id %}selected{% endif %}>
+                            {{ etudiant.nom }} {{ etudiant.prenom }}
+                        </option>
+                    {% endfor %}
+                {% else %}
+                    <option value="" disabled>Aucun étudiant disponible</option>
+                {% endif %}
+            </select>
+            <button type="submit" class="btn">Rechercher</button>
+        </form>
+    {% endif %}
+
     <!-- Formulaire de recherche -->
+<<<<<<< Updated upstream
     <form class="search-form" method="GET" action="{{ BASE_URL }}index.php">
         <input type="hidden" name="controller" value="offre">
         <input type="hidden" name="action" value="search">
+=======
+    <form class="search-form" method="GET" action="{{ url('offre', 'search') }}">
+        <input type="hidden" name="notif" value="1">
+>>>>>>> Stashed changes
         <label for="motcle">Mot-clé :</label>
         <input type="text" id="motcle" name="motcle" value="{{ motcle is defined ? motcle|e : '' }}" required>
         <button type="submit" class="btn">Rechercher</button>
@@ -22,12 +47,18 @@
                     <p>{{ offre.description is defined ? offre.description|e : '' }}</p>
                     
                     <div class="offer-buttons">
+<<<<<<< Updated upstream
                         <a href="{{ BASE_URL }}index.php?controller=offre&action=detail&id={{ offre.id }}" class="btn-voir">Voir</a>
                         {% if user is defined and user.role == 'Étudiant' %}
                             <form action="{{ BASE_URL }}index.php?controller=wishlist&action=add" method="POST" style="display:inline;">
                                 <input type="hidden" name="offre_id" value="{{ offre.id }}">
                                 <button type="submit" class="btn">Ajouter à la Wishlist</button>
                             </form>
+=======
+                        <a href="{{ url('offre', 'detail', {'id': offre.id}) }}" class="btn-voir">Voir</a>
+                        {% if user.role == 'Étudiant' %}
+                            <button type="button" class="btn-add-wishlist" data-offre-id="{{ offre.id }}" data-offre-title="{{ offre.titre }}">Ajouter à la wishlist</button>
+>>>>>>> Stashed changes
                         {% endif %}
                     </div>
                 </div>
@@ -41,7 +72,7 @@
     {% if totalPages is defined and totalPages > 0 %}
         <div class="pagination">
             {% if page > 1 %}
-                <a href="?controller=offre&action={{ motcle is not empty ? 'search' : 'index' }}&page={{ page - 1 }}&motcle={{ motcle|url_encode }}&competences={{ competences|url_encode }}">Précédent</a>
+                <a href="{{ url('offre', motcle is not empty ? 'search' : 'index', {'page': page - 1, 'motcle': motcle, 'competences': competences}) }}">Précédent</a>
             {% endif %}
 
             {% set window = 3 %}
@@ -64,13 +95,24 @@
             {% endif %}
 
             {% for i in start..end %}
-                <a href="?controller=offre&action={{ motcle is not empty ? 'search' : 'index' }}&page={{ i }}&motcle={{ motcle|url_encode }}&competences={{ competences|url_encode }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
+                <a href="{{ url('offre', motcle is not empty ? 'search' : 'index', {'page': i, 'motcle': motcle, 'competences': competences}) }}" class="{% if i == page %}active{% endif %}">{{ i }}</a>
             {% endfor %}
 
             {% if page < totalPages %}
-                <a href="?controller=offre&action={{ motcle is not empty ? 'search' : 'index' }}&page={{ page + 1 }}&motcle={{ motcle|url_encode }}&competences={{ competences|url_encode }}">Suivant</a>
+                <a href="{{ url('offre', motcle is not empty ? 'search' : 'index', {'page': page + 1, 'motcle': motcle, 'competences': competences}) }}">Suivant</a>
             {% endif %}
         </div>
     {% endif %}
 </section>
+<<<<<<< Updated upstream
+=======
+
+<script>
+  const BASE_URL = "{{ BASE_URL }}";
+</script>
+
+<script src="{{ BASE_URL }}public/js/offres.js"></script>
+<script src="{{ BASE_URL }}public/js/wishlist.js"></script>
+
+>>>>>>> Stashed changes
 {% endblock %}

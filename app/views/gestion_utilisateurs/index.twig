@@ -17,7 +17,12 @@
         </div>
         <div id="recherche" style="margin-top: 40px;">
             <h3>Rechercher un Utilisateur</h3>
+<<<<<<< Updated upstream
             <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=search" method="POST">
+=======
+            <h5> Vous pourrez modifier ou supprimer cet utilsateur. </h5>
+            <form class="search-form" action="{{ url('gestionutilisateurs', 'search') }}" method="POST">
+>>>>>>> Stashed changes
                 <label for="search-user">Nom, Prénom ou Email :</label>
                 <input type="text" id="search-user" name="search_query" required>
                 <button type="submit" class="btn">Rechercher</button>
@@ -25,6 +30,7 @@
         </div>
         <hr>
         {% if search_result is defined and search_result is not empty %}
+<<<<<<< Updated upstream
             <div id="resultat">
                 <h3>Résultat de la recherche :</h3>
                 <p><strong>Nom :</strong> {{ search_result.nom|e }}</p>
@@ -54,13 +60,55 @@
                     <button type="submit" class="btn" onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')">Supprimer</button>
                 </form>
             </div>
+=======
+        <div id="resultat">
+            <h3>Résultat de la recherche :</h3>
+            <p>Nom : {{ search_result.nom }}</p>
+            <p>Prénom : {{ search_result.prenom }}</p>
+            <p>Email : {{ search_result.email }}</p>
+            <p>Rôle : {{ search_result.role }}</p>
+    
+            <h3>Modifier cet utilisateur</h3>
+            <form action="{{ url('gestionutilisateurs', 'update') }}" method="POST">
+                <input type="hidden" name="id" value="{{ search_result.id }}">
+                <label>Nouveau Nom :</label>
+                <input type="text" name="nom" value="{{ search_result.nom|e }}">
+    
+                <label>Nouveau Prénom :</label>
+                <input type="text" name="prenom" value="{{ search_result.prenom|e }}">
+    
+                <label>Nouvel Email :</label>
+                <input type="email" name="email" value="{{ search_result.email|e }}">
+    
+                <label>Nouveau Rôle :</label>
+                <select name="role">
+                    <option value="Etudiant" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
+                    <option value="pilote" {% if search_result.role == 'pilote' %}selected{% endif %}>Pilote</option>
+                    <option value="Admin" {% if search_result.role == 'Admin' %}selected{% endif %}>Administrateur</option>
+                </select>
+                <button type="submit" class="btn-login">Modifier</button>
+            </form>
+    
+            {% if user.id != search_result.id %}
+    <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
+    <form action="{{ url('gestionutilisateurs', 'delete') }}" method="POST">
+        <input type="hidden" name="id" value="{{ search_result.id }}">
+        <button type="submit" class="btn-supprimer">Supprimer</button>
+    </form>
+{% else %}
+    <h3 style="margin-top:10px;">Suppression non autorisée</h3>
+    <p style="color: darkred;">Vous ne pouvez pas supprimer votre propre compte.</p>
+{% endif %}
+
+        </div>
+>>>>>>> Stashed changes
         {% elseif search_result is defined and search_result is empty %}
             <p>Aucun utilisateur trouvé.</p>
         {% endif %}
         <hr>
         <div id="creer" style="margin-top: 40px;">
             <h3>Créer un Utilisateur</h3>
-            <form action="{{ BASE_URL }}index.php?controller=gestionutilisateurs&action=create" method="POST">
+            <form action="{{ url('gestionutilisateurs', 'create') }}" method="POST">
                 <label for="nom-create-user">Nom :</label>
                 <input type="text" id="nom-create-user" name="nom" required>
                 <label for="prenom-create-user">Prénom :</label>
