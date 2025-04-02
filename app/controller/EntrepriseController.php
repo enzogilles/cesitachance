@@ -42,6 +42,10 @@ class EntrepriseController extends BaseController
     public function creer() {
         $this->checkAuth(['Admin', 'pilote']);
 
+        // Instantiate Entreprise model to get all sectors
+        $entrepriseModel = new Entreprise();
+        $secteurs = $entrepriseModel->getAllSecteurs();
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $entreprise = new Entreprise();
             foreach (['nom', 'ville', 'secteur', 'taille', 'description', 'email', 'telephone'] as $field) {
@@ -54,7 +58,9 @@ class EntrepriseController extends BaseController
             }
         }
 
-        $this->render('entreprises/creer.twig');
+        $this->render('entreprises/creer.twig', [
+            'secteurs' => $secteurs
+        ]);
     }
 
     public function modifier($id) {
