@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }, duration);
   }
 
-  if (resetButton) {
+  if (resetButton && searchForm && window.location.pathname.includes("offre")) {
     resetButton.addEventListener("click", function (e) {
       e.preventDefault();
       window.location.href = BASE_URL + "offre/index";

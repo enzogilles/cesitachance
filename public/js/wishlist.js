@@ -178,9 +178,13 @@ document.addEventListener("DOMContentLoaded", function () {
   const urlParams = new URLSearchParams(window.location.search);
   const notif = urlParams.get("notif");
 
-  if (notif === "1") {
+  const currentPath = window.location.pathname;
+
+  if (notif === "1" && (currentPath.includes("/wishlist") || currentPath.includes("wishlist"))) {
     showNotification("🔍 Wishlist affichée", "info", 5000);
     urlParams.delete("notif");
-    window.history.replaceState({}, "", `${window.location.pathname}?${urlParams.toString()}`);
+    const newUrl = window.location.pathname + '?' + urlParams.toString();
+    window.history.replaceState({}, "", newUrl);
   }
+
 });
