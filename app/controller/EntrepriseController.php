@@ -8,35 +8,25 @@ use App\Model\Entreprise;
 
 class EntrepriseController extends BaseController
 {
-    /**
-     * Affiche la liste des entreprises avec recherche/pagination (ouvert à tous).
-     */
     public function index() {
-        // Récupération des paramètres de recherche
-        $nom = isset($_GET['nom']) ? $_GET['nom'] : '';
-        $ville = isset($_GET['ville']) ? $_GET['ville'] : '';
-        $secteur = isset($_GET['secteur']) ? $_GET['secteur'] : '';
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        
-        // Nombre d'éléments par page
+        $nom = $_GET['nom'] ?? '';
+        $ville = $_GET['ville'] ?? '';
+        $secteur = $_GET['secteur'] ?? '';
+        $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
         $limit = 10;
         $offset = ($page - 1) * $limit;
-        
-        // Récupération des entreprises
+
         $entreprises = Entreprise::search($nom, $ville, $secteur, $limit, $offset);
         $totalEntreprises = Entreprise::countAll($nom, $ville, $secteur);
         $totalPages = ceil($totalEntreprises / $limit);
-        
-        // Récupération de tous les secteurs distincts pour le menu déroulant
+
         $entrepriseModel = new Entreprise();
         $secteurs = $entrepriseModel->getAllSecteurs();
-        
-        // Ajout des actions pour chaque entreprise
+
         foreach ($entreprises as &$entreprise) {
             $entreprise['actions'] = $this->getActionsForEntreprise($entreprise);
         }
-        
-        // Rendu du template
+
         echo $this->render('entreprises/index.twig', [
             'entreprises' => $entreprises,
             'nom' => $nom,
@@ -44,26 +34,26 @@ class EntrepriseController extends BaseController
             'secteur' => $secteur,
             'page' => $page,
             'totalPages' => $totalPages,
-            'user' => isset($_SESSION['user']) ? $_SESSION['user'] : null,
+            'user' => $_SESSION['user'] ?? null,
             'secteurs' => $secteurs
         ]);
     }
 
     public function creer() {
         $this->checkAuth(['Admin', 'pilote']);
-    
+
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $entreprise = new Entreprise();
             foreach (['nom', 'ville', 'secteur', 'taille', 'description', 'email', 'telephone'] as $field) {
                 $entreprise->$field = trim($_POST[$field] ?? '');
             }
-    
+
             if (!empty($entreprise->nom) && !empty($entreprise->ville) && !empty($entreprise->secteur) && !empty($entreprise->taille)) {
                 $entreprise->save();
                 $this->redirect('entreprise', 'index', ['notif' => 'created']);
             }
         }
-    
+
         $this->render('entreprises/creer.twig');
     }
 
@@ -130,22 +120,16 @@ class EntrepriseController extends BaseController
         ]);
     }
 
-    /**
-     * Génère les actions disponibles pour une entreprise.
-     */
     private function getActionsForEntreprise($entreprise) {
         $actions = '';
 
-        // Bouton de détails pour tous les utilisateurs
         $actions .= '<a href="' . $this->generateUrl('entreprise', 'details', ['id' => $entreprise['id']]) . '" class="btn btn-voir">Détails</a>';
 
-        // Actions supplémentaires pour Admin et pilote
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'modifier', ['id' => $entreprise['id']]) . '" class="btn btn-modifier">Modifier</a>';
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', ['id' => $entreprise['id']]) . '" class="btn btn-supprimer"">Supprimer</a>';
+            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', ['id' => $entreprise['id']]) . '" class="btn btn-supprimer">Supprimer</a>';
         }
 
-        // Action d'évaluation pour les étudiants
         if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Etudiant') {
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $entreprise['id']]) . '" class="btn btn-evaluate">Évaluer</a>';
         }

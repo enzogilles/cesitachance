@@ -47,7 +47,6 @@ class Entreprise extends BaseModel
             $sqlFilter = " WHERE 1=1 ";
             $params = [];
 
-            // Ajouter des filtres dynamiques en fonction des paramètres fournis
             if ($nom !== '') {
                 $sqlFilter .= " AND nom LIKE ? ";
                 $params[] = "%$nom%";
@@ -61,11 +60,9 @@ class Entreprise extends BaseModel
                 $params[] = "%$secteur%";
             }
 
-            // Construire la requête SQL avec tri et pagination
             $sqlData = "SELECT * FROM entreprise " . $sqlFilter . " ORDER BY nom ASC LIMIT ? OFFSET ?";
             $stmt = $pdo->prepare($sqlData);
 
-            // Lier les paramètres dynamiques
             $i = 1;
             foreach ($params as $p) {
                 $stmt->bindValue($i++, $p);
@@ -91,7 +88,6 @@ class Entreprise extends BaseModel
             $sqlFilter = " WHERE 1=1 ";
             $params = [];
 
-            // Ajouter des filtres dynamiques en fonction des paramètres fournis
             if ($nom !== '') {
                 $sqlFilter .= " AND nom LIKE ? ";
                 $params[] = "%$nom%";
@@ -105,7 +101,6 @@ class Entreprise extends BaseModel
                 $params[] = "%$secteur%";
             }
 
-            // Construire la requête SQL pour compter les entreprises
             $sqlCount = "SELECT COUNT(*) as total FROM entreprise " . $sqlFilter;
             $stmtCount = $pdo->prepare($sqlCount);
             $stmtCount->execute($params);
@@ -153,7 +148,6 @@ class Entreprise extends BaseModel
     {
         try {
             if (isset($this->id)) {
-                // Mise à jour d'une entreprise existante
                 $stmt = $this->pdo->prepare("UPDATE entreprise SET nom = ?, secteur = ?, ville = ?, taille = ?, description = ?, email = ?, telephone = ? WHERE id = ?");
                 return $stmt->execute([
                     $this->nom,
@@ -166,7 +160,6 @@ class Entreprise extends BaseModel
                     $this->id
                 ]);
             } else {
-                // Insertion d'une nouvelle entreprise
                 $stmt = $this->pdo->prepare("INSERT INTO entreprise (nom, secteur, ville, taille, description, email, telephone) VALUES (?, ?, ?, ?, ?, ?, ?)");
                 $result = $stmt->execute([
                     $this->nom,
@@ -189,19 +182,15 @@ class Entreprise extends BaseModel
 
     /**
      * Récupère tous les secteurs d'activité distincts des entreprises
-     * 
-     * @return array Liste des secteurs d'activité
      */
     public function getAllSecteurs() {
         try {
             $stmt = $this->pdo->prepare("SELECT DISTINCT secteur FROM entreprise WHERE secteur IS NOT NULL AND secteur != '' ORDER BY secteur");
             $stmt->execute();
-            
             $secteurs = [];
             while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $secteurs[] = $row['secteur'];
             }
-            
             return $secteurs;
         } catch (\PDOException $e) {
             throw new \Exception("Erreur lors de la récupération des secteurs : " . $e->getMessage());

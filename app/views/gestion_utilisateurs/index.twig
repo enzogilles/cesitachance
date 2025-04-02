@@ -5,7 +5,7 @@
 <main class="content">
     <h2>Gestion des Utilisateurs</h2>
     {# Vérification du rôle #}
-    {% if user is not defined or user.role != 'Admin' %}
+    {% if user is not defined or user.role == 'Étudiant' %}
         <p>Accès refusé</p>
     {% else %}
         <div class="dashboard-actions">
@@ -20,14 +20,19 @@
 
         {# Formulaire de recherche #}
         <div id="recherche" style="margin-top: 40px;">
-            <h3>Rechercher un Utilisateur</h3>
-            <h5> Vous pourrez modifier ou supprimer cet utilsateur. </h5>
+            {% if user.role == 'Admin' %}
+                <h3>Rechercher un Utilisateur</h3>
+                <h5>Vous pourrez modifier ou supprimer cet utilisateur.</h5>
+            {% elseif user.role == 'pilote' %}
+                <h3>Rechercher un Étudiant</h3>
+                <h5>Vous pourrez modifier ou supprimer cet étudiant.</h5>
+            {% endif %}
+
             <form class="search-form" action="{{ url('gestionutilisateurs', 'search') }}" method="POST">
                 <label for="search-user">Nom, Prénom ou Email :</label>
                 <input type="text" id="search-user" name="search_query" required>
 
                 <button type="submit" class="btn">Rechercher</button>
-                {# Bouton reset (pour ré-initialiser l'affichage) #}
                 <button type="button" class="bouton-reset">Réinitialiser</button>
             </form>
         </div>
@@ -41,19 +46,24 @@
             <p>Prénom : {{ search_result.prenom }}</p>
             <p>Email : {{ search_result.email }}</p>
             <p>Rôle : {{ search_result.role }}</p>
-    
-            <h3>Modifier cet utilisateur</h3>
+
+            {% if user.role == 'Admin' %}
+                <h3>Modifier cet utilisateur</h3>
+            {% elseif user.role == 'pilote' %}
+                <h3 style="margin-top:10px;">Modifier cet étudiant</h3>
+            {% endif %}
+
             <form action="{{ url('gestionutilisateurs', 'update') }}" method="POST">
                 <input type="hidden" name="id" value="{{ search_result.id }}">
                 <label>Nouveau Nom :</label>
                 <input type="text" name="nom" value="{{ search_result.nom|e }}">
-    
+
                 <label>Nouveau Prénom :</label>
                 <input type="text" name="prenom" value="{{ search_result.prenom|e }}">
-    
+
                 <label>Nouvel Email :</label>
                 <input type="email" name="email" value="{{ search_result.email|e }}">
-    
+
                 <label>Nouveau Rôle :</label>
                 <select name="role">
                     <option value="Etudiant" {% if search_result.role == 'Etudiant' %}selected{% endif %}>Étudiant</option>
@@ -62,9 +72,13 @@
                 </select>
                 <button type="submit" class="btn-login">Modifier</button>
             </form>
-    
+
             {% if user.id != search_result.id %}
-                <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
+                {% if user.role == 'Admin' %}
+                    <h3 style="margin-top:10px;">Supprimer cet utilisateur</h3>
+                {% elseif user.role == 'pilote' %}
+                    <h3 style="margin-top:10px;">Supprimer cet étudiant</h3>
+                {% endif %}
                 <form action="{{ url('gestionutilisateurs', 'delete') }}" method="POST">
                     <input type="hidden" name="id" value="{{ search_result.id }}">
                     <button type="submit" class="btn-supprimer">Supprimer</button>
@@ -79,30 +93,34 @@
             <p>Aucun utilisateur trouvé.</p>
         </div>
         {% endif %}
-    
+
         {# Formulaire de création d'un nouvel utilisateur #}
         <div id="creer" style="margin-top: 40px;">
-            <h3>Créer un Utilisateur</h3>
+            {% if user.role == 'Admin' %}
+                <h3>Créer un Utilisateur</h3>
+            {% elseif user.role == 'pilote' %}
+                <h3>Créer un Étudiant</h3>
+            {% endif %}
             <form action="{{ url('gestionutilisateurs', 'create') }}" method="POST">
                 <label for="nom-create-user">Nom :</label>
                 <input type="text" id="nom-create-user" name="nom" required>
-                
+
                 <label for="prenom-create-user">Prénom :</label>
                 <input type="text" id="prenom-create-user" name="prenom" required>
-                
+
                 <label for="email-create-user">Email :</label>
                 <input type="email" id="email-create-user" name="email" required>
-                
+
                 <label for="role-create-user">Rôle :</label>
                 <select id="role-create-user" name="role" required>
                     <option value="Etudiant">Étudiant</option>
                     <option value="pilote">Pilote</option>
                     <option value="Admin">Administrateur</option>
                 </select>
-                
+
                 <label for="password-create-user">Mot de passe :</label>
                 <input type="password" id="password-create-user" name="password" required>
-                
+
                 <button type="submit" class="btn-login">Créer</button>
             </form>
         </div>
@@ -124,5 +142,3 @@
 <script src="{{ BASE_URL }}public/js/gestion-etudiant.js"></script>
 <script src="{{ BASE_URL }}public/js/candidatures.js"></script>
 {% endblock %}
-
-
