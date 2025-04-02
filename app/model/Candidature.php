@@ -30,7 +30,7 @@ class Candidature extends BaseModel
             $sql = "
                 SELECT c.id,
                        e.nom AS entreprise,
-                       o.titre,
+                       o.titre AS offre,
                        c.date_soumission,
                        c.cv,
                        c.lettre,
@@ -62,7 +62,7 @@ class Candidature extends BaseModel
             $sql = "
                 SELECT c.id,
                        e.nom AS entreprise,
-                       o.titre,
+                       o.titre AS offre,
                        c.date_soumission,
                        c.cv,
                        c.lettre,
