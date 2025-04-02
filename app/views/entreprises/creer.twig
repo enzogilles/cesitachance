@@ -15,8 +15,12 @@
         <label for="ville">Ville :</label>
         <input type="text" id="ville" name="ville" required>
 
-        <label for="secteur">Secteur :</label>
-        <input type="text" id="secteur" name="secteur" required>
+        <select id="secteur" name="secteur">
+        <option value="">Tous les secteurs</option>
+        {% for secteurOption in secteurs %}
+            <option value="{{ secteurOption|e }}" {% if secteur is defined and secteur == secteurOption %}selected{% endif %}>{{ secteurOption|e }}</option>
+        {% endfor %}
+    </select>
 
         <label for="taille">Taille :</label>
         <input type="text" id="taille" name="taille" required>
