@@ -9,6 +9,34 @@ use App\Model\Utilisateur;
 class UtilisateurController extends BaseController {
 
     /**
+     * Nettoie et récupère une valeur du formulaire
+     */
+    private function getFormInput($key, $default = '') {
+        return isset($_POST[$key]) ? trim($_POST[$key]) : $default;
+    }
+    
+    /**
+     * Valide les champs requis d'un formulaire
+     * @return bool|string True si valide, message d'erreur sinon
+     */
+    private function validateRequiredFields($fields) {
+        foreach ($fields as $field) {
+            if (empty($this->getFormInput($field))) {
+                return "Tous les champs sont requis.";
+            }
+        }
+        return true;
+    }
+    
+    /**
+     * Affiche une erreur et le formulaire
+     */
+    private function renderWithError($viewPath, $error) {
+        $this->render($viewPath, ['error' => $error]);
+        return;
+    }
+
+    /**
      * Page de connexion -> accessible à tous.
      */
     public function connexion() {
@@ -56,93 +84,88 @@ class UtilisateurController extends BaseController {
      * Traitement de la connexion (login).
      */
     public function login() {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-
-            $email = trim($_POST["email"]);
-            $password = $_POST["password"];
-
-            if (empty($email) || empty($password)) {
-                $error = "Veuillez remplir tous les champs.";
-                $this->render('utilisateurs/connexion.twig', ['error' => $error]);
-                return;
-            }
-
-            $user = Utilisateur::findByEmail($email);
-            if (!$user || !password_verify($password, $user['password'])) {
-                // Email ou mot de passe incorrect
-                $error = "Email ou mot de passe incorrect.";
-                $this->render('utilisateurs/connexion.twig', ['error' => $error]);
-                return;
-            }
-
-            // Si tout est OK, on connecte l'utilisateur
-            $_SESSION["user"] = [
-                "id" => $user["id"],
-                "nom" => $user["nom"],
-                "prenom" => $user["prenom"],
-                "email" => $user["email"],
-                "role" => $user["role"]
-            ];
-
-            // Gestion de l'option "Rester connecté"
-            if (isset($_POST["remember"]) && $_POST["remember"] === "on") {
-                $_SESSION["remember"] = true;
-            } else {
-                $_SESSION["remember"] = false;
-            }
-
-            // Redirection vers le dashboard avec URL propre
-            $this->redirect('dashboard', 'index');
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            return;
         }
+
+        $email = $this->getFormInput("email");
+        $password = $this->getFormInput("password", null);
+        
+        // Validation des champs
+        $validation = $this->validateRequiredFields(['email', 'password']);
+        if ($validation !== true) {
+            return $this->renderWithError('utilisateurs/connexion.twig', $validation);
+        }
+
+        // Vérification des identifiants
+        $user = Utilisateur::findByEmail($email);
+        if (!$user || !password_verify($password, $user['password'])) {
+            return $this->renderWithError('utilisateurs/connexion.twig', "Email ou mot de passe incorrect.");
+        }
+
+        // Si tout est OK, on connecte l'utilisateur
+        $_SESSION["user"] = [
+            "id" => $user["id"],
+            "nom" => $user["nom"],
+            "prenom" => $user["prenom"],
+            "email" => $user["email"],
+            "role" => $user["role"]
+        ];
+
+        // Gestion de l'option "Rester connecté"
+        $_SESSION["remember"] = isset($_POST["remember"]) && $_POST["remember"] === "on";
+
+        // Redirection vers le dashboard avec URL propre
+        $this->redirect('dashboard', 'index');
     }
 
     /**
      * Traitement de l'inscription.
      */
     public function register() {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+            return;
+        }
 
-            $nom = trim($_POST["nom"]);
-            $prenom = trim($_POST["prenom"]);
-            $email = trim($_POST["email"]);
-            $role = trim($_POST["role"]);
-            $password = $_POST["password"];
-            $confirmPassword = $_POST["confirm-password"];
+        // Récupération des données du formulaire
+        $nom = $this->getFormInput("nom");
+        $prenom = $this->getFormInput("prenom");
+        $email = $this->getFormInput("email");
+        $role = $this->getFormInput("role");
+        $password = $this->getFormInput("password", null);
+        $confirmPassword = $this->getFormInput("confirm-password", null);
 
-            if (empty($nom) || empty($prenom) || empty($email) || empty($role) || empty($password) || empty($confirmPassword)) {
-                $error = "Tous les champs sont requis.";
-                $this->render('utilisateurs/inscription.twig', ['error' => $error]);
-                return;
-            }
+        // Validation des champs requis
+        $validation = $this->validateRequiredFields([
+            'nom', 'prenom', 'email', 'role', 'password', 'confirm-password'
+        ]);
+        if ($validation !== true) {
+            return $this->renderWithError('utilisateurs/inscription.twig', $validation);
+        }
 
-            if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $error = "Format d'email invalide.";
-                $this->render('utilisateurs/inscription.twig', ['error' => $error]);
-                return;
-            }
+        // Validation du format de l'email
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->renderWithError('utilisateurs/inscription.twig', "Format d'email invalide.");
+        }
 
-            if ($password !== $confirmPassword) {
-                $error = "Les mots de passe ne correspondent pas.";
-                $this->render('utilisateurs/inscription.twig', ['error' => $error]);
-                return;
-            }
+        // Validation de la correspondance des mots de passe
+        if ($password !== $confirmPassword) {
+            return $this->renderWithError('utilisateurs/inscription.twig', "Les mots de passe ne correspondent pas.");
+        }
 
-            // Vérifier si l'email existe déjà
-            if (Utilisateur::emailExists($email)) {
-                $error = "Cet email est déjà utilisé.";
-                $this->render('utilisateurs/inscription.twig', ['error' => $error]);
-                return;
-            }
+        // Vérification de l'unicité de l'email
+        if (Utilisateur::emailExists($email)) {
+            return $this->renderWithError('utilisateurs/inscription.twig', "Cet email est déjà utilisé.");
+        }
 
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-            $res = Utilisateur::createUser($nom, $prenom, $email, $role, $hashedPassword);
-            if ($res) {
-                $this->redirect('utilisateur', 'connexion');
-            } else {
-                $error = "Erreur lors de l'inscription.";
-                $this->render('utilisateurs/inscription.twig', ['error' => $error]);
-            }
+        // Création de l'utilisateur
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $res = Utilisateur::createUser($nom, $prenom, $email, $role, $hashedPassword);
+        
+        if ($res) {
+            $this->redirect('utilisateur', 'connexion');
+        } else {
+            return $this->renderWithError('utilisateurs/inscription.twig', "Erreur lors de l'inscription.");
         }
     }
 

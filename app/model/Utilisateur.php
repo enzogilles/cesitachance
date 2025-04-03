@@ -261,4 +261,56 @@ class Utilisateur extends BaseModel
             throw new \Exception("Erreur lors de la récupération des utilisateurs par rôle : " . $e->getMessage());
         }
     }
+
+    /**
+     * Récupère la liste des étudiants et administrateurs avec pagination.
+     * Utilisé pour afficher la liste des utilisateurs dans la wishlist.
+     */
+    public static function findStudentsAndAdminsPaginated($offset, $limit)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "SELECT id, nom, prenom, email, role 
+                    FROM user 
+                    WHERE role = 'Étudiant' OR role = 'Admin'
+                    ORDER BY nom ASC
+                    LIMIT ? OFFSET ?";
+            $stmt = $pdo->prepare($sql);
+            $stmt->bindValue(1, $limit, PDO::PARAM_INT);
+            $stmt->bindValue(2, $offset, PDO::PARAM_INT);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            // Compter le nombre total pour la pagination
+            $sqlCount = "SELECT COUNT(*) as total FROM user WHERE role = 'Étudiant' OR role = 'Admin'";
+            $stmtCount = $pdo->query($sqlCount);
+            $total = $stmtCount->fetch(PDO::FETCH_ASSOC)['total'];
+
+            return [
+                'users' => $users,
+                'total' => $total
+            ];
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération des étudiants et admins paginés : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Récupère tous les étudiants et administrateurs (sans pagination).
+     * Utilisé pour le menu déroulant de sélection.
+     */
+    public static function findAllStudentsAndAdmins()
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "SELECT id, nom, prenom, role 
+                    FROM user 
+                    WHERE role = 'Étudiant' OR role = 'Admin'
+                    ORDER BY nom ASC";
+            $stmt = $pdo->query($sql);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de tous les étudiants et admins : " . $e->getMessage());
+        }
+    }
 }
