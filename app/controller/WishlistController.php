@@ -99,8 +99,10 @@ class WishlistController extends BaseController
             $offre_id = (int)$data['offre_id'];
 
             if (Wishlist::exists($user_id, $offre_id)) {
-                echo json_encode(['success' => false, 'message' => "Offre d\u00e9j\u00e0 dans la wishlist"]);
+                header('Content-Type: application/json; charset=utf-8');
+                echo json_encode(['success' => false, 'message' => "Offre déjà dans la wishlist"]);
             } else {
+                header('Content-Type: application/json; charset=utf-8');
                 $result = Wishlist::add($user_id, $offre_id);
                 echo json_encode([
                     'success' => $result['success'],
