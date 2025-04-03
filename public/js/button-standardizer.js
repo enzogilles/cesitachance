@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     .btn-back, 
     .btn-wishlist, 
     .btn-postuler, 
+    .btn-details
     .bouton-reset,
     .btn-modifier,
     .btn-supprimer,
