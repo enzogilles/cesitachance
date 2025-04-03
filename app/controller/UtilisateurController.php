@@ -153,5 +153,4 @@ class UtilisateurController extends BaseController {
         $this->render('utilisateurs/resetPassword.twig');
     }
 
-    
 }

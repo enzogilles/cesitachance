@@ -78,9 +78,8 @@ class GestionUtilisateursController extends BaseController
             $role     = trim($_POST["role"]);
             $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
 
-            // Si le pilote crée un utilisateur, forçons le rôle "Étudiant" (optionnel selon vos besoins)
+            // Si le pilote crée un utilisateur, on impose qu'il soit "Étudiant".
             if ($_SESSION['user']['role'] === 'pilote') {
-                // Pour un pilote, on impose que le rôle du nouvel utilisateur soit Étudiant.
                 if ($role !== 'Étudiant') {
                     $role = 'Étudiant';
                 }

@@ -50,17 +50,4 @@ class ContactController extends BaseController
             $this->redirect('contact', 'index');
         }
     }
-
-    /**
-     * Affiche tous les messages reçus -> réservé à l'admin.
-     */
-    public function messages()
-    {
-        $this->checkAuth(['Admin']);
-
-        // Model
-        $messages = ContactMessage::findAll();
-
-        $this->render('contact/messages.twig', ['messages' => $messages]);
-    }
 }

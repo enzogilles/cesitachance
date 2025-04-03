@@ -111,12 +111,18 @@
                 <label for="email-create-user">Email :</label>
                 <input type="email" id="email-create-user" name="email" required>
 
-                <label for="role-create-user">Rôle :</label>
-                <select id="role-create-user" name="role" required>
-                    <option value="Étudiant">Étudiant</option>
-                    <option value="pilote">Pilote</option>
-                    <option value="Admin">Administrateur</option>
-                </select>
+                {% if user.role == 'pilote' %}
+                    {# Le pilote n’a pas le choix : ce sera un étudiant #}
+                    <label for="role-create-user">Rôle :</label>
+                    <input type="text" id="role-create-user" name="role" value="Étudiant" readonly>
+                {% else %}
+                    <label for="role-create-user">Rôle :</label>
+                    <select id="role-create-user" name="role" required>
+                        <option value="Étudiant">Étudiant</option>
+                        <option value="pilote">Pilote</option>
+                        <option value="Admin">Administrateur</option>
+                    </select>
+                {% endif %}
 
                 <label for="password-create-user">Mot de passe :</label>
                 <input type="password" id="password-create-user" name="password" required>
