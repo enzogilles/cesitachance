@@ -31,20 +31,5 @@ class ContactMessage extends BaseModel
             throw new \Exception("Erreur lors de l'insertion du message de contact : " . $e->getMessage());
         }
     }
-
-    /**
-     * Récupère tous les messages, par ordre de date_envoi DESC
-     */
-    public static function findAll()
-    {
-        try {
-            $pdo = \Database::getInstance();
-            $stmt = $pdo->prepare("SELECT * FROM contact_messages ORDER BY date_envoi DESC");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new \Exception("Erreur lors de la récupération des messages de contact : " . $e->getMessage());
-        }
-    }
 }
 ?>
