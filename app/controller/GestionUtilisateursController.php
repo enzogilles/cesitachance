@@ -218,12 +218,4 @@ class GestionUtilisateursController extends BaseController
         ]);
     }
 
-    /**
-     * Vérifie que l'utilisateur est connecté et a l'un des rôles autorisés.
-     * (Cette méthode s'appuie sur le BaseController::checkAuth())
-     */
-    protected function checkAuth(array $allowedRoles = [])
-    {
-        parent::checkAuth($allowedRoles);
-    }
 }
