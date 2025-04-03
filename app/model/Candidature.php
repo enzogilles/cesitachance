@@ -86,6 +86,48 @@ class Candidature extends BaseModel
     }
 
     /**
+     * Trouve une candidature par son ID
+     */
+    public static function findById($id)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $sql = "
+                SELECT c.*,
+                       e.nom AS entreprise,
+                       o.titre AS offre,
+                       u.nom AS user_nom,
+                       u.prenom AS user_prenom
+                FROM candidature c
+                INNER JOIN offre o ON c.offre_id = o.id
+                INNER JOIN entreprise e ON o.entreprise_id = e.id
+                INNER JOIN user u ON c.user_id = u.id
+                WHERE c.id = ?
+            ";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la récupération de la candidature : " . $e->getMessage());
+        }
+    }
+
+    /**
+     * Vérifie si une candidature existe déjà pour un utilisateur et une offre
+     */
+    public static function exists($userId, $offreId)
+    {
+        try {
+            $pdo = \Database::getInstance();
+            $stmt = $pdo->prepare("SELECT COUNT(*) FROM candidature WHERE user_id = ? AND offre_id = ?");
+            $stmt->execute([$userId, $offreId]);
+            return $stmt->fetchColumn() > 0;
+        } catch (\PDOException $e) {
+            throw new \Exception("Erreur lors de la vérification de l'existence de la candidature : " . $e->getMessage());
+        }
+    }
+
+    /**
      * Sauvegarde la candidature (insertion ou mise à jour).
      */
     public function save()
@@ -166,4 +208,3 @@ class Candidature extends BaseModel
         return false;
     }
 }
-?>

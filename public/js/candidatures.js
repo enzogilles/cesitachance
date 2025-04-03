@@ -1,4 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
+  // Ne pas initialiser si l'utilisateur n'est pas admin
+  if (!document.querySelector('.candidatures-table')) return;
+
   const statusLabels = {
     "Accepted": "Acceptée",
     "Pending": "En Attente",
@@ -11,67 +14,66 @@ document.addEventListener("DOMContentLoaded", function () {
     "Rejected": "refused"
   };
 
-  const tbody = document.querySelector("tbody");
-  if (tbody) {
-    tbody.style.visibility = "hidden";
+  function updateCandidatureStatus(candidatureId, newStatus) {
+    return fetch(`${BASE_URL}index.php?controller=candidature&action=updateStatus`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: `candidature_id=${candidatureId}&statut=${newStatus}`
+    })
+    .then(response => response.ok)
+    .catch(error => {
+      console.error('Erreur:', error);
+      return false;
+    });
   }
 
-  function loadStatuses() {
-    const savedStatuses = JSON.parse(localStorage.getItem("candidatures")) || {};
-    document.querySelectorAll("tbody tr").forEach(function (row) {
-      const key = row.dataset.id;
-      const statusCell = row.querySelector("td.status");
-      if (key && statusCell && savedStatuses[key] && statusLabels[savedStatuses[key]]) {
-        statusCell.textContent = statusLabels[savedStatuses[key]];
-        statusCell.className = "status " + statusClasses[savedStatuses[key]];
-      }
+  function handleStatusClick(statusCell, row) {
+    // Supprimer tous les menus ouverts
+    document.querySelectorAll(".status-options").forEach(menu => menu.remove());
+
+    const optionsBox = document.createElement("div");
+    optionsBox.classList.add("status-options");
+
+    Object.entries(statusLabels).forEach(([statusKey, label]) => {
+      const btn = document.createElement("button");
+      btn.textContent = label;
+      btn.classList.add("status-btn", statusClasses[statusKey]);
+      
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        const success = await updateCandidatureStatus(row.dataset.id, statusKey);
+        
+        if (success) {
+          statusCell.textContent = label;
+          statusCell.className = `status ${statusClasses[statusKey]}`;
+        }
+        
+        optionsBox.remove();
+      });
+      
+      optionsBox.appendChild(btn);
     });
 
-    if (tbody) {
-      tbody.style.visibility = "visible";
-    }
+    statusCell.appendChild(optionsBox);
   }
 
-  function saveStatus(key, status) {
-    let savedStatuses = JSON.parse(localStorage.getItem("candidatures")) || {};
-    savedStatuses[key] = status;
-    localStorage.setItem("candidatures", JSON.stringify(savedStatuses));
-  }
-
-  document.querySelectorAll("tbody tr").forEach(function (row) {
+  // Gestion des clics sur les statuts
+  document.querySelectorAll("tbody tr").forEach(row => {
     const statusCell = row.querySelector("td.status");
     if (statusCell) {
-      statusCell.addEventListener("click", function (e) {
-        document.querySelectorAll(".status-options").forEach(menu => menu.remove());
-        const key = row.dataset.id;
-        const optionsBox = document.createElement("div");
-        optionsBox.classList.add("status-options");
-
-        Object.keys(statusLabels).forEach(function (statusKey) {
-          const btn = document.createElement("button");
-          btn.textContent = statusLabels[statusKey];
-          btn.classList.add("status-btn", statusClasses[statusKey]);
-          btn.addEventListener("click", function (e) {
-            e.stopPropagation();
-            statusCell.textContent = statusLabels[statusKey];
-            statusCell.className = "status " + statusClasses[statusKey];
-            saveStatus(key, statusKey);
-            optionsBox.remove();
-          });
-          optionsBox.appendChild(btn);
-        });
-
-        statusCell.appendChild(optionsBox);
+      statusCell.addEventListener("click", (e) => {
         e.stopPropagation();
+        handleStatusClick(statusCell, row);
       });
     }
   });
 
-  document.addEventListener("click", function (e) {
-    if (!e.target.classList.contains("status-btn")) {
+  // Fermer le menu au clic ailleurs
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest('.status, .status-options')) {
       document.querySelectorAll(".status-options").forEach(menu => menu.remove());
     }
   });
-
-  loadStatuses();
 });
