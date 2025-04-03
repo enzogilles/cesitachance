@@ -88,21 +88,65 @@ class CandidatureController extends BaseController {
 
     /**
      * Met à jour le statut d'une candidature
-     * -> réservé aux Admin / Pilote.
+     * -> réservé aux Admin
      */
     public function updateStatus() {
-        // Vérifie la connexion + rôles
-        $this->checkAuth(['Admin','pilote']);
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $candidatureId = $_POST['candidature_id'];
-            $nouveauStatut = $_POST['statut'];
-
-            // Model
-            Candidature::updateStatus($candidatureId, $nouveauStatut);
-
-            // Redirection avec URL propre
-            $this->redirect('candidature', 'index');
+        try {
+            // Vérification de l'authentification
+            $this->checkAuth(['Admin', 'pilote']);
+            
+            if ($_SERVER["REQUEST_METHOD"] !== "POST") {
+                throw new \Exception("Méthode non autorisée");
+            }
+    
+            // Log de toutes les données reçues
+            error_log("POST data: " . print_r($_POST, true));
+            
+            $candidatureId = isset($_POST['candidature_id']) ? $_POST['candidature_id'] : null;
+            $nouveauStatut = isset($_POST['statut']) ? $_POST['statut'] : null;
+    
+            // Log des valeurs extraites
+            error_log("Valeurs extraites - ID: " . var_export($candidatureId, true) . 
+                     ", Statut: " . var_export($nouveauStatut, true));
+    
+            // Validation
+            if (!$candidatureId || !is_numeric($candidatureId)) {
+                throw new \Exception("ID de candidature invalide");
+            }
+    
+            if (!in_array($nouveauStatut, ['0', '1', '2'], true)) {
+                throw new \Exception("Statut invalide ($nouveauStatut)");
+            }
+    
+            // Conversion des valeurs
+            $candidatureId = (int)$candidatureId;
+            $nouveauStatut = (int)$nouveauStatut;
+    
+            // Mise à jour du statut
+            $success = Candidature::updateStatus($candidatureId, $nouveauStatut);
+    
+            // Log du résultat
+            error_log("Résultat de la mise à jour: " . ($success ? "succès" : "échec"));
+    
+            // Réponse
+            $this->jsonResponse([
+                'success' => $success,
+                'message' => $success ? 'Statut mis à jour avec succès' : 'Échec de la mise à jour'
+            ]);
+    
+        } catch (\Exception $e) {
+            error_log("Erreur dans updateStatus: " . $e->getMessage());
+            $this->jsonResponse([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
         }
+    }
+    
+    protected function jsonResponse($data, $status = 200) {
+        http_response_code($status);
+        header('Content-Type: application/json');
+        echo json_encode($data);
+        exit;
     }
 }

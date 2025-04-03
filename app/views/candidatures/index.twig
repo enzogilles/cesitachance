@@ -4,9 +4,12 @@
 <section class="content">
     {% if userRole in ['Admin', 'pilote'] %}
         <h3>Candidatures des Étudiants</h3>
-    {% elseif userRole|lower matches '/^(etudiant|étudiant)$/' %}
+    {% elseif user.role == 'Étudiant' %}
         <h3>Mes Candidatures</h3>
     {% endif %}
+
+    <div id="notifications-container"></div>
+
     <table class="styled-table candidatures-table">
         <thead>
             <tr>
@@ -62,11 +65,21 @@
 
 <script>
   const BASE_URL = "{{ BASE_URL }}";
+  const USER_ROLE = "{{ userRole }}";
 </script>
 
-
+<script src="{{ BASE_URL }}public/js/notifications.js"></script>
 <script src="{{ BASE_URL }}public/js/envoi-candidature.js"></script>
-{% if userRole == 'Admin' %}
+
+{% if userRole in ['Admin'] %}
     <script src="{{ BASE_URL }}public/js/candidatures.js"></script>
+{% else %}
+    <script>
+    if (USER_ROLE.toLowerCase().match(/^(etudiant|étudiant)$/)) {
+        setInterval(() => {
+            location.reload();
+        }, 30000);
+    }
+    </script>
 {% endif %}
 {% endblock %}
