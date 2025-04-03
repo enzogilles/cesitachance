@@ -7,7 +7,7 @@ use PDO;
 
 class ContactMessage extends BaseModel
 {
-    // Ajouter cette propriété statique pour les tests
+    // propriété statique pour test unitaire
     public static $staticMocks = [];
 
     public $id;
