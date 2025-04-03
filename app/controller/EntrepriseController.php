@@ -186,7 +186,7 @@ class EntrepriseController extends BaseController
         }
     
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Étudiant', 'pilote', 'Admin'])) {
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $id]) . '" class="btn btn-evaluate">Évaluer</a>';
+            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $id]) . '" class="btn-details">Évaluer</a>';
         }
     
         return $actions;
