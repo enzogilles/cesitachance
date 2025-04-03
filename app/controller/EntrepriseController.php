@@ -192,11 +192,6 @@ class EntrepriseController extends BaseController
             // Ajout de data-id pour que le JS puisse récupérer l'ID à supprimer
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', $params) . '" data-id="' . $id . '" class="btn btn-supprimer">Supprimer</a>';
         }
-    
-        if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Étudiant', 'pilote', 'Admin'])) {
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $id]) . '" class="btn-details">Évaluer</a>';
-        }
-    
         return $actions;
     }
     
