@@ -74,12 +74,13 @@ class GestionUtilisateursController extends BaseController
 
             if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($role) && !empty($password)) {
                 Utilisateur::createUser($nom, $prenom, $email, $role, $password);
-                $_SESSION["message"] = "Utilisateur ajouté avec succès.";
+                $created = true;
             } else {
                 $_SESSION["error"] = "Veuillez remplir tous les champs.";
+                $created = false;
             }
 
-            $this->redirect('gestionutilisateurs', 'index');
+            $this->redirect('gestionutilisateurs', 'index', $created ? ['notif' => 'created'] : ['notif' => 'error']);
         }
     }
 
@@ -110,8 +111,8 @@ class GestionUtilisateursController extends BaseController
             }
 
             Utilisateur::updateUser($id, $nom, $prenom, $email, $role);
-            $_SESSION["message"] = "Utilisateur modifié avec succès.";
-            $this->redirect('gestionutilisateurs', 'index');
+            $this->redirect('gestionutilisateurs', 'index', ['notif' => 'updated']);
+            header('Location: ' . BASE_URL . 'gestion-utilisateurs?notif=updated');
         }
     }
 
