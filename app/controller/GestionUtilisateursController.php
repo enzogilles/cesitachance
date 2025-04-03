@@ -33,8 +33,8 @@ class GestionUtilisateursController extends BaseController
     
         // Si c'est un pilote, on ne récupère que les étudiants
         if ($_SESSION['user']['role'] === 'pilote') {
-            $total = Utilisateur::countByRole('Etudiant');
-            $users = Utilisateur::findByRole('Etudiant', $limit, $offset);
+            $total = Utilisateur::countByRole('Étudiant');
+            $users = Utilisateur::findByRole('Étudiant', $limit, $offset);
         } else {
             // Pour les admins, on récupère tous les utilisateurs
             $total = Utilisateur::countAll();
