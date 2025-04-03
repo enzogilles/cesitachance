@@ -101,9 +101,6 @@ class UtilisateurController extends BaseController {
      */
     public function register() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
 
             $nom = trim($_POST["nom"]);
             $prenom = trim($_POST["prenom"]);
