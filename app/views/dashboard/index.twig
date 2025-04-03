@@ -15,5 +15,31 @@
             <li><a href="{{ url('offre', 'index') }}">Voir les offres de stage</a></li>
         </ul>
     </div>
+    
+    {% if stats is defined %}
+    <section class="dashboard-stats">
+        <h3>Statistiques des offres</h3>
+        <p><strong>Total des offres :</strong> {{ stats.total_offres }}</p>
+        
+        <h4>Top 5 des offres les plus wishlistées :</h4>
+        <ul>
+            {% for offre in stats.top_wishlist %}
+                <li>
+                    <strong>{{ offre.titre }}</strong> par {{ offre.entreprise }} 
+                    - wishlisté {{ offre.nb }} fois
+                </li>
+            {% endfor %}
+        </ul>
+        
+        <h4>Répartition par durée :</h4>
+        <ul>
+            {% for duree in stats.durees %}
+                <li>
+                    Durée : {{ duree.duree }} jours - Nombre d'offres : {{ duree.nb }}
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+    {% endif %}
 </main>
 {% endblock %}
