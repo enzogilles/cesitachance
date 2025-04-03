@@ -122,31 +122,31 @@ class GestionUtilisateursController extends BaseController
         }
     }
 
-    /**
-     * Suppression d'un utilisateur
-     */
-    public function delete()
-    {
-        $this->checkAuth(['Admin', 'pilote']);
-    
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            $id = $_POST["id"];
-    
-            // Vérification supplémentaire pour les pilotes
-            if ($_SESSION['user']['role'] === 'pilote') {
-                $user = Utilisateur::findById($id);
-                if (!$user || $user->role !== 'Étudiant') {
-                    $_SESSION["error"] = "Vous ne pouvez supprimer que les comptes étudiants.";
-                    $this->redirect('gestionutilisateurs', 'index');
-                    return;
-                }
+ /**
+ * Suppression d'un utilisateur
+ */
+public function delete()
+{
+    $this->checkAuth(['Admin', 'pilote']);
+
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
+        $id = $_POST["id"];
+
+        // Vérification supplémentaire pour les pilotes
+        if ($_SESSION['user']['role'] === 'pilote') {
+            $user = Utilisateur::findById($id);
+            if (!$user || $user['role'] !== 'Étudiant') {  // Utilisation des crochets au lieu de ->
+                $_SESSION["error"] = "Vous ne pouvez supprimer que les comptes étudiants.";
+                $this->redirect('gestionutilisateurs', 'index');
+                return;
             }
-    
-            Utilisateur::deleteUser($id);
-            $_SESSION["message"] = "Utilisateur supprimé avec succès.";
-            $this->redirect('gestionutilisateurs', 'index', ['notif' => 'deleted']);
         }
+
+        Utilisateur::deleteUser($id);
+        $_SESSION["message"] = "Utilisateur supprimé avec succès.";
+        $this->redirect('gestionutilisateurs', 'index', ['notif' => 'deleted']);
     }
+}
     
 
     /**
