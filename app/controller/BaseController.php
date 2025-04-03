@@ -19,9 +19,7 @@ class BaseController {
      */
     protected function render($template, $data = []) {
         // On démarre la session ici si pas déjà active
-        if (session_status() !== PHP_SESSION_ACTIVE) {
-            session_start();
-        }
+      
 
         // Récupération éventuelle de l'utilisateur connecté
         $user = isset($_SESSION['user']) && !empty($_SESSION['user']) ? $_SESSION['user'] : null;

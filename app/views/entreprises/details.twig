@@ -17,6 +17,7 @@
             <p>Téléphone: {{ entreprise.telephone|e }}</p>
         {% endif %}
         <p>Nombre de stagiaires ayant postulé: {{ entreprise.nb_stagiaires|default(0) }}</p>
+        
         {% set moy = entreprise.moyenne_eval|default(null) %}
         {% set moyenneAffiche = moy ? moy|round(2) : 'N/A' %}
         <p>Moyenne des évaluations: {{ moyenneAffiche }} / 5</p>
