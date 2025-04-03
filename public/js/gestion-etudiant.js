@@ -61,7 +61,15 @@ document.addEventListener("DOMContentLoaded", function () {
   if (resetButton && searchForm) {
     resetButton.addEventListener("click", function (e) {
       e.preventDefault();
-      window.location.href = BASE_URL + "gestionutilisateurs/index";
+      // Au lieu de rediriger, on vide le champ et on reset le formulaire
+      const searchInput = searchForm.querySelector('input[name="search_query"]');
+      if (searchInput) {
+        searchInput.value = "";
+      }
+      // Optionnel : focus sur le champ pour une nouvelle recherche
+      if (searchInput) {
+        searchInput.focus();
+      }
     });
   }
 

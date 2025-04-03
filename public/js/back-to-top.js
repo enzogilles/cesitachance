@@ -13,22 +13,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Fonction pour vérifier si on doit afficher le bouton
   function toggleBackToTopButton() {
     if (header) {
-      // Récupère la position et dimensions du header
-      const headerRect = header.getBoundingClientRect();
-      
       // Si le bas du header est au-dessus de la fenêtre (plus visible)
-      if (headerRect.bottom < 0) {
-        backToTopButton.classList.add('visible');
-      } else {
-        backToTopButton.classList.remove('visible');
-      }
+      const headerIsHidden = header.getBoundingClientRect().bottom < 0;
+      backToTopButton.classList.toggle('visible', headerIsHidden);
     } else {
       // Fallback si le header n'est pas trouvé (utilise le scroll standard)
-      if (window.scrollY > 150) {
-        backToTopButton.classList.add('visible');
-      } else {
-        backToTopButton.classList.remove('visible');
-      }
+      backToTopButton.classList.toggle('visible', window.scrollY > 150);
     }
   }
 
