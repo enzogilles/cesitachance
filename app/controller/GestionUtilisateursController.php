@@ -14,9 +14,6 @@ class GestionUtilisateursController extends BaseController
      */
     public function index()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
 
         if (!isset($_SESSION['user'])) {
             $this->redirect('utilisateur', 'connexion');
