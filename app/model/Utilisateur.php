@@ -100,7 +100,6 @@ class Utilisateur extends BaseModel
         }
     }
 
-
     /**
      * Récupère tous les utilisateurs (avec pagination).
      */
@@ -121,6 +120,7 @@ class Utilisateur extends BaseModel
 
     /**
      * Récupère certaines stats globales sur les utilisateurs.
+     * Les rôles reconnus : 'Étudiant', 'pilote', 'Admin'
      */
     public static function getStats()
     {
@@ -129,9 +129,9 @@ class Utilisateur extends BaseModel
             $stmt = $pdo->prepare("
                 SELECT 
                     COUNT(*) AS total_users,
-                    SUM(CASE WHEN role = 'etudiant' THEN 1 ELSE 0 END) AS total_etudiants,
+                    SUM(CASE WHEN role = 'Étudiant' THEN 1 ELSE 0 END) AS total_etudiants,
                     SUM(CASE WHEN role = 'pilote' THEN 1 ELSE 0 END) AS total_pilotes,
-                    SUM(CASE WHEN role = 'admin' THEN 1 ELSE 0 END) AS total_admins
+                    SUM(CASE WHEN role = 'Admin' THEN 1 ELSE 0 END) AS total_admins
                 FROM user
             ");
             $stmt->execute();
@@ -142,7 +142,7 @@ class Utilisateur extends BaseModel
     }
 
     /**
-     * Met à jour un utilisateur (Admin).
+     * Met à jour un utilisateur.
      */
     public static function updateUser($id, $nom, $prenom, $email, $role)
     {
@@ -169,19 +169,18 @@ class Utilisateur extends BaseModel
             throw new \Exception("Erreur lors de la suppression de l'utilisateur : " . $e->getMessage());
         }
     }
-    
 
     /**
-     * Recherche par nom/prenom/email.
+     * Recherche par nom/prenom/email (retourne le premier match).
      */
     public static function search($searchQuery)
     {
         $pdo = \Database::getInstance();
         $stmt = $pdo->prepare("SELECT * FROM user 
-                           WHERE nom LIKE :q 
-                              OR prenom LIKE :q 
-                              OR email LIKE :q
-                           LIMIT 1");
+                               WHERE nom LIKE :q 
+                                  OR prenom LIKE :q 
+                                  OR email LIKE :q
+                               LIMIT 1");
         $stmt->bindValue(':q', '%' . $searchQuery . '%');
         $stmt->execute();
         return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -195,11 +194,11 @@ class Utilisateur extends BaseModel
         try {
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("SELECT * FROM user 
-                           WHERE role = :role 
-                           AND (nom LIKE :q 
-                           OR prenom LIKE :q 
-                           OR email LIKE :q)
-                           LIMIT 1");
+                                   WHERE role = :role 
+                                     AND (nom LIKE :q 
+                                      OR prenom LIKE :q 
+                                      OR email LIKE :q)
+                                   LIMIT 1");
             $stmt->bindValue(':role', $role);
             $stmt->bindValue(':q', '%' . $searchQuery . '%');
             $stmt->execute();
@@ -209,38 +208,20 @@ class Utilisateur extends BaseModel
         }
     }
 
-
-
     /**
-     * Vérifie qu'un utilisateur (id) est un étudiant (pour stats).
+     * Vérifie qu'un utilisateur (id) est un Étudiant (pour stats).
      */
     public static function isEtudiant($id)
     {
         try {
             $pdo = \Database::getInstance();
-            $stmt = $pdo->prepare("SELECT * FROM user WHERE id = ? AND role = 'etudiant'");
+            $stmt = $pdo->prepare("SELECT * FROM user WHERE id = ? AND role = 'Étudiant'");
             $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
-            throw new \Exception("Erreur lors de la vérification du rôle étudiant : " . $e->getMessage());
+            throw new \Exception("Erreur lors de la vérification du rôle Étudiant : " . $e->getMessage());
         }
     }
-
-    /**
-     * Récupère tous les utilisateurs dont le rôle est 'Étudiant'.
-     */
-    public static function findAllEtudiants()
-    {
-        try {
-            $pdo = \Database::getInstance();
-            $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role = 'Étudiant'");
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (\PDOException $e) {
-            throw new \Exception("Erreur lors de la récupération de la liste des étudiants : " . $e->getMessage());
-        }
-    }
-
 
     /**
      * Compte le nombre d'utilisateurs par rôle
@@ -259,17 +240,17 @@ class Utilisateur extends BaseModel
     }
 
     /**
-     * Récupère tous les utilisateurs d'un rôle spécifique
+     * Récupère tous les utilisateurs d'un rôle spécifique (avec pagination).
      */
     public static function findByRole($role, $limit, $offset)
     {
         try {
             $pdo = \Database::getInstance();
             $sql = "SELECT id, nom, prenom, email, role 
-                FROM user 
-                WHERE role = ? 
-                ORDER BY id DESC 
-                LIMIT ? OFFSET ?";
+                    FROM user 
+                    WHERE role = ? 
+                    ORDER BY id DESC 
+                    LIMIT ? OFFSET ?";
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(1, $role, PDO::PARAM_STR);
             $stmt->bindValue(2, $limit, PDO::PARAM_INT);
@@ -280,54 +261,4 @@ class Utilisateur extends BaseModel
             throw new \Exception("Erreur lors de la récupération des utilisateurs par rôle : " . $e->getMessage());
         }
     }
-
-    public static function findStudentsAndAdminsPaginated($offset, $limit)
-{
-    try {
-        $pdo = \Database::getInstance();
-        
-        // Compter le total pour la pagination
-        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user WHERE role IN ('Étudiant', 'Admin')");
-        $stmt->execute();
-        $count = $stmt->fetch(\PDO::FETCH_ASSOC);
-        $total = $count['total'];
-        
-        // Requête principale
-        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role 
-                              FROM user 
-                              WHERE role IN ('Étudiant', 'Admin') 
-                              ORDER BY nom, prenom 
-                              LIMIT ?, ?");
-        $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
-        $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
-        $stmt->execute();
-        $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-        
-        return [
-            'users' => $users,
-            'total' => $total
-        ];
-    } catch (\PDOException $e) {
-        throw new \Exception("Erreur lors de la récupération des utilisateurs : " . $e->getMessage());
-    }
 }
-
-/**
- * Récupère tous les étudiants et admins
- */
-public static function findAllStudentsAndAdmins()
-{
-    try {
-        $pdo = \Database::getInstance();
-        $stmt = $pdo->prepare("SELECT id, nom, prenom, role 
-                              FROM user 
-                              WHERE role IN ('Étudiant', 'Admin') 
-                              ORDER BY nom, prenom");
-        $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    } catch (\PDOException $e) {
-        throw new \Exception("Erreur lors de la récupération de tous les utilisateurs : " . $e->getMessage());
-    }
-}
-}
-?>
