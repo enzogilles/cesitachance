@@ -27,14 +27,13 @@ class EntrepriseController extends BaseController
             $entreprise['actions'] = $this->getActionsForEntreprise($entreprise);
         }
 
-        echo $this->render('entreprises/index.twig', [
+        $this->render('entreprises/index.twig', [
             'entreprises' => $entreprises,
             'nom' => $nom,
             'ville' => $ville,
             'secteur' => $secteur,
             'page' => $page,
             'totalPages' => $totalPages,
-            'user' => $_SESSION['user'] ?? null,
             'secteurs' => $secteurs
         ]);
     }
@@ -91,8 +90,7 @@ class EntrepriseController extends BaseController
     }
 
     /**
-     * Correction principale : on récupère l’ID dans $_POST 
-     * plutôt que $_GET, car le formulaire est en method POST.
+     * Supprime une entreprise (réservé aux Admin/pilote)
      */
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);
@@ -116,7 +114,9 @@ class EntrepriseController extends BaseController
         $this->redirect('entreprise', 'index', $redirectParams);
     }
     
-
+    /**
+     * Affiche les détails d'une entreprise
+     */
     public function details($id) {
         $entrepriseData = Entreprise::findById($id);
         if (!$entrepriseData) {
@@ -128,13 +128,12 @@ class EntrepriseController extends BaseController
         ]);
     }
 
-    // Action pour gérer l'évaluation d'une entreprise
+    /**
+     * Action pour gérer l'évaluation d'une entreprise
+     */
     public function evaluer($id) {
         // Autoriser l'évaluation pour les rôles "Étudiant", "pilote" et "Admin"
-        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'pilote', 'Admin'])) {
-            $this->redirect('entreprise', 'details', ['id' => $id, 'error' => 'Accès refusé']);
-            return;
-        }
+        $this->checkAuth(['Étudiant', 'pilote', 'Admin']);
         
         $entrepriseData = Entreprise::findById($id);
         if (!$entrepriseData) {
@@ -150,8 +149,7 @@ class EntrepriseController extends BaseController
                 $error = "La note doit être comprise entre 1 et 5.";
                 $this->render('entreprises/details.twig', [
                     'entreprise' => $entrepriseData,
-                    'error' => $error,
-                    'user' => $_SESSION['user']
+                    'error' => $error
                 ]);
                 return;
             }
@@ -159,14 +157,13 @@ class EntrepriseController extends BaseController
             try {
                 $pdo = \Database::getInstance();
                 $stmt = $pdo->prepare("INSERT INTO evaluation_entreprise (entreprise_id, user_id, note, commentaire) VALUES (?, ?, ?, ?)");
-                $stmt->execute([$id, $_SESSION['user']['id'], $note, $commentaire]);
+                $stmt->execute([$id, $this->user['id'], $note, $commentaire]);
                 $this->redirect('entreprise', 'details', ['id' => $id, 'notif' => 'evaluation_sent']);
             } catch (\PDOException $e) {
                 $error = "Erreur lors de l'enregistrement de l'évaluation : " . $e->getMessage();
                 $this->render('entreprises/details.twig', [
                     'entreprise' => $entrepriseData,
-                    'error' => $error,
-                    'user' => $_SESSION['user']
+                    'error' => $error
                 ]);
                 return;
             }
@@ -176,6 +173,9 @@ class EntrepriseController extends BaseController
         }
     }
 
+    /**
+     * Génère les boutons d'action pour une entreprise dans la liste
+     */
     private function getActionsForEntreprise($entreprise) {
         $id = $entreprise['id'];
         $params = ['id' => $id];
@@ -187,12 +187,11 @@ class EntrepriseController extends BaseController
         $actions = '';
         $actions .= '<a href="' . $this->generateUrl('entreprise', 'details', ['id' => $id]) . '" class="btn btn-voir">Détails</a>';
     
-        if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+        if (isset($this->user) && in_array($this->user['role'], ['Admin', 'pilote'])) {
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'modifier', ['id' => $id]) . '" class="btn btn-modifier">Modifier</a>';
             // Ajout de data-id pour que le JS puisse récupérer l'ID à supprimer
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', $params) . '" data-id="' . $id . '" class="btn btn-supprimer">Supprimer</a>';
         }
         return $actions;
     }
-    
 }
