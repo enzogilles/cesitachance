@@ -9,9 +9,6 @@ use App\Model\Entreprise;
 
 class OffreController extends BaseController {
     public function index() {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
 
         $motcle = $_GET['motcle'] ?? '';
         $filtreCompetences = $_GET['competences'] ?? '';
