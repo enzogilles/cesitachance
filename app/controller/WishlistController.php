@@ -12,36 +12,21 @@ class WishlistController extends BaseController
 {
     public function index()
     {
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
-
         if (!isset($_SESSION['user'])) {
             $this->redirect('utilisateur', 'connexion');
         }
-
-        $pdo = \Database::getInstance();
 
         if (in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
             $limit = 10;
             $offset = ($page - 1) * $limit;
 
-            $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user WHERE role IN ('Étudiant', 'Admin')");
-            $stmt->execute();
-            $count = $stmt->fetch(\PDO::FETCH_ASSOC);
-            $total = $count['total'];
+            $result = Utilisateur::findStudentsAndAdminsPaginated($offset, $limit);
+            $students = $result['users'];
+            $total = $result['total'];
             $totalPages = ceil($total / $limit);
 
-            $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role FROM user WHERE role IN ('Étudiant', 'Admin') ORDER BY nom, prenom LIMIT ?, ?");
-            $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
-            $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
-            $stmt->execute();
-            $students = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-
-            $stmtAll = $pdo->prepare("SELECT id, nom, prenom, role FROM user WHERE role IN ('Étudiant', 'Admin') ORDER BY nom, prenom");
-            $stmtAll->execute();
-            $allUsers = $stmtAll->fetchAll(\PDO::FETCH_ASSOC);
+            $allUsers = Utilisateur::findAllStudentsAndAdmins();
 
             $this->render('wishlist/index.twig', [
                 'students' => $students,
@@ -116,12 +101,11 @@ class WishlistController extends BaseController
             if (Wishlist::exists($user_id, $offre_id)) {
                 echo json_encode(['success' => false, 'message' => "Offre d\u00e9j\u00e0 dans la wishlist"]);
             } else {
-                $success = Wishlist::add($user_id, $offre_id);
-                $wishlist_id = $success ? \Database::getInstance()->lastInsertId() : null;
+                $result = Wishlist::add($user_id, $offre_id);
                 echo json_encode([
-                    'success' => $success,
-                    'wishlist_id' => $wishlist_id,
-                    'message' => $success ? null : "Erreur lors de l'ajout"
+                    'success' => $result['success'],
+                    'wishlist_id' => $result['wishlist_id'],
+                    'message' => $result['success'] ? null : "Erreur lors de l'ajout"
                 ]);
             }
             exit;

@@ -33,17 +33,23 @@ class Wishlist extends BaseModel
 
     /**
      * Ajoute une offre à la wishlist d'un utilisateur.
+     * Retourne un tableau avec le statut de l'opération et l'ID inséré
      */
     public static function add($userId, $offreId)
     {
         try {
             if (self::exists($userId, $offreId)) {
-                return false;
+                return ['success' => false, 'wishlist_id' => null];
             }
+            
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("INSERT INTO wishlist (user_id, offre_id) VALUES (?, ?)");
-            $stmt->execute([$userId, $offreId]);
-            return $stmt->rowCount() > 0;
+            $success = $stmt->execute([$userId, $offreId]);
+            
+            return [
+                'success' => $success, 
+                'wishlist_id' => $success ? $pdo->lastInsertId() : null
+            ];
         } catch (\PDOException $e) {
             throw new \Exception("Erreur lors de l'ajout d'une offre dans la wishlist : " . $e->getMessage());
         }
@@ -144,7 +150,7 @@ class Wishlist extends BaseModel
     }
 
     /**
-     * Récupère la wishlist paginée d’un utilisateur.
+     * Récupère la wishlist paginée d'un utilisateur.
      */
     public static function findByUserIdWithRelationsPaginated($userId, $limit, $offset)
     {
@@ -171,7 +177,7 @@ class Wishlist extends BaseModel
     }
 
     /**
-     * Compte les éléments de la wishlist d’un utilisateur.
+     * Compte les éléments de la wishlist d'un utilisateur.
      */
     public static function countByUserId($userId)
     {

@@ -280,5 +280,54 @@ class Utilisateur extends BaseModel
             throw new \Exception("Erreur lors de la récupération des utilisateurs par rôle : " . $e->getMessage());
         }
     }
+
+    public static function findStudentsAndAdminsPaginated($offset, $limit)
+{
+    try {
+        $pdo = \Database::getInstance();
+        
+        // Compter le total pour la pagination
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM user WHERE role IN ('Étudiant', 'Admin')");
+        $stmt->execute();
+        $count = $stmt->fetch(\PDO::FETCH_ASSOC);
+        $total = $count['total'];
+        
+        // Requête principale
+        $stmt = $pdo->prepare("SELECT id, nom, prenom, email, role 
+                              FROM user 
+                              WHERE role IN ('Étudiant', 'Admin') 
+                              ORDER BY nom, prenom 
+                              LIMIT ?, ?");
+        $stmt->bindValue(1, $offset, \PDO::PARAM_INT);
+        $stmt->bindValue(2, $limit, \PDO::PARAM_INT);
+        $stmt->execute();
+        $users = $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        
+        return [
+            'users' => $users,
+            'total' => $total
+        ];
+    } catch (\PDOException $e) {
+        throw new \Exception("Erreur lors de la récupération des utilisateurs : " . $e->getMessage());
+    }
+}
+
+/**
+ * Récupère tous les étudiants et admins
+ */
+public static function findAllStudentsAndAdmins()
+{
+    try {
+        $pdo = \Database::getInstance();
+        $stmt = $pdo->prepare("SELECT id, nom, prenom, role 
+                              FROM user 
+                              WHERE role IN ('Étudiant', 'Admin') 
+                              ORDER BY nom, prenom");
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    } catch (\PDOException $e) {
+        throw new \Exception("Erreur lors de la récupération de tous les utilisateurs : " . $e->getMessage());
+    }
+}
 }
 ?>

@@ -57,10 +57,6 @@ class UtilisateurController extends BaseController {
      */
     public function login() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            // Démarrage de la session si non démarrée
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
 
             $email = trim($_POST["email"]);
             $password = $_POST["password"];
@@ -105,9 +101,6 @@ class UtilisateurController extends BaseController {
      */
     public function register() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
 
             $nom = trim($_POST["nom"]);
             $prenom = trim($_POST["prenom"]);
@@ -160,45 +153,5 @@ class UtilisateurController extends BaseController {
         $this->render('utilisateurs/resetPassword.twig');
     }
 
-    /**
-     * Traite la demande de réinitialisation du mot de passe.
-     */
-    public function sendResetLink() {
-        if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
-
-            $email = trim($_POST["email"]);
-            if (empty($email)) {
-                $error = "Veuillez saisir votre email.";
-                $this->render('utilisateurs/resetPassword.twig', ['error' => $error]);
-                return;
-            }
-
-            // Vérifier si l'utilisateur existe
-            $user = Utilisateur::findByEmail($email);
-            if (!$user) {
-                $error = "Aucun compte associé à cet email.";
-                $this->render('utilisateurs/resetPassword.twig', ['error' => $error]);
-                return;
-            }
-
-            // Génération d'un token et insertion dans la table password_resets
-            $token = bin2hex(random_bytes(16));
-            $expiration = date("Y-m-d H:i:s", strtotime("+1 hour"));
-
-            $pdo = \Database::getInstance();
-            $stmt = $pdo->prepare("INSERT INTO password_resets (user_id, token, expiration) VALUES (?, ?, ?)");
-            $stmt->execute([$user['id'], $token, $expiration]);
-
-            // Création du lien de réinitialisation avec URL propre
-            $resetLink = BASE_URL . 'utilisateur/changePassword/' . $token;
-            mail($email, "Réinitialisation de votre mot de passe", "Cliquez sur ce lien pour réinitialiser votre mot de passe : " . $resetLink);
-
-            $message = "Un lien de réinitialisation a été envoyé à votre adresse email.";
-            $this->render('utilisateurs/resetPassword.twig', ['message' => $message]);
-            exit;
-        }
-    }
+    
 }
