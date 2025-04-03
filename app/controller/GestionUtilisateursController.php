@@ -14,10 +14,6 @@ class GestionUtilisateursController extends BaseController
      */
     public function index()
     {
-        if (!isset($_SESSION['user'])) {
-            $this->redirect('utilisateur', 'connexion');
-        }
-
         // Vérification des droits d'accès
         $this->checkAuth(['Admin', 'pilote']);
 
@@ -31,7 +27,7 @@ class GestionUtilisateursController extends BaseController
         $offset = ($page - 1) * $limit;
 
         // Si c'est un pilote, on ne récupère que les étudiants
-        if ($_SESSION['user']['role'] === 'pilote') {
+        if ($this->user['role'] === 'pilote') {
             $total = Utilisateur::countByRole('Étudiant');
             $users = Utilisateur::findByRole('Étudiant', $limit, $offset);
         } else {
@@ -43,14 +39,6 @@ class GestionUtilisateursController extends BaseController
         // Statistiques globales
         $stats = Utilisateur::getStats();
 
-        // Préparation des données pour le template
-        $userData = [
-            'id'     => $_SESSION['user']['id'],
-            'role'   => $_SESSION['user']['role'],
-            'nom'    => $_SESSION['user']['nom'] ?? '',
-            'prenom' => $_SESSION['user']['prenom'] ?? ''
-        ];
-
         // Rendu de la vue Twig
         $this->render('gestion_utilisateurs/index.twig', [
             'users'         => $users,
@@ -58,8 +46,7 @@ class GestionUtilisateursController extends BaseController
             'page'          => $page,
             'limit'         => $limit,
             'total'         => $total,
-            'search_result' => $search_result,
-            'user'          => $userData
+            'search_result' => $search_result
         ]);
     }
 
@@ -79,7 +66,7 @@ class GestionUtilisateursController extends BaseController
             $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
 
             // Si le pilote crée un utilisateur, on impose qu'il soit "Étudiant".
-            if ($_SESSION['user']['role'] === 'pilote') {
+            if ($this->user['role'] === 'pilote') {
                 if ($role !== 'Étudiant') {
                     $role = 'Étudiant';
                 }
@@ -111,7 +98,7 @@ class GestionUtilisateursController extends BaseController
             $role   = trim($_POST["role"])   ?? null;
 
             // Vérification supplémentaire pour les pilotes
-            if ($_SESSION['user']['role'] === 'pilote') {
+            if ($this->user['role'] === 'pilote') {
                 // Vérifier que l'utilisateur à modifier est un Étudiant
                 $user = Utilisateur::findById($id);
                 if (!$user || $user['role'] !== 'Étudiant') {
@@ -139,7 +126,7 @@ class GestionUtilisateursController extends BaseController
             $id = $_POST["id"];
 
             // Vérification supplémentaire pour les pilotes
-            if ($_SESSION['user']['role'] === 'pilote') {
+            if ($this->user['role'] === 'pilote') {
                 $user = Utilisateur::findById($id);
                 if (!$user || $user['role'] !== 'Étudiant') {
                     $_SESSION["error"] = "Vous ne pouvez supprimer que les comptes étudiants.";
@@ -164,7 +151,7 @@ class GestionUtilisateursController extends BaseController
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
             $searchQuery = trim($_POST["search_query"]);
 
-            if ($_SESSION['user']['role'] === 'pilote') {
+            if ($this->user['role'] === 'pilote') {
                 // Modification de la recherche pour les pilotes (seulement les étudiants)
                 $search_result = (!empty($searchQuery))
                     ? Utilisateur::searchByRole($searchQuery, 'Étudiant')
