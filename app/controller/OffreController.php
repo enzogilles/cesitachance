@@ -9,7 +9,6 @@ use App\Model\Entreprise;
 
 class OffreController extends BaseController {
     public function index() {
-
         $motcle = $_GET['motcle'] ?? '';
         $filtreCompetences = $_GET['competences'] ?? '';
 
@@ -25,7 +24,7 @@ class OffreController extends BaseController {
         foreach ($offres as &$offre) {
             $detailLink = '<a href="' . $this->generateUrl('offre', 'detail', ['id' => $offre['id']]) . '" class="btn-voir">Détails</a>';
 
-            if (!empty($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
+            if (isset($this->user) && in_array($this->user['role'], ['Admin', 'pilote'])) {
                 $modifyLink = ' <a href="' . $this->generateUrl('offre', 'modifier', ['id' => $offre['id']]) . '" class="btn-modifier">Modifier</a>';
                 $deleteLink = ' <a href="' . $this->generateUrl('offre', 'supprimer', ['id' => $offre['id']]) . '" class="btn-supprimer" data-id="' . $offre['id'] . '">Supprimer</a>';
                 $offre['actions'] = $detailLink . $modifyLink . $deleteLink;
@@ -65,7 +64,6 @@ class OffreController extends BaseController {
             'totalPages' => $totalPages
         ]);
     }
-    
 
     public function detail($id) {
         if (!$id) {
@@ -78,8 +76,7 @@ class OffreController extends BaseController {
         $this->render('offres/detail.twig', ['offre' => $offre]);
     }
 
-    public function create()
-    {
+    public function create() {
         $this->checkAuth(['Admin', 'pilote']);
     
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -104,7 +101,6 @@ class OffreController extends BaseController {
             }
     
             $offre->save();
-
             $this->redirect('offre', 'gererOffres', ['notif' => 'created']);
         }
     
@@ -112,7 +108,6 @@ class OffreController extends BaseController {
             'entreprises' => Entreprise::findAll()
         ]);
     }
-    
 
     public function modifier($id) {
         $this->checkAuth(['Admin','pilote']);
@@ -163,8 +158,6 @@ class OffreController extends BaseController {
             'entreprises' => $entreprises
         ]);
     }
-    
-    
 
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);
@@ -175,7 +168,6 @@ class OffreController extends BaseController {
             $this->redirect('offre', 'gererOffres', ['notif' => 'deleted']);
         }
     }
-    
 
     public function search() {
         $motcle = $_GET['motcle'] ?? '';
