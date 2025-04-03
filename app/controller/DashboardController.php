@@ -15,12 +15,10 @@ class DashboardController extends BaseController {
         $this->checkAuth(['Admin','pilote']);
         $stats = DashboardStats::getOfferStats();
         $this->render('dashboard/index.twig', [
-            'user'  => $_SESSION['user'],
             'stats' => $stats
         ]);
     }
     
-
     /**
      * Statistiques sur les offres -> réservé à Admin/Pilote.
      */
