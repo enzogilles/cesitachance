@@ -7,6 +7,9 @@ use PDO;
 
 class ContactMessage extends BaseModel
 {
+    // Ajouter cette propriété statique pour les tests
+    public static $staticMocks = [];
+
     public $id;
     public $nom;
     public $email;
@@ -23,6 +26,12 @@ class ContactMessage extends BaseModel
      */
     public static function create($nom, $email, $message)
     {
+        // Vérifier si un mock existe pour cette méthode
+        if (isset(self::$staticMocks['create'])) {
+            $callback = self::$staticMocks['create'];
+            return $callback($nom, $email, $message);
+        }
+
         try {
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("INSERT INTO contact_messages (nom, email, message) VALUES (?, ?, ?)");
