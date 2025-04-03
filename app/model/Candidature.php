@@ -7,6 +7,9 @@ use PDO;
 
 class Candidature extends BaseModel
 {
+    // propriété statique pour le test unitaire
+    public static $staticMocks = [];
+
     public $id;
     public $user_id;
     public $offre_id;
@@ -25,6 +28,11 @@ class Candidature extends BaseModel
      */
     public static function findAllWithRelations()
     {
+        // vérification si un mock existe pour cette méthode
+         if (isset(self::$staticMocks['findAllWithRelations'])) {
+            $callback = self::$staticMocks['findAllWithRelations'];
+            return $callback();
+         }
         try {
             $pdo = \Database::getInstance();
             $sql = "
@@ -117,6 +125,11 @@ class Candidature extends BaseModel
      */
     public static function exists($userId, $offreId)
     {
+        // Vérifier si un mock existe pour cette méthode
+        if (isset(self::$staticMocks['exists'])) {
+            $callback = self::$staticMocks['exists'];
+            return $callback($userId, $offreId);
+        }
         try {
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("SELECT COUNT(*) FROM candidature WHERE user_id = ? AND offre_id = ?");
@@ -185,6 +198,11 @@ class Candidature extends BaseModel
      */
     public static function updateStatus($id, $statut)
     {
+         // Vérifier si un mock existe pour cette méthode
+         if (isset(self::$staticMocks['updateStatus'])) {
+             $callback = self::$staticMocks['updateStatus'];
+            return $callback($id, $statut);
+        }
         try {
             $pdo = \Database::getInstance();
             $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
