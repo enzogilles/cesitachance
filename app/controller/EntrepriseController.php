@@ -42,7 +42,6 @@ class EntrepriseController extends BaseController
     public function creer() {
         $this->checkAuth(['Admin', 'pilote']);
 
-        // Instantiate Entreprise model to get all sectors
         $entrepriseModel = new Entreprise();
         $secteurs = $entrepriseModel->getAllSecteurs();
 
@@ -71,7 +70,6 @@ class EntrepriseController extends BaseController
             die("Entreprise introuvable.");
         }
 
-        // Instantiate Entreprise model to get all sectors
         $entrepriseModel = new Entreprise();
         $secteurs = $entrepriseModel->getAllSecteurs();
 
@@ -96,8 +94,6 @@ class EntrepriseController extends BaseController
         $this->checkAuth(['Admin', 'pilote']);
     
         $id = $_GET['id'] ?? null;
-    
-        // Préserver les filtres si présents
         $redirectParams = ['notif' => 'deleted'];
         foreach (['nom', 'ville', 'secteur', 'page'] as $param) {
             if (!empty($_GET[$param])) {
@@ -112,7 +108,6 @@ class EntrepriseController extends BaseController
         $this->redirect('entreprise', 'index', $redirectParams);
     }
     
-
     public function details($id) {
         $entrepriseData = Entreprise::findById($id);
         if (!$entrepriseData) {
@@ -122,6 +117,54 @@ class EntrepriseController extends BaseController
         $this->render('entreprises/details.twig', [
             'entreprise' => $entrepriseData
         ]);
+    }
+    
+    // Action pour gérer l'évaluation d'une entreprise
+    public function evaluer($id) {
+        // Autoriser l'évaluation pour les rôles "Étudiant", "pilote" et "Admin"
+        if (!isset($_SESSION['user']) || !in_array($_SESSION['user']['role'], ['Étudiant', 'pilote', 'Admin'])) {
+            $this->redirect('entreprise', 'details', ['id' => $id, 'error' => 'Accès refusé']);
+            return;
+        }
+        
+        $entrepriseData = Entreprise::findById($id);
+        if (!$entrepriseData) {
+            die("Entreprise introuvable.");
+        }
+        
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            $note = isset($_POST['note']) ? (int)$_POST['note'] : 0;
+            $commentaire = trim($_POST['commentaire'] ?? '');
+            
+            // Validation de la note
+            if ($note < 1 || $note > 5) {
+                $error = "La note doit être comprise entre 1 et 5.";
+                $this->render('entreprises/details.twig', [
+                    'entreprise' => $entrepriseData,
+                    'error' => $error,
+                    'user' => $_SESSION['user']
+                ]);
+                return;
+            }
+            
+            try {
+                $pdo = \Database::getInstance();
+                $stmt = $pdo->prepare("INSERT INTO evaluation_entreprise (entreprise_id, user_id, note, commentaire) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$id, $_SESSION['user']['id'], $note, $commentaire]);
+                $this->redirect('entreprise', 'details', ['id' => $id, 'notif' => 'evaluation_sent']);
+            } catch (\PDOException $e) {
+                $error = "Erreur lors de l'enregistrement de l'évaluation : " . $e->getMessage();
+                $this->render('entreprises/details.twig', [
+                    'entreprise' => $entrepriseData,
+                    'error' => $error,
+                    'user' => $_SESSION['user']
+                ]);
+                return;
+            }
+        } else {
+            // En GET, rediriger vers les détails de l'entreprise
+            $this->redirect('entreprise', 'details', ['id' => $id]);
+        }
     }
 
     private function getActionsForEntreprise($entreprise) {
@@ -142,11 +185,10 @@ class EntrepriseController extends BaseController
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', $params) . '" class="btn btn-supprimer">Supprimer</a>';
         }
     
-        if (isset($_SESSION['user']) && $_SESSION['user']['role'] === 'Etudiant') {
+        if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Étudiant', 'pilote', 'Admin'])) {
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'evaluer', ['id' => $id]) . '" class="btn btn-evaluate">Évaluer</a>';
         }
     
         return $actions;
     }
-    
 }

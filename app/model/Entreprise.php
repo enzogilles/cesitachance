@@ -22,14 +22,24 @@ class Entreprise extends BaseModel
         $this->pdo = \Database::getInstance();
     }
 
-    /**
-     * Trouver une entreprise par son ID.
-     */
     public static function findById($id)
     {
         try {
             $pdo = \Database::getInstance();
-            $stmt = $pdo->prepare("SELECT * FROM entreprise WHERE id = ?");
+            $stmt = $pdo->prepare("
+                SELECT e.*,
+                       (SELECT COUNT(*)
+                        FROM candidature c
+                        JOIN offre o ON c.offre_id = o.id
+                        WHERE o.entreprise_id = e.id
+                       ) AS nb_stagiaires,
+                       (SELECT AVG(v.note)
+                        FROM evaluation_entreprise v
+                        WHERE v.entreprise_id = e.id
+                       ) AS moyenne_eval
+                FROM entreprise e
+                WHERE e.id = ?
+            ");
             $stmt->execute([$id]);
             return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (\PDOException $e) {
@@ -37,9 +47,6 @@ class Entreprise extends BaseModel
         }
     }
 
-    /**
-     * Rechercher des entreprises en fonction de filtres (nom, ville, secteur) avec pagination.
-     */
     public static function search($nom, $ville, $secteur, $limit, $offset)
     {
         try {
@@ -78,9 +85,6 @@ class Entreprise extends BaseModel
         }
     }
 
-    /**
-     * Compter le nombre total d'entreprises en fonction des filtres (nom, ville, secteur).
-     */
     public static function countAll($nom, $ville, $secteur)
     {
         try {
@@ -112,9 +116,6 @@ class Entreprise extends BaseModel
         }
     }
 
-    /**
-     * Récupérer toutes les entreprises de la base de données.
-     */
     public static function findAll()
     {
         try {
@@ -127,9 +128,6 @@ class Entreprise extends BaseModel
         }
     }
 
-    /**
-     * Supprimer une entreprise par son ID.
-     */
     public static function delete($id)
     {
         try {
@@ -141,9 +139,6 @@ class Entreprise extends BaseModel
         }
     }
 
-    /**
-     * Sauvegarder une entreprise (insertion ou mise à jour en fonction de la présence d'un ID).
-     */
     public function save()
     {
         try {
@@ -180,9 +175,6 @@ class Entreprise extends BaseModel
         }
     }
 
-    /**
-     * Récupère tous les secteurs d'activité distincts des entreprises
-     */
     public function getAllSecteurs() {
         try {
             $stmt = $this->pdo->prepare("SELECT DISTINCT secteur FROM entreprise WHERE secteur IS NOT NULL AND secteur != '' ORDER BY secteur");
