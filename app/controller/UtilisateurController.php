@@ -57,10 +57,6 @@ class UtilisateurController extends BaseController {
      */
     public function login() {
         if ($_SERVER["REQUEST_METHOD"] === "POST") {
-            // Démarrage de la session si non démarrée
-            if (session_status() === PHP_SESSION_NONE) {
-                session_start();
-            }
 
             $email = trim($_POST["email"]);
             $password = $_POST["password"];
