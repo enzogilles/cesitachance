@@ -8,7 +8,6 @@ use App\Model\ContactMessage;
 
 class ContactController extends BaseController
 {
-
     /**
      * Affiche le formulaire de contact (ouvert à tous).
      */
@@ -23,10 +22,8 @@ class ContactController extends BaseController
      */
     public function send()
     {
-        // Pas de restriction absolue, pas besoin de checkAuth
-        if (session_status() === PHP_SESSION_NONE) {
-            session_start();
-        }
+        // Pas besoin de démarrer la session ici puisque BaseController le fait déjà
+        // dans son constructeur
 
         if ($_SERVER["REQUEST_METHOD"] !== "POST") {
             $_SESSION["error"] = "Méthode non autorisée.";
