@@ -12,44 +12,58 @@
             <li><a href="#supprimer" class="btn-login">Supprimer</a></li>
         </ul>
     </div>
+
+    {# --- CRÉER --- #}
     <div id="creer" style="margin-top: 40px;">
         <h3>Créer une Entreprise</h3>
-        <form id="create-entreprise-form" action="{{ url('entreprise', 'create') }}" method="POST">
+        <!-- On appelle la méthode creer() du contrôleur EntrepriseController -->
+        <form id="create-entreprise-form" action="{{ url('entreprise', 'creer') }}" method="POST">
             <label for="nom-creation">Nom :</label>
             <input type="text" id="nom-creation" name="nom" required>
+            
             <label for="secteur">Secteur :</label>
             <input type="text" id="secteur" name="secteur" required>
+            
             <label for="ville">Ville :</label>
             <input type="text" id="ville" name="ville" required>
+            
             <label for="taille">Taille :</label>
             <input type="text" id="taille" name="taille" required>
+            
             <button type="submit" class="btn">Créer</button>
         </form>
     </div>
+
+    {# --- MODIFIER --- #}
     <div id="modifier" style="margin-top: 40px;">
         <h3>Modifier une Entreprise</h3>
-        <form id="update-entreprise-form" action="{{ url('entreprise', 'update') }}" method="POST">
+        <!-- Si tu veux pointer vers le même contrôleur / la méthode "modifier($id)" -->
+        <!-- alors soit tu passes l'id par GET, soit tu fais un routeur qui gère le param en POST -->
+        <!-- Exemple : tu peux poster en "entreprise/modifier" et ton routeur lit l'id depuis $_POST -->
+        <form id="update-entreprise-form" action="{{ url('entreprise', 'modifier') }}" method="GET">
             <label for="id-modif">ID de l'entreprise :</label>
             <input type="number" id="id-modif" name="id" required>
-            <label for="nom-modif">Nouveau nom :</label>
-            <input type="text" id="nom-modif" name="nom">
-            <label for="secteur-modif">Nouveau secteur :</label>
-            <input type="text" id="secteur-modif" name="secteur">
-            <label for="ville-modif">Nouvelle ville :</label>
-            <input type="text" id="ville-modif" name="ville">
-            <label for="taille-modif">Nouvelle taille :</label>
-            <input type="text" id="taille-modif" name="taille">
-            <button type="submit" class="btn">Modifier</button>
+
+            <button type="submit" class="btn">Aller vers la page de modification</button>
         </form>
+        
+        {# 
+          Ensuite, sur la page "entreprise/modifier?id=xxx", tu auras le vrai formulaire 
+          qui POST vers la même URL ou vers l’URL "entreprise/modifier/xxx" (selon ton routeur). 
+        #}
     </div>
+
+    {# --- SUPPRIMER --- #}
     <div id="supprimer" style="margin-top: 40px;">
         <h3>Supprimer une Entreprise</h3>
-        <form id="delete-entreprise-form" action="{{ url('entreprise', 'delete') }}" method="POST">
+        <!-- ICI on veut appeler la méthode supprimer() -->
+        <form id="delete-entreprise-form" action="{{ url('entreprise', 'supprimer') }}" method="POST">
             <label for="id-suppr">ID de l'entreprise :</label>
             <input type="number" id="id-suppr" name="id" required>
             <button type="submit" class="btn">Supprimer</button>
         </form>
     </div>
+
     <div class="back-button-container">
         <a href="{{ url('offre', 'index') }}" class="btn btn-back">⬅ Retour aux Entreprises</a>
     </div>

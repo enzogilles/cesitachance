@@ -90,10 +90,17 @@ class EntrepriseController extends BaseController
         ]);
     }
 
+    /**
+     * Correction principale : on récupère l’ID dans $_POST 
+     * plutôt que $_GET, car le formulaire est en method POST.
+     */
     public function supprimer() {
         $this->checkAuth(['Admin', 'pilote']);
     
-        $id = $_GET['id'] ?? null;
+        // On capture l'ID quelle que soit la méthode
+        $id = $_POST['id'] ?? $_GET['id'] ?? null;
+    
+        // Gérer la redirection après suppression
         $redirectParams = ['notif' => 'deleted'];
         foreach (['nom', 'ville', 'secteur', 'page'] as $param) {
             if (!empty($_GET[$param])) {
@@ -101,6 +108,7 @@ class EntrepriseController extends BaseController
             }
         }
     
+        // Si on a bien un ID, on supprime
         if ($id) {
             Entreprise::delete($id);
         }
@@ -108,6 +116,7 @@ class EntrepriseController extends BaseController
         $this->redirect('entreprise', 'index', $redirectParams);
     }
     
+
     public function details($id) {
         $entrepriseData = Entreprise::findById($id);
         if (!$entrepriseData) {
@@ -118,7 +127,7 @@ class EntrepriseController extends BaseController
             'entreprise' => $entrepriseData
         ]);
     }
-    
+
     // Action pour gérer l'évaluation d'une entreprise
     public function evaluer($id) {
         // Autoriser l'évaluation pour les rôles "Étudiant", "pilote" et "Admin"
@@ -170,19 +179,18 @@ class EntrepriseController extends BaseController
     private function getActionsForEntreprise($entreprise) {
         $id = $entreprise['id'];
         $params = ['id' => $id];
-    
         foreach (['nom', 'ville', 'secteur', 'page'] as $param) {
             if (!empty($_GET[$param])) {
                 $params[$param] = $_GET[$param];
             }
         }
-    
         $actions = '';
         $actions .= '<a href="' . $this->generateUrl('entreprise', 'details', ['id' => $id]) . '" class="btn btn-voir">Détails</a>';
     
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Admin', 'pilote'])) {
             $actions .= ' <a href="' . $this->generateUrl('entreprise', 'modifier', ['id' => $id]) . '" class="btn btn-modifier">Modifier</a>';
-            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', $params) . '" class="btn btn-supprimer">Supprimer</a>';
+            // Ajout de data-id pour que le JS puisse récupérer l'ID à supprimer
+            $actions .= ' <a href="' . $this->generateUrl('entreprise', 'supprimer', $params) . '" data-id="' . $id . '" class="btn btn-supprimer">Supprimer</a>';
         }
     
         if (isset($_SESSION['user']) && in_array($_SESSION['user']['role'], ['Étudiant', 'pilote', 'Admin'])) {
@@ -191,4 +199,5 @@ class EntrepriseController extends BaseController
     
         return $actions;
     }
+    
 }
