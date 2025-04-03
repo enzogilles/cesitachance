@@ -140,38 +140,15 @@ class Candidature extends BaseModel
 
     /**
      * Met à jour le statut d'une candidature.
-     * @return bool true si la mise à jour a réussi, false sinon
      */
     public static function updateStatus($id, $statut)
     {
         try {
-            error_log("Début updateStatus - ID: $id, Statut: $statut");
-            
-            // Vérification que l'ID existe
             $pdo = \Database::getInstance();
-            $checkStmt = $pdo->prepare("SELECT id FROM candidature WHERE id = ?");
-            $checkStmt->execute([$id]);
-            
-            if (!$checkStmt->fetch()) {
-                error_log("Candidature non trouvée pour l'ID: $id");
-                return false;
-            }
-    
-            // Mise à jour du statut
             $stmt = $pdo->prepare("UPDATE candidature SET statut = ? WHERE id = ?");
-            $result = $stmt->execute([$statut, $id]);
-    
-            if (!$result) {
-                error_log("Erreur SQL: " . print_r($stmt->errorInfo(), true));
-                return false;
-            }
-    
-            error_log("Mise à jour réussie - ID: $id, Nouveau statut: $statut");
-            return true;
-    
+            return $stmt->execute([$statut, $id]);
         } catch (\PDOException $e) {
-            error_log("Exception PDO dans updateStatus: " . $e->getMessage());
-            throw $e;
+            throw new \Exception("Erreur lors de la mise à jour du statut de la candidature : " . $e->getMessage());
         }
     }
 

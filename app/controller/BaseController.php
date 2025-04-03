@@ -95,17 +95,4 @@ class BaseController {
         header("Location: $url");
         exit;
     }
-
-    /**
-     * Envoie une réponse JSON
-     *
-     * @param array $data Les données à envoyer
-     * @param int $status Code HTTP de la réponse
-     */
-    protected function jsonResponse($data, $status = 200) {
-        header('Content-Type: application/json');
-        http_response_code($status);
-        echo json_encode($data);
-        exit;
-    }
 }
