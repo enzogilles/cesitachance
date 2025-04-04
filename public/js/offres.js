@@ -80,19 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
   const postulerForm = document.getElementById("postuler-form");
   if (postulerForm && cvInput) {
     postulerForm.addEventListener("submit", function (e) {
-      const file = cvInput.files[0];
-      if (!file) {
-        e.preventDefault();
-        showNotification("⚠️ Merci de joindre un CV avant de postuler.", "error", 4000);
-        return;
-      }
-
-      const extension = file.name.split('.').pop().toLowerCase();
-      if (extension !== "pdf") {
-        e.preventDefault();
-        showNotification("⚠️ Seuls les fichiers PDF sont acceptés.", "error", 4000);
-        return;
-      }
     });
   }
 });
