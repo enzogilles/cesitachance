@@ -13,14 +13,16 @@
     <p>Date de fin : {{ offre.date_fin is defined ? offre.date_fin|e : 'Non précisée' }}</p>
     <p>Description : {{ offre.description is defined ? offre.description|e|nl2br : 'Aucune description' }}</p>
     <div class="offer-buttons">
-        {% if userRole != 'pilote' %}
+        {% if user is defined and user is not empty and userRole != 'pilote' %}
             <form action="{{ url('wishlist', 'add') }}" method="POST" style="display:inline;">
                 <input type="hidden" name="offre_id" value="{{ offre.id }}">
                 <button type="submit" class="btn btn-wishlist">Ajouter à la Wishlist</button>
             </form>
         {% endif %}
     </div>
-    {% if userRole != 'pilote' %}
+
+    {# Section de postulation #}
+    {% if user is defined and user is not empty and userRole != 'pilote' %}
       <h3>Postuler à cette offre</h3>
       <form id="postuler-form" action="{{ url('candidature', 'postuler') }}" method="post" enctype="multipart/form-data">
         <input type="hidden" name="offre_id" value="{{ offre.id }}">
@@ -41,11 +43,14 @@
         <button type="submit" class="btn">Postuler</button>
         <button type="reset" class="bouton-reset reset-btn">Réinitialiser</button>
       </form>
-    {% elseif userRole is null %}
-      <p>Connectez-vous pour postuler</p>
+    {% elseif not user is defined or user is empty %}
+      <div class="login-message">
+        <p style = "color:grey;">Pour postuler à cette offre, veuillez vous connecter.</p>
+      </div>
     {% else %}
       <p>Seuls les étudiants peuvent postuler à une offre.</p>
     {% endif %}
+
     <div class="back-button-container">
         <a href="{{ url('offre', 'index') }}" class="btn btn-back">⬅ Retour aux offres</a>
     </div>
