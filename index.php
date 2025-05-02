@@ -1,95 +1,128 @@
 <?php
+/**
+ * This is the router, the main entry point of the StockFlow application.
+ * It handles the routing and dispatches requests to the appropriate controller methods.
+ */
 
-// Démarrer la session
-session_start();
+require "vendor/autoload.php";
 
-//-------------------------------------------------------------------------------------------
+use App\Controller\HomeController;
+use App\Controller\DashboardController;
+use App\Controller\ProductController;
+use App\Controller\StockController;
+use App\Controller\OrderController;
+use App\Controller\UserController;
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
-
-//-------------------------------------------------------------------------------------------
-
-// Charger la configuration globale et les classes...
-require_once __DIR__ . '/app/config/config.php';
-require_once __DIR__ . '/app/config/database.php';
-
-//-------------------------------------------------------------------------------------------
-
-spl_autoload_register(function ($class) {
-    $prefix = 'app\\';
-    $base_dir = __DIR__ . '/app/';
-
-//-------------------------------------------------------------------------------------------
-
-    $len = strlen($prefix);
-
-    if (strncmp($prefix, $class, $len) !== 0) {
-        return;
-    }
-
-//-------------------------------------------------------------------------------------------
-
-    $relative_class = substr($class, $len);
-    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
-
-    if (file_exists($file)) {
-        require_once $file;
-    }
-});
-
-//-------------------------------------------------------------------------------------------
-
-// Récupérer l'URL demandée
-$url = isset($_GET['url']) ? $_GET['url'] : '';
-$url = rtrim($url, '/');
-$url = filter_var($url, FILTER_SANITIZE_URL);
-
-//-------------------------------------------------------------------------------------------
-
-// Diviser l'URL en segments
-$segments = explode('/', $url);
-
-//-------------------------------------------------------------------------------------------
-
-// Par défaut, on utilise le contrôleur "home" et l'action "index"
-$controllerName = !empty($segments[0]) ? $segments[0] : 'home';
-$actionName = isset($segments[1]) ? $segments[1] : 'index';
-$params = array_slice($segments, 2);
-
-//-------------------------------------------------------------------------------------------
-
-// Définir manuellement $_GET['id'] si présent dans les paramètres
-if (isset($segments[2])) {
-    $_GET['id'] = $segments[2];
+// Initialize session if not already started
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-//-------------------------------------------------------------------------------------------
+// Configure Twig
+$loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig = new \Twig\Environment($loader, [
+    'debug' => true,
+    'cache' => false // Set to a directory path for production
+]);
+$twig->addExtension(new \Twig\Extension\DebugExtension());
 
-// Construire le nom complet du contrôleur
-$controllerClass = 'app\\controller\\' . ucfirst($controllerName) . 'Controller';
+// Add current session to twig globals
+$twig->addGlobal('session', $_SESSION);
+$twig->addGlobal('current_date', date('Y-m-d H:i:s'));
 
-//-------------------------------------------------------------------------------------------
+// Parse the URI
+if (isset($_GET['uri'])) {
+    $uri = trim($_GET['uri'], '/');
+} else {
+    $uri = '';
+}
 
-if (class_exists($controllerClass)) {
-    $controller = new $controllerClass();
-    if (method_exists($controller, $actionName)) {
-        // Vérifier si l'action attend un paramètre (ex: id)
-        $reflection = new ReflectionMethod($controller, $actionName);
-        $requiredParams = $reflection->getNumberOfRequiredParameters();
+// Split URI into segments
+$segments = explode('/', $uri);
+$controller = isset($segments[0]) && !empty($segments[0]) ? $segments[0] : 'home';
+$action = isset($segments[1]) && !empty($segments[1]) ? $segments[1] : 'index';
+$params = array_slice($segments, 2);
+
+// Convert to CamelCase for controller class name
+$controllerName = str_replace(' ', '', ucwords(str_replace('-', ' ', $controller)));
+$controllerClass = "App\\Controller\\{$controllerName}Controller";
+
+// Initialize controller and execute action
+try {
+    if (class_exists($controllerClass)) {
+        // Instantiate the controller
+        $controllerInstance = new $controllerClass($twig);
         
-        if ($requiredParams > 0) {
-            if (count($params) >= $requiredParams) {
-                call_user_func_array([$controller, $actionName], $params);
-            } else {
-                die("Erreur : Nombre de paramètres insuffisant pour l'action '$actionName'.");
-            }
+        // Check if the action method exists
+        if (method_exists($controllerInstance, $action)) {
+            // Call the action with parameters
+            call_user_func_array([$controllerInstance, $action], $params);
         } else {
-            $controller->$actionName();
+            // Action not found
+            header("HTTP/1.0 404 Not Found");
+            echo "Action '$action' not found in controller '$controllerName'";
         }
     } else {
-        echo "Action '$actionName' non trouvée dans le contrôleur '$controllerClass'.";
+        // Try mapping specific routes
+        switch ($uri) {
+            case '':
+            case 'home':
+                $controller = new HomeController($twig);
+                $controller->index();
+                break;
+                
+            case 'dashboard':
+                $controller = new DashboardController($twig);
+                $controller->index();
+                break;
+                
+            case 'dashboard/alerts':
+                $controller = new DashboardController($twig);
+                $controller->alerts();
+                break;
+                
+            case 'dashboard/stock-evolution':
+                $controller = new DashboardController($twig);
+                $controller->stockEvolution();
+                break;
+                
+            case 'dashboard/categories':
+                $controller = new DashboardController($twig);
+                $controller->categoryDistribution();
+                break;
+                
+            case 'dashboard/delivery-stats':
+                $controller = new DashboardController($twig);
+                $controller->deliveryStats();
+                break;
+                
+            case 'dashboard/export':
+                $controller = new DashboardController($twig);
+                $controller->exportData();
+                break;
+                
+            case 'login':
+                $controller = new UserController($twig);
+                $controller->login();
+                break;
+                
+            case 'logout':
+                $controller = new UserController($twig);
+                $controller->logout();
+                break;
+                
+            default:
+                // 404 Not Found
+                header("HTTP/1.0 404 Not Found");
+                $controller = new HomeController($twig);
+                $controller->notFound();
+                break;
+        }
     }
-} else {
-    echo "Contrôleur '$controllerClass' non trouvé.";
+} catch (Exception $e) {
+    // Handle exceptions
+    header("HTTP/1.0 500 Internal Server Error");
+    echo "Error: " . $e->getMessage();
+    // Log the error
+    error_log($e->getMessage());
 }
